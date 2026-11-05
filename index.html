@@ -1,0 +1,109 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ALEX LINUX LAB</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;background:#080d0b;color:#eaffef;
+ font-family:Arial,sans-serif;padding:20px
+}
+header{text-align:center;padding:25px 0}
+h1{color:#35ff83;font-size:30px}
+.subtitle{color:#8da99a}
+.card{
+ background:#111b16;border:1px solid #245b3b;
+ border-radius:14px;padding:17px;margin:15px 0
+}
+h2{color:#35ff83;font-size:19px}
+button{
+ background:#20bd66;color:#001b0c;border:0;
+ border-radius:9px;padding:12px;font-weight:bold;
+ margin:5px 0;width:100%
+}
+input{
+ background:#050a07;color:#35ff83;border:1px solid #35ff83;
+ border-radius:8px;padding:12px;width:100%
+}
+#terminal{
+ background:#020604;color:#42ff8c;padding:15px;
+ border-radius:10px;min-height:110px;white-space:pre-wrap;
+ font-family:monospace
+}
+footer{text-align:center;color:#718b7b;padding:25px}
+</style>
+</head>
+<body>
+
+<header>
+<h1>🐧 ALEX LINUX LAB</h1>
+<p class="subtitle">Aprende Linux desde cero</p>
+</header>
+
+<div class="card">
+<h2>🛡️ Bienvenido</h2>
+<p>Tu laboratorio gratuito de Linux y ciberseguridad.</p>
+<p>Aprende comandos, archivos, permisos y redes.</p>
+</div>
+
+<div class="card">
+<h2>💻 Terminal Linux simulada</h2>
+<input id="cmd" placeholder="Escribe un comando...">
+<button onclick="run()">EJECUTAR COMANDO</button>
+<div id="terminal">Alex Linux Lab iniciado...
+Escribe: help</div>
+</div>
+
+<div class="card">
+<h2>📚 Comandos básicos</h2>
+<button onclick="demo('help')">HELP - Ayuda</button>
+<button onclick="demo('pwd')">PWD - Ubicación</button>
+<button onclick="demo('ls')">LS - Archivos</button>
+<button onclick="demo('whoami')">WHOAMI - Usuario</button>
+<button onclick="demo('date')">DATE - Fecha</button>
+<button onclick="demo('clear')">CLEAR - Limpiar</button>
+</div>
+
+<div class="card">
+<h2>🎯 Tu primer desafío</h2>
+<p>¿Qué comando muestra los archivos de una carpeta?</p>
+<button onclick="quiz(false)">pwd</button>
+<button onclick="quiz(true)">ls</button>
+<button onclick="quiz(false)">whoami</button>
+<p id="result"></p>
+</div>
+
+<footer>
+ALEX LINUX LAB • VERSIÓN 1.0<br>
+Aprende. Practica. Protege.
+</footer>
+
+<script>
+function execute(c){
+ const out=document.getElementById('terminal');
+ const commands={
+ help:"Comandos disponibles: pwd, ls, whoami, date, clear, help",
+ pwd:"/home/alex",
+ ls:"Documentos  Descargas  Proyectos",
+ whoami:"alex",
+ date:new Date().toLocaleString("es"),
+ clear:""
+ };
+ out.textContent=commands[c]!==undefined?
+ "$ "+c+"\n"+commands[c]:"Comando no reconocido. Escribe help.";
+}
+function run(){
+ let c=document.getElementById('cmd').value.trim().toLowerCase();
+ execute(c);
+}
+function demo(c){document.getElementById('cmd').value=c;execute(c)}
+function quiz(ok){
+ document.getElementById('result').textContent=
+ ok?"¡Correcto! 🎉 ls muestra los archivos.":"Inténtalo otra vez.";
+}
+</script>
+</body>
+</html>
