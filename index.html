@@ -36,7 +36,7 @@ button:active{background:#087c3d}
 <div id="terminal"></div>
 <div class="inputrow">
 <input id="command" placeholder="Escribe help..." autocomplete="off">
-<button id="run">EJECUTAR</button>
+<button id="run" type="button">EJECUTAR</button>
 </div>
 <p style="font-size:11px;color:#83aa90">Pulsa ENTER para ejecutar un comando.</p>
 </div>
@@ -56,64 +56,70 @@ button:active{background:#087c3d}
 </div>
 
 <script>
+"use strict";
+
+(function(){
+
 const terminal = document.getElementById("terminal");
 const input = document.getElementById("command");
+const runButton = document.getElementById("run");
+
+if(!terminal || !input || !runButton){
+ alert("Error: no se encontraron los elementos de la terminal.");
+ return;
+}
 
 let cwd = "/home/alex";
 let history = [];
 let historyIndex = 0;
 let editor = null;
 let variables = {};
-let processes = [
+
+function dir(){
+ return {type:"dir",children:{},permissions:"755",modified:Date.now()};
+}
+
+function file(content=""){
+ return {type:"file",content:String(content),permissions:"644",modified:Date.now()};
+}
+
+const root = dir();
+
+function addPath(path,node){
+ const parts=path.split("/").filter(Boolean);
+ let current=root;
+
+ for(let i=0;i<parts.length;i++){
+  const name=parts[i];
+
+  if(i===parts.length-1){
+   current.children[name]=node;
+  }else{
+   if(!current.children[name]) current.children[name]=dir();
+   current=current.children[name];
+  }
+ }
+}
+
+addPath("home/alex/readme.txt",file("Bienvenido a ALEX LINUX LAB 4.0.\nTu laboratorio Linux virtual está funcionando."));
+addPath("home/alex/notas.txt",file("Mis primeras notas de Linux."));
+addPath("home/alex/documentos/guia.txt",file("Guía básica de comandos Linux."));
+addPath("home/alex/scripts/demo.sh",file('echo "Hola desde Alex Linux Lab"'));
+addPath("etc/hostname",file("alex-linux-lab"));
+addPath("etc/os-release",file("NAME=Alex Linux Lab\nVERSION=4.0\nMODE=Virtual"));
+addPath("var/log/system.log",file("Sistema iniciado correctamente."));
+
+const processes=[
  {pid:1,name:"init",user:"root",cpu:"0.1%",memory:"12 MB"},
  {pid:102,name:"alex-shell",user:"alex",cpu:"1.2%",memory:"28 MB"},
  {pid:205,name:"virtual-network",user:"system",cpu:"0.4%",memory:"16 MB"},
  {pid:310,name:"file-manager",user:"alex",cpu:"0.2%",memory:"20 MB"}
 ];
 
-const commands = [
-"help","pwd","ls","cd","mkdir","touch","cat","write","append",
-"rm","rmdir","cp","mv","tree","find","grep","head","tail","wc",
-"stat","du","df","free","ps","top","kill","chmod","whoami","id",
-"hostname","uname","date","uptime","neofetch","history","clear",
-"echo","calc","seq","which","man","env","export","ping","ip",
-"tar","nano","sha256","base64","hex","reset","exit"
-];
-
-function nodeDir(){
- return {type:"dir",children:{},permissions:"755",modified:Date.now()};
-}
-function nodeFile(content=""){
- return {type:"file",content:String(content),permissions:"644",modified:Date.now()};
-}
-
-const root = nodeDir();
-
-function addPath(path,node){
- const parts = path.split("/").filter(Boolean);
- let current = root;
- for(let i=0;i<parts.length;i++){
-  if(i===parts.length-1){
-   current.children[parts[i]]=node;
-  }else{
-   if(!current.children[parts[i]]) current.children[parts[i]]=nodeDir();
-   current=current.children[parts[i]];
-  }
- }
-}
-
-addPath("home/alex/readme.txt",nodeFile("Bienvenido a ALEX-LINUX-LAB 4.0.\nEste es tu laboratorio Linux virtual."));
-addPath("home/alex/notas.txt",nodeFile("Mis primeras notas de Linux."));
-addPath("home/alex/documentos/guia.txt",nodeFile("Guia basica de comandos Linux."));
-addPath("home/alex/scripts/demo.sh",nodeFile("#!/bin/bash\necho Hola desde ALEX LINUX LAB"));
-addPath("etc/hostname",nodeFile("alex-linux-lab"));
-addPath("etc/os-release",nodeFile("NAME=Alex Linux Lab\nVERSION=4.0\nMODE=Virtual"));
-addPath("var/log/system.log",nodeFile("Sistema iniciado correctamente.\nLaboratorio virtual listo."));
-
 function print(text="",color=""){
  const line=document.createElement("div");
  if(color) line.className=color;
- line.textContent=text;
+ line.textContent=String(text);
  terminal.appendChild(line);
  terminal.scrollTop=terminal.scrollHeight;
 }
@@ -126,86 +132,96 @@ function tokenize(str){
  const result=[];
  const regex=/"([^"]*)"|'([^']*)'|(\S+)/g;
  let match;
+
  while((match=regex.exec(str))!==null){
-  result.push(match[1] ?? match[2] ?? match[3]);
+  result.push(match[1]!==undefined?match[1]:
+   match[2]!==undefined?match[2]:match[3]);
  }
  return result;
 }
 
 function normalize(path){
- let parts=[];
- let source=path.startsWith("/")?path:cwd+"/"+path;
- for(const part of source.split("/")){
-  if(!part || part===".") continue;
+ let source=String(path||".");
+ if(!source.startsWith("/")) source=cwd+"/"+source;
+
+ const parts=[];
+ source.split("/").forEach(part=>{
+  if(!part || part===".") return;
   if(part==="..") parts.pop();
   else parts.push(part);
- }
+ });
+
  return "/"+parts.join("/");
 }
 
 function getNode(path){
  if(path==="/") return root;
+
  let current=root;
- for(const part of path.split("/").filter(Boolean)){
+ const parts=path.split("/").filter(Boolean);
+
+ for(const part of parts){
   if(!current || current.type!=="dir") return null;
   current=current.children[part];
  }
- return current || null;
+
+ return current||null;
 }
 
 function parentInfo(path){
- const clean=normalize(path);
- const parts=clean.split("/").filter(Boolean);
+ const parts=normalize(path).split("/").filter(Boolean);
  const name=parts.pop();
  const parent=getNode("/"+parts.join("/"));
- return {parent,name,path:clean};
-}
-
-function ensureDir(path){
- const info=parentInfo(path);
- if(!info.parent || info.parent.type!=="dir") return false;
- if(info.parent.children[info.name]) return false;
- info.parent.children[info.name]=nodeDir();
- return true;
-}
-
-function getSize(node){
- if(!node) return 0;
- if(node.type==="file") return new TextEncoder().encode(node.content).length;
- return Object.values(node.children).reduce((sum,item)=>sum+getSize(item),0);
-}
-
-function listTree(node,path="",prefix=""){
- if(!node || node.type!=="dir") return [];
- let result=[];
- const names=Object.keys(node.children).sort();
- names.forEach((name,index)=>{
-  const child=node.children[name];
-  const last=index===names.length-1;
-  result.push(prefix+(last?"└── ":"├── ")+name+(child.type==="dir"?"/":""));
-  if(child.type==="dir"){
-   result=result.concat(listTree(child,path+"/"+name,prefix+(last?"    ":"│   ")));
-  }
- });
- return result;
+ return {parent,name};
 }
 
 function cloneNode(node){
  if(node.type==="file") return {...node};
- const copy=nodeDir();
+
+ const copy=dir();
  copy.permissions=node.permissions;
  copy.modified=node.modified;
- for(const [name,child] of Object.entries(node.children)){
-  copy.children[name]=cloneNode(child);
- }
+
+ Object.keys(node.children).forEach(name=>{
+  copy.children[name]=cloneNode(node.children[name]);
+ });
+
  return copy;
 }
 
-function deleteNode(path){
+function removeNode(path){
  const info=parentInfo(path);
  if(!info.parent || !info.parent.children[info.name]) return false;
  delete info.parent.children[info.name];
  return true;
+}
+
+function sizeOf(node){
+ if(!node) return 0;
+ if(node.type==="file") return new TextEncoder().encode(node.content).length;
+
+ return Object.values(node.children).reduce(
+  (total,child)=>total+sizeOf(child),0
+ );
+}
+
+function treeLines(node,prefix=""){
+ if(!node || node.type!=="dir") return [];
+
+ const names=Object.keys(node.children).sort();
+ let lines=[];
+
+ names.forEach((name,index)=>{
+  const child=node.children[name];
+  const last=index===names.length-1;
+  lines.push(prefix+(last?"└── ":"├── ")+name+(child.type==="dir"?"/":""));
+
+  if(child.type==="dir"){
+   lines=lines.concat(treeLines(child,prefix+(last?"    ":"│   ")));
+  }
+ });
+
+ return lines;
 }
 
 function help(){
@@ -228,54 +244,58 @@ function help(){
  print("calc | seq | sha256 | base64 | hex");
  print("tar | nano | man | history | clear");
  print("");
- print("EJEMPLOS");
- print("mkdir proyectos");
- print("touch prueba.txt");
- print('write prueba.txt "Hola Linux"');
- print("cat prueba.txt");
- print("chmod 755 prueba.txt");
- print("grep Hola prueba.txt");
- print("find /home/alex -name txt");
- print("=======================================","green");
+ print("Ejemplo: mkdir proyectos");
+ print('Ejemplo: write notas.txt "Hola Linux"');
+ print("Ejemplo: grep Hola notas.txt");
+ print("========================================","green");
 }
 
-function parseNumber(value){
- const number=Number(value);
- return Number.isFinite(number)?number:null;
-}
-
-function safeCalc(expression){
- if(!/^[0-9+\-*/().%\s]+$/.test(expression)) throw Error("Expresion no permitida.");
+function calculate(expression){
  const tokens=expression.match(/\d+(?:\.\d+)?|[()+\-*/%]/g);
- if(!tokens || tokens.join("")!==expression.replace(/\s/g,"")) throw Error("Expresion invalida.");
+ if(!tokens || tokens.join("")!==expression.replace(/\s/g,"")){
+  throw Error("Expresión no válida.");
+ }
+
  let pos=0;
+
  function factor(){
   const token=tokens[pos++];
+
   if(token==="+") return factor();
   if(token==="-") return -factor();
+
   if(token==="("){
    const value=expr();
-   if(tokens[pos++]!==")") throw Error("Falta cerrar parentesis.");
+   if(tokens[pos++]!==")") throw Error("Falta cerrar paréntesis.");
    return value;
   }
-  const value=Number(token);
-  if(!Number.isFinite(value)) throw Error("Numero invalido.");
-  return value;
+
+  const number=Number(token);
+  if(!Number.isFinite(number)) throw Error("Número inválido.");
+  return number;
  }
+
  function term(){
   let value=factor();
+
   while(["*","/","%"].includes(tokens[pos])){
    const op=tokens[pos++];
    const right=factor();
-   if((op==="/" || op==="%") && right===0) throw Error("No se puede dividir por cero.");
+
+   if((op==="/" || op==="%") && right===0){
+    throw Error("No se puede dividir por cero.");
+   }
+
    if(op==="*") value*=right;
    if(op==="/") value/=right;
    if(op==="%") value%=right;
   }
   return value;
  }
+
  function expr(){
   let value=term();
+
   while(tokens[pos]==="+" || tokens[pos]==="-"){
    const op=tokens[pos++];
    const right=term();
@@ -283,279 +303,347 @@ function safeCalc(expression){
   }
   return value;
  }
+
  const result=expr();
- if(pos!==tokens.length || !Number.isFinite(result)) throw Error("Expresion invalida.");
+
+ if(pos!==tokens.length || !Number.isFinite(result)){
+  throw Error("Expresión inválida.");
+ }
+
  return result;
 }
 
-function showNode(path){
- const node=getNode(normalize(path));
- if(!node){print("No existe: "+path,"red");return;}
- if(node.type==="dir"){
-  print(Object.keys(node.children).join("  ") || "(directorio vacio)");
- }else{
-  print(node.content);
- }
-}
-
-function walkFind(node,path,pattern,results){
+function findFiles(node,path,pattern,results){
  if(node.type!=="dir") return;
- for(const [name,child] of Object.entries(node.children)){
+
+ Object.entries(node.children).forEach(([name,child])=>{
   const full=path==="/"?"/"+name:path+"/"+name;
-  if(name.toLowerCase().includes(pattern.toLowerCase())) results.push(full);
-  if(child.type==="dir") walkFind(child,full,pattern,results);
- }
+
+  if(name.toLowerCase().includes(pattern.toLowerCase())){
+   results.push(full);
+  }
+
+  if(child.type==="dir") findFiles(child,full,pattern,results);
+ });
 }
 
-function manuals(name){
+function manual(name){
  const pages={
-  ls:"ls: muestra los archivos y carpetas.\nUso: ls [ruta]",
-  cd:"cd: cambia de directorio.\nUso: cd carpeta | cd .. | cd /",
-  pwd:"pwd: muestra la ruta actual.",
-  mkdir:"mkdir: crea un directorio.\nUso: mkdir nombre",
-  touch:"touch: crea un archivo vacio.\nUso: touch archivo.txt",
-  cat:"cat: muestra el contenido de un archivo.\nUso: cat archivo.txt",
-  write:"write: reemplaza el contenido de un archivo.\nUso: write archivo.txt texto",
+  ls:"ls: muestra archivos y carpetas. Uso: ls [ruta]",
+  cd:"cd: cambia de directorio. Uso: cd carpeta | cd .. | cd /",
+  pwd:"pwd: muestra el directorio actual.",
+  mkdir:"mkdir: crea carpetas. Uso: mkdir nombre",
+  touch:"touch: crea archivos. Uso: touch archivo.txt",
+  cat:"cat: muestra archivos. Uso: cat archivo.txt",
+  write:"write: reemplaza el contenido. Uso: write archivo.txt texto",
   append:"append: agrega texto al final de un archivo.",
-  rm:"rm: elimina un archivo virtual.\nUso: rm archivo",
-  cp:"cp: copia archivos o carpetas virtuales.\nUso: cp origen destino",
-  mv:"mv: mueve o renombra elementos.\nUso: mv origen destino",
-  chmod:"chmod: cambia permisos virtuales.\nUso: chmod 755 archivo",
-  grep:"grep: busca texto dentro de un archivo.\nUso: grep palabra archivo",
-  find:"find: busca nombres en el laboratorio.\nUso: find /home/alex -name txt",
-  ps:"ps: muestra procesos simulados.",
-  top:"top: muestra el monitor de sistema virtual.",
-  ping:"ping: simula una prueba de conectividad. No envia paquetes reales.",
-  ip:"ip addr o ip route: muestra datos de red ficticios.",
+  chmod:"chmod: cambia permisos virtuales. Uso: chmod 755 archivo",
+  grep:"grep: busca palabras. Uso: grep palabra archivo",
+  find:"find: busca nombres. Uso: find /home/alex -name txt",
+  ps:"ps: muestra procesos virtuales.",
+  top:"top: muestra el monitor virtual.",
+  ping:"ping: simula una prueba de conectividad. No envía paquetes reales.",
+  ip:"ip addr | ip route: muestra datos de red ficticios.",
   free:"free: muestra memoria RAM simulada.",
-  df:"df: muestra almacenamiento virtual.",
-  tar:"tar -cf archivo.tar carpeta | tar -tf archivo.tar",
-  nano:"nano: abre el editor virtual.\n:w guarda | :wq guarda y sale | :q! cancela",
+  df:"df: muestra espacio virtual.",
+  nano:"nano archivo.txt: abre editor. :w guarda, :wq guarda y sale, :q! cancela.",
+  tar:"tar -cf archivo.tar carpeta | tar -tf archivo.tar | tar -xf archivo.tar",
+  calc:"calc (10+5)*2: calculadora virtual.",
   sha256:"sha256 texto: calcula el hash SHA-256.",
   base64:"base64 encode texto | base64 decode texto",
-  hex:"hex encode texto | hex decode texto",
-  calc:"calc: calculadora.\nEjemplo: calc (20+5)*3"
+  hex:"hex encode texto | hex decode codigo"
  };
- print(manuals[name] || "No hay manual para ese comando.");
+
+ print(pages[name]||"No hay manual para ese comando.");
 }
 
 async function execute(raw){
- const args=tokenize(raw.trim());
+ const args=tokenize(raw);
  if(!args.length) return;
- let cmd=args[0].toLowerCase();
- let a=args.slice(1);
- const joined=a.join(" ");
 
- try{
+ const cmd=args[0].toLowerCase();
+ const a=args.slice(1);
+ const text=a.join(" ");
+
  switch(cmd){
 
- case "help": help(); break;
- case "pwd": print(cwd); break;
- case "whoami": print("alex"); break;
- case "id": print("uid=1000(alex) gid=1000(alex) groups=1000(alex),27(sudo)"); break;
- case "hostname": print("alex-linux-lab"); break;
- case "uname":
-  print(a[0]==="-a"?"Linux alex-linux-lab 6.8.0-virtual #1 SMP x86_64 GNU/Linux":"Linux");
+ case "help":
+  help();
   break;
- case "date": print(new Date().toString()); break;
- case "uptime": print("Sistema virtual activo desde hace 00:24:18"); break;
- case "clear": terminal.innerHTML=""; break;
- case "history": history.forEach((item,i)=>print((i+1)+"  "+item)); break;
- case "echo": print(a.join(" ").replace(/\$([A-Za-z_][A-Za-z0-9_]*)/g,(_,key)=>variables[key]||"")); break;
- case "env":
-  print("USER=alex\nHOME=/home/alex\nSHELL=/bin/alex-shell\nHOSTNAME=alex-linux-lab\nLAB_VERSION=4.0");
-  Object.entries(variables).forEach(([k,v])=>print(k+"="+v));
-  break;
- case "export":
-  if(!a.length){print("Uso: export NOMBRE=valor","red");break;}
-  const pair=a.join(" ").match(/^([A-Za-z_]\w*)=(.*)$/);
-  if(!pair){print("Formato: export NOMBRE=valor","red");break;}
-  variables[pair[1]]=pair[2];
-  print("Variable guardada: "+pair[1],"green");
-  break;
- case "which":
-  print(commands.includes(a[0])?"/usr/bin/"+a[0]:"Comando no encontrado: "+(a[0]||""));
-  break;
- case "man": manuals(a[0]); break;
 
- case "ls":{
-  const path=normalize(a[0]||".");
-  const node=getNode(path);
-  if(!node || node.type!=="dir"){print("Directorio no encontrado","red");break;}
-  const names=Object.entries(node.children).map(([name,item])=>item.type==="dir"?name+"/":name);
-  print(names.join("    ")||"(vacio)");
+ case "pwd":
+  print(cwd);
+  break;
+
+ case "whoami":
+  print("alex");
+  break;
+
+ case "id":
+  print("uid=1000(alex) gid=1000(alex) groups=1000(alex),27(sudo)");
+  break;
+
+ case "hostname":
+  print("alex-linux-lab");
+  break;
+
+ case "uname":
+  print(a[0]==="-a"?
+   "Linux alex-linux-lab 6.8.0-virtual x86_64 GNU/Linux":"Linux");
+  break;
+
+ case "date":
+  print(new Date().toString());
+  break;
+
+ case "uptime":
+  print("Sistema virtual activo. Estado: operativo.");
+  break;
+
+ case "clear":
+  terminal.innerHTML="";
+  break;
+
+ case "history":
+  history.forEach((item,index)=>print((index+1)+"  "+item));
+  break;
+
+ case "echo":
+  print(text.replace(/\$([A-Za-z_]\w*)/g,(_,key)=>variables[key]||""));
+  break;
+
+ case "env":
+  print("USER=alex\nHOME=/home/alex\nSHELL=/bin/alex-shell\nHOSTNAME=alex-linux-lab\nVERSION=4.0");
+  Object.entries(variables).forEach(([key,value])=>print(key+"="+value));
+  break;
+
+ case "export":{
+  const match=text.match(/^([A-Za-z_]\w*)=(.*)$/);
+  if(!match){print("Uso: export NOMBRE=valor","red");break;}
+  variables[match[1]]=match[2];
+  print("Variable guardada: "+match[1],"green");
   break;
  }
+
+ case "which":
+  print(["help","ls","cd","pwd","cat","mkdir","touch","grep","find","calc","ping","ip","nano"].includes(a[0])?
+   "/usr/bin/"+a[0]:"Comando no encontrado");
+  break;
+
+ case "man":
+  manual(a[0]);
+  break;
+
+ case "ls":{
+  const node=getNode(normalize(a[0]||"."));
+  if(!node || node.type!=="dir"){print("Directorio no encontrado","red");break;}
+  const names=Object.entries(node.children).map(([name,item])=>
+   item.type==="dir"?name+"/":name);
+  print(names.join("    ")||"(directorio vacío)");
+  break;
+ }
+
  case "cd":{
   const path=normalize(a[0]||"/home/alex");
   const node=getNode(path);
-  if(!node || node.type!=="dir"){print("No es un directorio: "+path,"red");break;}
+  if(!node || node.type!=="dir"){print("Directorio no encontrado","red");break;}
   cwd=path;
   break;
  }
+
  case "mkdir":{
   if(!a[0]){print("Uso: mkdir nombre","red");break;}
-  const path=normalize(a[0]);
-  print(ensureDir(path)?"Directorio creado: "+path:"No se pudo crear. Comprueba la ruta.","green");
+  const info=parentInfo(normalize(a[0]));
+  if(!info.parent || info.parent.type!=="dir" || info.parent.children[info.name]){
+   print("No se pudo crear el directorio","red");
+   break;
+  }
+  info.parent.children[info.name]=dir();
+  print("Directorio creado","green");
   break;
  }
+
  case "touch":{
   if(!a[0]){print("Uso: touch archivo","red");break;}
-  const path=normalize(a[0]);
-  const info=parentInfo(path);
-  if(!info.parent || info.parent.type!=="dir"){print("Ruta no valida","red");break;}
+  const info=parentInfo(normalize(a[0]));
+  if(!info.parent || info.parent.type!=="dir"){print("Ruta no válida","red");break;}
   if(info.parent.children[info.name]){
-   if(info.parent.children[info.name].type==="file") info.parent.children[info.name].modified=Date.now();
-   else print("Ya existe un directorio con ese nombre","red");
+   print("El elemento ya existe");
   }else{
-   info.parent.children[info.name]=nodeFile();
-   print("Archivo creado: "+path,"green");
+   info.parent.children[info.name]=file();
+   print("Archivo creado","green");
   }
   break;
  }
+
  case "cat":{
-  if(!a[0]){print("Uso: cat archivo","red");break;}
-  const node=getNode(normalize(a[0]));
+  const node=getNode(normalize(a[0]||""));
   if(!node || node.type!=="file"){print("Archivo no encontrado","red");break;}
   print(node.content);
   break;
  }
+
  case "write":
  case "append":{
   if(a.length<2){print("Uso: "+cmd+" archivo texto","red");break;}
-  const path=normalize(a[0]);
-  const info=parentInfo(path);
-  if(!info.parent || info.parent.type!=="dir"){print("Ruta no valida","red");break;}
+  const info=parentInfo(normalize(a[0]));
+  if(!info.parent || info.parent.type!=="dir"){print("Ruta no válida","red");break;}
+
   let node=info.parent.children[info.name];
   if(node && node.type!=="file"){print("No es un archivo","red");break;}
-  if(!node) node=info.parent.children[info.name]=nodeFile();
-  node.content=cmd==="append"?node.content+(node.content?"\n":"")+a.slice(1).join(" "):a.slice(1).join(" ");
+  if(!node) node=info.parent.children[info.name]=file();
+
+  node.content=cmd==="write"?a.slice(1).join(" "):
+   node.content+(node.content?"\n":"")+a.slice(1).join(" ");
   node.modified=Date.now();
-  print("Contenido actualizado: "+path,"green");
+
+  print("Archivo actualizado","green");
   break;
  }
+
  case "rm":{
-  if(!a[0]){print("Uso: rm archivo","red");break;}
-  const path=normalize(a[0]);
+  const path=normalize(a[0]||"");
   const node=getNode(path);
-  if(!node){print("No existe","red");break;}
-  if(node.type==="dir"){print("Usa rmdir para directorios vacios","red");break;}
-  deleteNode(path);
-  print("Archivo eliminado: "+path,"green");
+  if(!node || node.type!=="file"){print("Archivo no encontrado","red");break;}
+  removeNode(path);
+  print("Archivo eliminado","green");
   break;
  }
+
  case "rmdir":{
   const path=normalize(a[0]||"");
   const node=getNode(path);
   if(!node || node.type!=="dir"){print("Directorio no encontrado","red");break;}
-  if(Object.keys(node.children).length){print("El directorio no esta vacio","red");break;}
-  deleteNode(path);
+  if(Object.keys(node.children).length){print("El directorio no está vacío","red");break;}
+  removeNode(path);
   print("Directorio eliminado","green");
   break;
  }
+
  case "cp":
  case "mv":{
   if(a.length<2){print("Uso: "+cmd+" origen destino","red");break;}
-  const source=normalize(a[0]), dest=normalize(a[1]);
+
+  const source=normalize(a[0]);
+  const destination=normalize(a[1]);
   const node=getNode(source);
-  if(!node || source==="/"){print("Origen no valido","red");break;}
-  if(dest===source || dest.startsWith(source+"/")){print("Destino no valido","red");break;}
-  const info=parentInfo(dest);
-  if(!info.parent || info.parent.type!=="dir"){print("Directorio destino no encontrado","red");break;}
-  if(info.parent.children[info.name]){print("El destino ya existe","red");break;}
+  const info=parentInfo(destination);
+
+  if(!node || source==="/" || !info.parent || info.parent.type!=="dir"){
+   print("Origen o destino no válido","red");
+   break;
+  }
+
+  if(destination===source || destination.startsWith(source+"/") ||
+     info.parent.children[info.name]){
+   print("Destino no válido o ya existente","red");
+   break;
+  }
+
   info.parent.children[info.name]=cloneNode(node);
-  if(cmd==="mv") deleteNode(source);
-  print(cmd==="cp"?"Copia creada":"Elemento movido","green");
+  if(cmd==="mv") removeNode(source);
+
+  print(cmd==="cp"?"Copia realizada":"Elemento movido","green");
   break;
  }
+
  case "tree":{
   const path=normalize(a[0]||".");
   const node=getNode(path);
   if(!node || node.type!=="dir"){print("Directorio no encontrado","red");break;}
   print(path);
-  listTree(node).forEach(line=>print(line));
+  treeLines(node).forEach(line=>print(line));
   break;
  }
+
  case "find":{
-  let path="/home/alex",pattern="";
-  if(a[0]==="-name"){pattern=a[1]||"";}
+  let path="/home/alex";
+  let pattern="";
+
+  if(a[0]==="-name") pattern=a[1]||"";
   else if(a[1]==="-name"){path=normalize(a[0]);pattern=a[2]||"";}
   else {path=normalize(a[0]||".");pattern=a[1]||"";}
+
   const node=getNode(path);
-  if(!node || node.type!=="dir"){print("Ruta no valida","red");break;}
-  if(!pattern){print("Uso: find /ruta -name palabra","red");break;}
+  if(!node || node.type!=="dir" || !pattern){
+   print("Uso: find /ruta -name palabra","red");
+   break;
+  }
+
   const results=[];
-  walkFind(node,path,pattern,results);
-  results.length?results.forEach(x=>print(x)):print("Sin resultados");
+  findFiles(node,path,pattern,results);
+  results.length?results.forEach(item=>print(item)):print("Sin resultados");
   break;
  }
+
  case "grep":{
   if(a.length<2){print("Uso: grep palabra archivo","red");break;}
   const node=getNode(normalize(a[1]));
   if(!node || node.type!=="file"){print("Archivo no encontrado","red");break;}
-  const matches=node.content.split("\n").filter(line=>line.toLowerCase().includes(a[0].toLowerCase()));
-  matches.length?matches.forEach(line=>print(line)):print("Sin coincidencias");
+  const lines=node.content.split("\n").filter(line=>
+   line.toLowerCase().includes(a[0].toLowerCase()));
+  lines.length?lines.forEach(line=>print(line)):print("Sin coincidencias");
   break;
  }
+
  case "head":
  case "tail":{
   const node=getNode(normalize(a[0]||""));
   if(!node || node.type!=="file"){print("Uso: "+cmd+" archivo","red");break;}
   const lines=node.content.split("\n");
-  const count=Number(a[1])||5;
+  const count=Math.max(1,Math.min(100,Number(a[1])||5));
   (cmd==="head"?lines.slice(0,count):lines.slice(-count)).forEach(line=>print(line));
   break;
  }
+
  case "wc":{
   const node=getNode(normalize(a[0]||""));
   if(!node || node.type!=="file"){print("Uso: wc archivo","red");break;}
-  const lines=node.content?node.content.split("\n").length:0;
   const words=node.content.trim()?node.content.trim().split(/\s+/).length:0;
-  print(lines+" lineas  "+words+" palabras  "+getSize(node)+" bytes");
+  print(node.content.split("\n").length+" líneas  "+words+" palabras  "+sizeOf(node)+" bytes");
   break;
  }
+
  case "stat":{
   const node=getNode(normalize(a[0]||"."));
   if(!node){print("No encontrado","red");break;}
-  print("Tipo: "+node.type+"\nPermisos: "+node.permissions+"\nTamaño: "+getSize(node)+" bytes\nModificado: "+new Date(node.modified).toLocaleString());
+  print("Tipo: "+node.type+"\nPermisos: "+node.permissions+
+   "\nTamaño: "+sizeOf(node)+" bytes\nModificado: "+new Date(node.modified).toLocaleString());
   break;
  }
+
  case "du":{
   const path=normalize(a[0]||".");
   const node=getNode(path);
   if(!node){print("Ruta no encontrada","red");break;}
-  print(getSize(node)+" bytes  "+path);
+  print(sizeOf(node)+" bytes  "+path);
   break;
  }
+
  case "df":{
-  const used=getSize(root);
-  print("Sistema de archivos virtual");
+  const used=sizeOf(root);
+  print("Almacenamiento virtual");
   print("Total: 100 MB");
   print("Usado: "+(used/1024).toFixed(2)+" KB");
   print("Disponible: "+(102400-used/1024).toFixed(2)+" KB");
-  print("Uso: "+(used/1048576*100).toFixed(2)+"%");
   break;
  }
- case "free":{
+
+ case "free":
   print("             TOTAL      USADO      LIBRE");
   print("RAM          4096 MB    1240 MB    2856 MB");
   print("SWAP         2048 MB     120 MB    1928 MB");
-  print("Nota: memoria simulada del laboratorio.");
+  print("Datos simulados del laboratorio.");
   break;
- }
- case "ps":{
+
+ case "ps":
+ case "top":
   print("PID   USER      CPU     MEMORIA    PROCESO","green");
-  processes.forEach(p=>print(p.pid+"   "+p.user+"   "+p.cpu+"   "+p.memory+"   "+p.name));
+  processes.forEach(p=>print(
+   p.pid+"   "+p.user+"   "+p.cpu+"   "+p.memory+"   "+p.name));
+  if(cmd==="top") print("Monitor virtual: RAM 30% | CPU 12% | Procesos "+processes.length);
   break;
- }
- case "top":{
-  print("ALEX SYSTEM MONITOR 4.0","green");
-  print("CPU virtual: 12% | RAM virtual: 30% | Procesos: "+processes.length);
-  print("PID   PROCESO          CPU       MEMORIA");
-  processes.forEach(p=>print(p.pid+"   "+p.name+"   "+p.cpu+"   "+p.memory));
-  print("Monitor de demostracion: datos simulados.");
-  break;
- }
+
  case "kill":{
   const pid=Number(a[0]);
   const index=processes.findIndex(p=>p.pid===pid && p.pid!==1);
@@ -565,6 +653,59 @@ async function execute(raw){
   print("Proceso virtual terminado: "+name,"green");
   break;
  }
+
  case "chmod":{
-  if(a.length<2){print("Uso: chmod 755 archivo","red");break;}
-  if(!/^[0-7]{3,
+  if(a.length<2 || !/^[0-7]{3,4}$/.test(a[0])){
+   print("Uso: chmod 755 archivo","red");break;
+  }
+  const node=getNode(normalize(a[1]));
+  if(!node){print("Archivo no encontrado","red");break;}
+  node.permissions=a[0].slice(-3);
+  print("Permisos virtuales cambiados a "+node.permissions,"green");
+  break;
+ }
+
+ case "neofetch":
+  print("      .--.       ALEX LINUX LAB 4.0","green");
+  print("     |o_o |      Sistema: Linux virtual");
+  print("     |:_/ |      Usuario: alex");
+  print("    //   \\ \\     Shell: alex-shell");
+  print("   (|     | )    RAM virtual: 4 GB");
+  print("  /'\\_   _/`\\    Entorno: navegador");
+  print("  \\___)=(___/    Estado: operativo","green");
+  break;
+
+ case "calc":
+  if(!a.length){print("Uso: calc (10+5)*2","red");break;}
+  print("Resultado: "+calculate(a.join(" ")),"green");
+  break;
+
+ case "seq":{
+  if(!a.length){print("Uso: seq 10 o seq 1 10","red");break;}
+  const start=a.length>1?Number(a[0]):1;
+  const end=Number(a.length>1?a[1]:a[0]);
+  if(!Number.isInteger(start)||!Number.isInteger(end)||end<start||end-start>1000){
+   print("Rango no válido. Máximo 1000 números.","red");break;
+  }
+  for(let i=start;i<=end;i++) print(i);
+  break;
+ }
+
+ case "ping":{
+  const host=a[0]||"servidor-ejemplo";
+  print("PING "+host+" (simulación)");
+  for(let i=1;i<=4;i++){
+   print("64 bytes desde "+host+": icmp_seq="+i+" ttl=64 tiempo="+(12+i*3)+" ms");
+  }
+  print("4 paquetes simulados, 4 recibidos, 0% pérdida.");
+  print("No se envía tráfico real por la red.");
+  break;
+ }
+
+ case "ip":
+  if(a[0]==="addr" || a[0]==="a"){
+   print("1: lo: <LOOPBACK> 127.0.0.1/8");
+   print("2: eth0: <UP,BROADCAST> 192.168.1.100/24");
+   print("Direcciones ficticias del laboratorio.");
+  }else if(a[0]==="route"){
+   print("default v
