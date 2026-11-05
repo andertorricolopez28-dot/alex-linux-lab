@@ -3,588 +3,419 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#050b08">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ALEX LINUX LAB 3.0</title>
 <style>
-:root {
-  --green:#00ff88;
-  --bg:#050b08;
-  --panel:#0b1510;
-  --border:#17452d;
-  --text:#d8ffe7;
-  --muted:#7da98c;
-}
 *{box-sizing:border-box}
 body{
-  margin:0;background:var(--bg);color:var(--text);
-  font-family:Consolas,Monaco,monospace;
-  min-height:100vh;
+ margin:0;background:#050b08;color:#d9ffe5;
+ font-family:monospace;padding:15px
 }
-header{
-  padding:25px 16px;text-align:center;
-  background:linear-gradient(135deg,#06170d,#0c2918);
-  border-bottom:1px solid var(--border);
-}
-header h1{
-  color:var(--green);font-size:clamp(24px,6vw,38px);
-  margin:0;text-shadow:0 0 15px #00ff8860;
-}
-header p{color:var(--muted);margin:10px 0 0;font-size:13px}
-main{width:min(1050px,94%);margin:22px auto}
+header{text-align:center;padding:20px}
+h1{color:#00ff88;text-shadow:0 0 12px #00ff88}
 .panel{
-  background:var(--panel);border:1px solid var(--border);
-  border-radius:12px;padding:17px;margin-bottom:17px;
-  box-shadow:0 0 18px #00ff8808;
-}
-h2{color:var(--green);font-size:17px;margin:0 0 13px}
-.status{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:14px}
-.pill{
-  border:1px solid var(--border);padding:7px 10px;
-  border-radius:20px;font-size:11px;color:var(--green);
+ max-width:900px;margin:15px auto;padding:15px;
+ background:#0b1710;border:1px solid #17613a;
+ border-radius:12px
 }
 #terminal{
-  height:390px;overflow-y:auto;padding:14px;
-  background:#020604;border:1px solid #16432a;
-  border-radius:9px;white-space:pre-wrap;overflow-wrap:anywhere;
-  font-size:13px;line-height:1.6;
+ height:380px;overflow:auto;background:#020604;
+ padding:15px;border-radius:8px;
+ white-space:pre-wrap;overflow-wrap:anywhere;
+ line-height:1.6;font-size:13px
 }
-.line{margin:2px 0}
-.prompt{color:var(--green)}
-.output{color:#c4e9d0}
-.error{color:#ff7777}
-.info{color:#70cfff}
-.success{color:var(--green)}
-.warning{color:#ffd36a}
-.inputrow{
-  display:flex;align-items:center;gap:8px;margin-top:12px;
-  background:#020604;border:1px solid var(--border);
-  border-radius:8px;padding:10px;
-}
-#command{
-  min-width:0;flex:1;background:transparent;border:0;
-  outline:none;color:var(--green);font:inherit;font-size:14px;
+.green{color:#00ff88}
+.red{color:#ff7777}
+.blue{color:#69caff}
+.inputrow{display:flex;gap:8px;margin-top:12px}
+input{
+ flex:1;min-width:0;background:#020604;color:#00ff88;
+ border:1px solid #17613a;padding:13px;
+ font-family:monospace;border-radius:6px
 }
 button{
-  background:#07351d;border:1px solid #00a95b;color:var(--green);
-  padding:10px 14px;border-radius:7px;font-weight:bold;
-  font-family:inherit;cursor:pointer;
+ background:#07532b;color:#00ff88;
+ border:1px solid #00a957;border-radius:6px;
+ padding:12px;cursor:pointer;font-weight:bold
 }
-button:active{transform:scale(.97)}
-button:hover{background:#0b512b}
+button:active{background:#087c3d}
 .quick{display:flex;flex-wrap:wrap;gap:8px}
-.quick button{font-size:12px;padding:8px 11px}
-.grid{
-  display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
-  gap:10px;
-}
-.tool{
-  border:1px solid var(--border);border-radius:8px;
-  padding:12px;background:#08120c;
-}
-.tool strong{color:var(--green);display:block;margin-bottom:7px}
-.tool span{font-size:12px;color:var(--muted)}
-footer{text-align:center;padding:25px;color:var(--muted);font-size:11px}
-a{color:var(--green)}
-@media(max-width:500px){
-  #terminal{height:340px;font-size:12px}
-  .panel{padding:12px}
-  button{padding:9px 11px}
-}
+.quick button{font-size:12px}
 </style>
 </head>
 <body>
 
 <header>
-  <h1> ALEX-LINUX-LAB </h1>
-  <p>LINUX VIRTUAL ENVIRONMENT · VERSION 3.0</p>
+<h1>ALEX LINUX LAB 3.0</h1>
+<p>LABORATORIO LINUX VIRTUAL</p>
+<p class="green">● SISTEMA INICIADO</p>
 </header>
 
-<main>
-  <section class="panel">
-    <div class="status">
-      <span class="pill">● SYSTEM ONLINE</span>
-      <span class="pill">LINUX SIMULATOR</span>
-      <span class="pill">USER: ALEX</span>
-      <span class="pill">VERSION 3.0</span>
-    </div>
+<div class="panel">
+<h3 class="green">TERMINAL</h3>
+<div id="terminal"></div>
 
-    <h2>▸ TERMINAL LINUX</h2>
-    <div id="terminal" aria-live="polite"></div>
+<div class="inputrow">
+<input id="command" placeholder="Escribe help..." autocomplete="off">
+<button id="run">EJECUTAR</button>
+</div>
+<p style="font-size:11px;color:#83aa90">
+Pulsa ENTER para ejecutar un comando.
+</p>
+</div>
 
-    <div class="inputrow">
-      <span class="prompt" id="prompt">$</span>
-      <input id="command" type="text" placeholder="Escribe un comando..." autocomplete="off" autocapitalize="off" spellcheck="false">
-      <button id="run">EJECUTAR</button>
-    </div>
-    <p style="color:var(--muted);font-size:11px">
-      ENTER ejecutar · ↑ ↓ historial · Escribe help para ver los comandos.
-    </p>
-  </section>
-
-  <section class="panel">
-    <h2>▸ COMANDOS RÁPIDOS</h2>
-    <div class="quick">
-      <button data-cmd="help">help</button>
-      <button data-cmd="neofetch">neofetch</button>
-      <button data-cmd="ls">ls</button>
-      <button data-cmd="pwd">pwd</button>
-      <button data-cmd="tree">tree</button>
-      <button data-cmd="date">date</button>
-      <button data-cmd="history">history</button>
-      <button data-cmd="clear">clear</button>
-    </div>
-  </section>
-
-  <section class="panel">
-    <h2>▸ HERRAMIENTAS DEL LABORATORIO</h2>
-    <div class="grid">
-      <div class="tool"><strong>Gestión de archivos</strong><span>Crear, leer, copiar, mover y borrar archivos virtuales.</span></div>
-      <div class="tool"><strong>Terminal Linux</strong><span>Directorio actual, historial, variables y comandos.</span></div>
-      <div class="tool"><strong>Calculadora</strong><span>Operaciones matemáticas sin ejecutar código externo.</span></div>
-      <div class="tool"><strong>SHA-256</strong><span>Generar hashes de texto en el navegador.</span></div>
-      <div class="tool"><strong>Base64</strong><span>Codificar y decodificar texto.</span></div>
-      <div class="tool"><strong>JSON</strong><span>Formatear y validar estructuras JSON.</span></div>
-    </div>
-  </section>
-
-  <section class="panel">
-    <h2>▸ PRIMEROS PASOS</h2>
-    <div class="output">
-      help
-      <br>neofetch
-      <br>mkdir proyectos
-      <br>cd proyectos
-      <br>touch prueba.txt
-      <br>write prueba.txt Hola Linux
-      <br>cat prueba.txt
-      <br>tree
-    </div>
-  </section>
-</main>
-
-<footer>
-  ALEX-LINUX-LAB 3.0 · LABORATORIO EDUCATIVO DE LINUX
-  <br>Aprende · Practica · Construye
-</footer>
+<div class="panel">
+<h3 class="green">COMANDOS RÁPIDOS</h3>
+<div class="quick">
+<button data-command="help">HELP</button>
+<button data-command="ls">LS</button>
+<button data-command="pwd">PWD</button>
+<button data-command="whoami">WHOAMI</button>
+<button data-command="neofetch">NEOFETCH</button>
+<button data-command="date">DATE</button>
+<button data-command="clear">CLEAR</button>
+</div>
+</div>
 
 <script>
-"use strict";
+(function(){
 
-const terminal = document.getElementById("terminal");
-const input = document.getElementById("command");
-const promptLabel = document.getElementById("prompt");
+const terminal=document.getElementById("terminal");
+const input=document.getElementById("command");
+const runButton=document.getElementById("run");
 
-const FS = {
-  type:"dir",
-  children:{
-    home:{
-      type:"dir",
-      children:{
-        alex:{
-          type:"dir",
-          children:{
-            Documents:{type:"dir",children:{}},
-            Downloads:{type:"dir",children:{}},
-            Projects:{type:"dir",children:{}},
-            "welcome.txt":{
-              type:"file",
-              content:"Bienvenido a ALEX-LINUX-LAB 3.0.\nTu laboratorio Linux virtual está listo."
-            },
-            "notes.txt":{
-              type:"file",
-              content:"Mis primeras prácticas de Linux."
-            }
-          }
-        }
-      }
-    },
-    etc:{type:"dir",children:{
-      "hostname":{type:"file",content:"alex-linux-lab"}
-    }},
-    tmp:{type:"dir",children:{}},
-    var:{type:"dir",children:{}}
-  }
+if(!terminal || !input || !runButton){
+ alert("Error: no se encontró la terminal.");
+ return;
+}
+
+const files={
+ "/home/alex":{
+  "welcome.txt":"Bienvenido a ALEX LINUX LAB 3.0",
+  "notas.txt":"Aprendiendo Linux paso a paso."
+ }
 };
 
-let cwd=["home","alex"];
+let cwd="/home/alex";
 let history=[];
-let historyIndex=0;
-let env={USER:"alex",HOME:"/home/alex",SHELL:"/bin/bash",LAB:"ALEX-LINUX-LAB"};
-let startTime=Date.now();
+let historyPosition=0;
 
-function print(text="",type="output"){
-  const div=document.createElement("div");
-  div.className="line "+type;
-  div.textContent=String(text);
-  terminal.appendChild(div);
-  terminal.scrollTop=terminal.scrollHeight;
+function output(text,color=""){
+ const line=document.createElement("div");
+ line.textContent=String(text);
+ if(color) line.className=color;
+ terminal.appendChild(line);
+ terminal.scrollTop=terminal.scrollHeight;
 }
 
-function currentPath(){
-  return "/"+cwd.join("/");
+function prompt(){
+ return "alex@linux-lab:"+cwd+"$ ";
 }
 
-function updatePrompt(){
-  promptLabel.textContent="alex@linux-lab:"+currentPath()+"$";
+function resolve(path){
+ if(!path || path==="~") return "/home/alex";
+ if(path.startsWith("/")) return path.replace(/\/+/g,"/").replace(/\/$/,"") || "/";
+ const parts=(cwd+"/"+path).split("/");
+ const result=[];
+ for(const p of parts){
+  if(!p || p===".") continue;
+  if(p==="..") result.pop();
+  else result.push(p);
+ }
+ return "/"+result.join("/");
 }
 
-function getNode(parts){
-  let node=FS;
-  for(const part of parts){
-    if(!node || node.type!=="dir" || !node.children[part]) return null;
-    node=node.children[part];
+function parent(path){
+ const p=path.lastIndexOf("/");
+ return {
+  folder:path.substring(0,p)||"/",
+  name:path.substring(p+1)
+ };
+}
+
+function execute(raw){
+ const text=raw.trim();
+ if(!text)return;
+
+ output(prompt()+text,"green");
+ history.push(text);
+ historyPosition=history.length;
+
+ const parts=text.match(/"[^"]*"|'[^']*'|\S+/g)||[];
+ const cmd=parts.shift().toLowerCase();
+ const args=parts.map(x=>x.replace(/^["']|["']$/g,""));
+
+ try{
+ switch(cmd){
+
+ case "help":
+ output("===== COMANDOS DISPONIBLES =====","green");
+ output("help       Mostrar ayuda");
+ output("ls         Listar archivos");
+ output("pwd        Mostrar ubicación");
+ output("cd         Cambiar directorio");
+ output("mkdir      Crear carpeta");
+ output("touch      Crear archivo");
+ output("cat        Leer archivo");
+ output("write      Escribir archivo");
+ output("rm         Eliminar archivo");
+ output("whoami     Mostrar usuario");
+ output("hostname   Nombre del sistema");
+ output("uname      Información Linux");
+ output("date       Fecha actual");
+ output("uptime     Tiempo de sesión");
+ output("neofetch   Información visual");
+ output("echo       Mostrar texto");
+ output("calc       Calculadora");
+ output("tree       Árbol de archivos");
+ output("clear      Limpiar terminal");
+ output("history    Historial");
+ break;
+
+ case "pwd":
+ output(cwd,"green");
+ break;
+
+ case "whoami":
+ output("alex","green");
+ break;
+
+ case "hostname":
+ output("alex-linux-lab");
+ break;
+
+ case "uname":
+ output(args[0]==="-a"?
+ "Linux alex-linux-lab 6.0.0-virtual x86_64 GNU/Linux":
+ "Linux");
+ break;
+
+ case "date":
+ output(new Date().toString());
+ break;
+
+ case "uptime":
+ output("Sesión activa: "+Math.floor(performance.now()/1000)+" segundos");
+ break;
+
+ case "neofetch":
+ output("       .---.       alex@linux-lab","green");
+ output("      /     \\      ----------------");
+ output("     | () () |     OS: Alex Linux Lab 3.0");
+ output("      \\  ^  /      Kernel: Virtual");
+ output("       |||||       Shell: AlexShell");
+ output("       |||||       User: alex");
+ break;
+
+ case "ls":{
+ const path=resolve(args[0]||".");
+ if(!files[path]){
+  output("No existe el directorio: "+path,"red");break;
+ }
+ const names=Object.keys(files[path]);
+ output(names.length?names.join("    "):"(vacío)");
+ break;
+ }
+
+ case "cd":{
+ const path=resolve(args[0]||"~");
+ if(!files[path]){
+  output("Directorio no encontrado: "+path,"red");break;
+ }
+ cwd=path;
+ break;
+ }
+
+ case "mkdir":{
+ if(!args[0]){output("Uso: mkdir nombre","red");break;}
+ const path=resolve(args[0]);
+ if(files[path]){output("Ya existe.","red");break;}
+ const p=parent(path);
+ if(!files[p.folder]){output("Carpeta padre no encontrada.","red");break;}
+ files[path]={};
+ output("Carpeta creada: "+path,"green");
+ break;
+ }
+
+ case "touch":{
+ if(!args[0]){output("Uso: touch archivo","red");break;}
+ const path=resolve(args[0]);
+ const p=parent(path);
+ if(!files[p.folder]){output("Carpeta padre no encontrada.","red");break;}
+ if(files[p.folder][p.name]===undefined) files[p.folder][p.name]="";
+ output("Archivo creado: "+path,"green");
+ break;
+ }
+
+ case "cat":{
+ if(!args[0]){output("Uso: cat archivo","red");break;}
+ const path=resolve(args[0]);
+ const p=parent(path);
+ const value=files[p.folder]?.[p.name];
+ if(typeof value!=="string"){output("Archivo no encontrado.","red");break;}
+ output(value||"(archivo vacío)");
+ break;
+ }
+
+ case "write":{
+ if(args.length<2){output("Uso: write archivo contenido","red");break;}
+ const path=resolve(args.shift());
+ const p=parent(path);
+ if(!files[p.folder]){output("Carpeta padre no encontrada.","red");break;}
+ if(typeof files[p.folder][p.name]!=="string" &&
+ files[p.folder][p.name]!==undefined){
+ output("No es un archivo.","red");break;
+ }
+ files[p.folder][p.name]=args.join(" ");
+ output("Contenido guardado.","green");
+ break;
+ }
+
+ case "rm":{
+ if(!args[0]){output("Uso: rm archivo","red");break;}
+ const path=resolve(args[0]);
+ const p=parent(path);
+ if(typeof files[p.folder]?.[p.name]!=="string"){
+ output("Archivo no encontrado.","red");break;
+ }
+ delete files[p.folder][p.name];
+ output("Archivo eliminado.","green");
+ break;
+ }
+
+ case "echo":
+ output(args.join(" "));
+ break;
+
+ case "calc":{
+ const expression=args.join("");
+ if(!/^[0-9+\-*/().%\s]+$/.test(expression)){
+ output("Operación no válida.","red");break;
+ }
+ const tokens=expression.match(/\d+(?:\.\d+)?|[()+\-*/%]/g)||[];
+ if(tokens.join("")!==expression.replace(/\s/g,"")){
+ output("Expresión incorrecta.","red");break;
+ }
+ const result=(function(){
+ let i=0;
+ function primary(){
+  const t=tokens[i++];
+  if(t==="-")return -primary();
+  if(t==="+")return primary();
+  if(t==="("){
+   const v=add();
+   if(tokens[i++]!==")")throw Error("Paréntesis incorrectos");
+   return v;
   }
-  return node;
-}
-
-function resolvePath(path){
-  if(!path || path==="~") return ["home","alex"];
-  let parts=path.startsWith("/")?[]:[...cwd];
-  if(path.startsWith("~")) parts=["home","alex"];
-  const rest=path.startsWith("~")?path.slice(1):path;
-  for(const p of rest.split("/")){
-    if(!p || p===".") continue;
-    if(p==="..") parts.pop();
-    else parts.push(p);
+  const n=Number(t);
+  if(!Number.isFinite(n))throw Error("Número incorrecto");
+  return n;
+ }
+ function mul(){
+  let v=primary();
+  while(["*","/","%"].includes(tokens[i])){
+   const op=tokens[i++],b=primary();
+   if((op==="/"||op==="%")&&b===0)throw Error("División por cero");
+   v=op==="*"?v*b:op==="/"?v/b:v%b;
   }
-  return parts;
-}
-
-function parentAndName(path){
-  const parts=resolvePath(path);
-  const name=parts.pop();
-  return {parent:getNode(parts),name,parts};
-}
-
-function tokenize(str){
-  const result=[];
-  const regex=/"([^"]*)"|'([^']*)'|(\S+)/g;
-  let match;
-  while((match=regex.exec(str))!==null){
-    result.push(match[1] ?? match[2] ?? match[3]);
+  return v;
+ }
+ function add(){
+  let v=mul();
+  while(tokens[i]==="+"||tokens[i]==="-"){
+   const op=tokens[i++],b=mul();
+   v=op==="+"?v+b:v-b;
   }
-  return result;
+  return v;
+ }
+ const v=add();
+ if(i!==tokens.length||!Number.isFinite(v))throw Error("Expresión incorrecta");
+ return v;
+ })();
+ output("Resultado: "+result,"green");
+ break;
+ }
+
+ case "tree":{
+ const path=resolve(args[0]||".");
+ if(!files[path]){output("Ruta no encontrada.","red");break;}
+ function walk(obj,level){
+  Object.entries(obj).forEach(([name,value])=>{
+   output("  ".repeat(level)+"├── "+name+(typeof value==="object"?"/":""));
+   if(typeof value==="object")walk(value,level+1);
+  });
+ }
+ output(path);
+ walk(files[path],1);
+ break;
+ }
+
+ case "history":
+ history.forEach((x,i)=>output((i+1)+"  "+x));
+ break;
+
+ case "clear":
+ terminal.textContent="";
+ break;
+
+ default:
+ output("Comando desconocido: "+cmd,"red");
+ output("Escribe help para ver los comandos.","blue");
+ }
+ }catch(error){
+ output("ERROR: "+error.message,"red");
+ }
 }
 
-function requireNode(path){
-  const node=getNode(resolvePath(path));
-  if(!node) throw new Error("No existe: "+path);
-  return node;
-}
+runButton.addEventListener("click",function(){
+ const value=input.value;
+ input.value="";
+ execute(value);
+ input.focus();
+});
 
-function requireDir(path){
-  const node=requireNode(path);
-  if(node.type!=="dir") throw new Error("No es un directorio: "+path);
-  return node;
-}
-
-function formatTree(node,prefix="",isLast=true,name="."){
-  let result=prefix+(isLast?"└── ":"├── ")+name;
-  if(node.type==="dir"){
-    const entries=Object.entries(node.children);
-    entries.forEach(([key,value],i)=>{
-      result+="\n"+formatTree(value,prefix+(isLast?"    ":"│   "),i===entries.length-1,key);
-    });
+input.addEventListener("keydown",function(e){
+ if(e.key==="Enter"){
+  e.preventDefault();
+  const value=input.value;
+  input.value="";
+  execute(value);
+ }
+ if(e.key==="ArrowUp"){
+  e.preventDefault();
+  if(historyPosition>0){
+   historyPosition--;
+   input.value=history[historyPosition];
   }
-  return result;
-}
-
-function parseExpression(expression){
-  const tokens=expression.match(/\d+(?:\.\d+)?|[()+\-*/%]/g);
-  if(!tokens || tokens.join("")!==expression.replace(/\s/g,""))
-    throw new Error("Expresión no válida.");
-
-  let pos=0;
-  function primary(){
-    const t=tokens[pos++];
-    if(t==="+") return primary();
-    if(t==="-") return -primary();
-    if(t==="("){
-      const value=addSub();
-      if(tokens[pos++]!==")") throw new Error("Falta cerrar paréntesis.");
-      return value;
-    }
-    const n=Number(t);
-    if(!Number.isFinite(n)) throw new Error("Número no válido.");
-    return n;
+ }
+ if(e.key==="ArrowDown"){
+  e.preventDefault();
+  if(historyPosition<history.length-1){
+   historyPosition++;
+   input.value=history[historyPosition];
+  }else{
+   historyPosition=history.length;
+   input.value="";
   }
-  function mulDiv(){
-    let v=primary();
-    while(["*","/","%"].includes(tokens[pos])){
-      const op=tokens[pos++];
-      const b=primary();
-      if((op==="/" || op==="%") && b===0) throw new Error("No se puede dividir por cero.");
-      if(op==="*") v*=b;
-      if(op==="/") v/=b;
-      if(op==="%") v%=b;
-    }
-    return v;
-  }
-  function addSub(){
-    let v=mulDiv();
-    while(tokens[pos]==="+" || tokens[pos]==="-"){
-      const op=tokens[pos++];
-      const b=mulDiv();
-      v=op==="+"?v+b:v-b;
-    }
-    return v;
-  }
-  const answer=addSub();
-  if(pos!==tokens.length || !Number.isFinite(answer)) throw new Error("Expresión incorrecta.");
-  return answer;
-}
+ }
+});
 
-function help(){
-  print("========== ALEX LINUX LAB 3.0 ==========","success");
-  print("NAVEGACIÓN");
-  print("pwd                 Mostrar directorio actual");
-  print("ls [ruta]           Listar archivos");
-  print("cd [ruta]           Cambiar directorio");
-  print("tree                Mostrar árbol de carpetas");
-  print("find [ruta] [texto] Buscar nombres");
-  print("");
-  print("ARCHIVOS Y CARPETAS","success");
-  print("mkdir [nombre]      Crear directorio");
-  print("touch [archivo]     Crear archivo");
-  print("cat [archivo]       Leer archivo");
-  print("write [archivo] texto  Escribir archivo");
-  print("append [archivo] texto Añadir texto");
-  print("rm [archivo]        Eliminar archivo");
-  print("rmdir [carpeta]     Eliminar carpeta vacía");
-  print("cp [origen] [destino]  Copiar");
-  print("mv [origen] [destino]  Mover o renombrar");
-  print("stat [archivo]      Información del archivo");
-  print("");
-  print("SISTEMA");
-  print("whoami, id, uname, hostname, date, uptime");
-  print("neofetch, env, export, echo, which, history");
-  print("");
-  print("UTILIDADES","success");
-  print("calc [operación]    Calculadora");
-  print("seq [inicio] [fin]  Secuencia numérica");
-  print("wc [archivo]        Contar líneas y palabras");
-  print("head [archivo]      Primeras líneas");
-  print("tail [archivo]      Últimas líneas");
-  print("grep [texto] [archivo] Buscar texto");
-  print("sha256 [texto]      Hash SHA-256");
-  print("base64 encode|decode [texto]");
-  print("url encode|decode [texto]");
-  print("json [texto JSON]   Formatear JSON");
-  print("clear               Limpiar terminal");
-  print("help                Mostrar esta ayuda");
-  print("");
-  print("Escribe man [comando] para consultar un comando.","info");
-}
+document.querySelectorAll("[data-command]").forEach(button=>{
+ button.addEventListener("click",function(){
+  execute(button.dataset.command);
+  input.focus();
+ });
+});
 
-function findFiles(node,parts,query,results){
-  if(node.type!=="dir") return;
-  for(const [name,child] of Object.entries(node.children)){
-    const full="/"+parts.concat(name).join("/");
-    if(name.toLowerCase().includes(query.toLowerCase())) results.push(full);
-    findFiles(child,parts.concat(name),query,results);
-  }
-}
+output("======================================","green");
+output("       ALEX LINUX LAB 3.0","green");
+output("       TERMINAL INICIADA","green");
+output("======================================","green");
+output("Usuario: alex");
+output("Sistema: Linux virtual");
+output("Escribe help para comenzar.","blue");
 
-async function execute(raw){
-  const line=raw.trim();
-  if(!line) return;
-  print("alex@linux-lab:"+currentPath()+"$ "+line,"prompt");
-  history.push(line);
-  historyIndex=history.length;
-
-  const args=tokenize(line);
-  const cmd=args.shift().toLowerCase();
-
-  try{
-    switch(cmd){
-
-      case "help": help(); break;
-      case "clear": terminal.innerHTML=""; break;
-      case "pwd": print(currentPath()); break;
-      case "whoami": print("alex"); break;
-      case "hostname": print("alex-linux-lab"); break;
-      case "date": print(new Date().toString()); break;
-      case "uname":
-        print(args[0]==="-a"
-          ?"Linux alex-linux-lab 6.0.0-virtual #1 SMP Virtual x86_64 GNU/Linux"
-          :"Linux");
-        break;
-      case "id": print("uid=1000(alex) gid=1000(alex) groups=1000(alex)"); break;
-      case "uptime":{
-        const sec=Math.floor((Date.now()-startTime)/1000);
-        print("up "+sec+" seconds, 1 user, load average: 0.00, 0.00, 0.00");
-        break;
-      }
-      case "neofetch":
-        print("       .---.        alex@linux-lab","success");
-        print("      /     \\       ----------------");
-        print("      | () () |     OS: Alex Linux Lab 3.0");
-        print("       \\  ^  /      Kernel: Virtual Browser Kernel");
-        print("        |||||       Shell: AlexShell");
-        print("        |||||       User: alex");
-        print("                    Filesystem: Virtual");
-        print("                    Terminal: Web Terminal");
-        break;
-      case "env":
-        Object.entries(env).forEach(([k,v])=>print(k+"="+v));
-        break;
-      case "export":{
-        const value=args.join(" ");
-        const idx=value.indexOf("=");
-        if(idx<1) throw new Error("Uso: export NOMBRE=valor");
-        const key=value.slice(0,idx);
-        if(!/^[A-Za-z_][A-Za-z0-9_]*$/.test(key)) throw new Error("Nombre de variable inválido.");
-        env[key]=value.slice(idx+1);
-        print("Variable guardada: "+key,"success");
-        break;
-      }
-      case "echo":{
-        let value=args.join(" ");
-        value=value.replace(/\$([A-Za-z_][A-Za-z0-9_]*)/g,(_,k)=>env[k]??"");
-        print(value);
-        break;
-      }
-      case "which":{
-        const known=["ls","cd","pwd","mkdir","touch","cat","echo","grep","cp","mv","rm","calc","sha256","help"];
-        print(known.includes(args[0])?"/usr/bin/"+args[0]:"Comando no encontrado: "+(args[0]||""),known.includes(args[0])?"success":"error");
-        break;
-      }
-      case "history":
-        history.forEach((h,i)=>print((i+1)+"  "+h));
-        break;
-
-      case "ls":{
-        const path=args[0]||".";
-        const node=requireDir(path);
-        const names=Object.entries(node.children);
-        if(!names.length){print("(directorio vacío)");break;}
-        names.forEach(([name,n])=>print(n.type==="dir"?name+"/":name,n.type==="dir"?"info":"output"));
-        break;
-      }
-      case "cd":{
-        const path=args[0]||"~";
-        const parts=resolvePath(path);
-        const node=getNode(parts);
-        if(!node || node.type!=="dir") throw new Error("Directorio no encontrado: "+path);
-        cwd=parts;
-        updatePrompt();
-        break;
-      }
-      case "tree":{
-        const path=args[0]||".";
-        const node=requireDir(path);
-        print(formatTree(node,"",true,path));
-        break;
-      }
-      case "mkdir":{
-        if(!args[0]) throw new Error("Uso: mkdir nombre");
-        const {parent,name}=parentAndName(args[0]);
-        if(!parent || parent.type!=="dir") throw new Error("Directorio padre no encontrado.");
-        if(parent.children[name]) throw new Error("Ya existe: "+name);
-        parent.children[name]={type:"dir",children:{}};
-        print("Directorio creado: "+name,"success");
-        break;
-      }
-      case "touch":{
-        if(!args[0]) throw new Error("Uso: touch archivo");
-        const {parent,name}=parentAndName(args[0]);
-        if(!parent || parent.type!=="dir") throw new Error("Directorio padre no encontrado.");
-        if(!parent.children[name]) parent.children[name]={type:"file",content:""};
-        print("Archivo preparado: "+name,"success");
-        break;
-      }
-      case "cat":{
-        if(!args[0]) throw new Error("Uso: cat archivo");
-        const node=requireNode(args[0]);
-        if(node.type!=="file") throw new Error("No es un archivo.");
-        print(node.content||"(archivo vacío)");
-        break;
-      }
-      case "write":
-      case "append":{
-        if(args.length<2) throw new Error("Uso: "+cmd+" archivo texto");
-        const path=args.shift();
-        const {parent,name}=parentAndName(path);
-        if(!parent || parent.type!=="dir") throw new Error("Directorio padre no encontrado.");
-        if(parent.children[name] && parent.children[name].type!=="file") throw new Error("No es un archivo.");
-        if(!parent.children[name]) parent.children[name]={type:"file",content:""};
-        const text=args.join(" ");
-        if(cmd==="append" && parent.children[name].content) parent.children[name].content+="\n";
-        parent.children[name].content+=text;
-        print("Contenido guardado en "+name,"success");
-        break;
-      }
-      case "rm":{
-        if(!args[0]) throw new Error("Uso: rm archivo");
-        const {parent,name}=parentAndName(args[0]);
-        if(!parent || !parent.children[name]) throw new Error("Archivo no encontrado.");
-        if(parent.children[name].type==="dir") throw new Error("Usa rmdir para carpetas vacías.");
-        delete parent.children[name];
-        print("Archivo eliminado: "+name,"success");
-        break;
-      }
-      case "rmdir":{
-        if(!args[0]) throw new Error("Uso: rmdir carpeta");
-        const {parent,name}=parentAndName(args[0]);
-        const node=parent?.children[name];
-        if(!node || node.type!=="dir") throw new Error("Directorio no encontrado.");
-        if(Object.keys(node.children).length) throw new Error("El directorio no está vacío.");
-        delete parent.children[name];
-        print("Directorio eliminado: "+name,"success");
-        break;
-      }
-      case "cp":
-      case "mv":{
-        if(args.length<2) throw new Error("Uso: "+cmd+" origen destino");
-        const src=parentAndName(args[0]);
-        const dest=parentAndName(args[1]);
-        if(!src.parent?.children[src.name]) throw new Error("Origen no encontrado.");
-        if(!dest.parent) throw new Error("Destino no encontrado.");
-        if(dest.parent.children[dest.name]) throw new Error("El destino ya existe.");
-        const original=src.parent.children[src.name];
-        dest.parent.children[dest.name]=JSON.parse(JSON.stringify(original));
-        if(cmd==="mv") delete src.parent.children[src.name];
-        print(cmd==="cp"?"Copia creada.":"Elemento movido.","success");
-        break;
-      }
-      case "stat":{
-        const node=requireNode(args[0]);
-        print("Tipo: "+node.type);
-        print("Nombre: "+args[0]);
-        print("Tamaño: "+(node.type==="file"?node.content.length:"directorio")+"");
-        break;
-      }
-      case "find":{
-        const path=args[0]||".";
-        const query=args[1]||"";
-        if(!query) throw new Error("Uso: find ruta nombre");
-        const node=requireDir(path);
-        const results=[];
-        findFiles(node,resolvePath(path),query,results);
-        results.length?results.forEach(x=>print(x)):print("Sin resultados.");
-        break;
-      }
-      case "grep":{
-        if(args.length<2) throw new Error("Uso: grep palabra archivo");
-        const word=args.shift();
-        const node=requireNode(args[0]);
-        if(node.type!=="file") throw new Error("No es un archivo.");
-        const matches=node.content.split("\n").filter(x=>x.includes(word));
-        matches.length?matches.forEach(x=>print(x)):print("Sin coincidencias.");
-        break;
-      }
-      case "wc":{
-        const node=requireNode(args[0]);
-        if(node.type!=="file") throw new Error("No es un archivo.");
-        const s=node.content;
-        print("Líneas: "+(s? s.split("\n").length:0));
-        print("Palabras: "+(s.trim()?s.trim().split(/\s+/).length:0));
-        print("Caracteres: "+s.length);
-        break;
-      }
-      case "head":
-      case "tail":{
-        const node=requireNode(args[0]);
-        if(node.type!=="file") throw new Error("No es un archivo.");
-        c
+})();
+</script>
+</body>
+</html>
