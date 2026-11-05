@@ -3,30 +3,29 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>ALEX LINUX LAB 6.0</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#050b08;color:#00ff88;font-family:monospace;padding:15px}
-.container{max-width:900px;margin:auto}
+body{margin:0;padding:15px;background:#050b08;color:#00ff88;font-family:monospace}
+main{max-width:900px;margin:auto}
 h1{text-align:center;text-shadow:0 0 12px #00ff88}
-.subtitle{text-align:center;color:#8affbd}
-.panel{border:1px solid #00ff88;border-radius:10px;padding:12px;background:#08140e;box-shadow:0 0 15px #003d22}
-#terminal{height:380px;overflow-y:auto;background:#020604;padding:12px;border:1px solid #145b38;border-radius:7px;white-space:pre-wrap;overflow-wrap:anywhere}
+.sub{text-align:center;color:#8affbd;margin-bottom:18px}
+.panel{background:#08140e;border:1px solid #00ff88;border-radius:10px;padding:12px}
+#terminal{height:380px;overflow:auto;background:#020604;border:1px solid #145b38;padding:12px;border-radius:7px;white-space:pre-wrap;overflow-wrap:anywhere}
 .line{margin:0 0 7px}
 .inputrow{display:flex;gap:8px;margin-top:12px}
-input{flex:1;min-width:0;background:#020604;color:#00ff88;border:1px solid #00ff88;padding:13px;border-radius:6px;font-family:monospace}
-button{background:#06351e;color:#00ff88;border:1px solid #00ff88;padding:10px;border-radius:6px;font-family:monospace;cursor:pointer}
+input{min-width:0;flex:1;background:#020604;color:#00ff88;border:1px solid #00ff88;border-radius:6px;padding:13px;font-family:monospace}
+button{background:#06351e;color:#00ff88;border:1px solid #00ff88;border-radius:6px;padding:10px;font-family:monospace;cursor:pointer}
 button:active{background:#00ff88;color:#001b0d}
 .quick{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
-.small{font-size:12px;color:#8affbd;text-align:center;margin-top:14px}
+.small{text-align:center;color:#8affbd;font-size:12px;margin-top:14px}
 </style>
 </head>
 <body>
-<div class="container">
-<h1> ALEX-LINUX-LAB 6.0 </h1>
-<div class="subtitle">ETHICAL HACKING • LINUX • CYBERSECURITY</div>
-<br>
+<main>
+<h1>ALEX-LINUX-LAB 6.0</h1>
+<div class="sub">LINUX • ETHICAL HACKING • CYBERSECURITY</div>
 <div class="panel">
 <div id="terminal"></div>
 <div class="inputrow">
@@ -48,110 +47,103 @@ button:active{background:#00ff88;color:#001b0d}
 <button data-cmd="clear">CLEAR</button>
 </div>
 </div>
-<div class="small">ALEX LAB 6.0 — ENTORNO EDUCATIVO SIMULADO</div>
-</div>
+<div class="small">ALEX LINUX LAB 6.0 — LABORATORIO VIRTUAL</div>
+</main>
 
 <script>
-(()=>{
+(function(){
 "use strict";
 const terminal=document.getElementById("terminal");
 const input=document.getElementById("command");
 const run=document.getElementById("run");
 
-const files={
-"/":{type:"dir"},
-"/home":{type:"dir"},
-"/home/alex":{type:"dir"},
-"/home/alex/Documentos":{type:"dir"},
-"/home/alex/Descargas":{type:"dir"},
-"/home/alex/Escritorio":{type:"dir"},
-"/home/alex/Documentos/nota.txt":{type:"file",content:"Bienvenido a ALEX LINUX LAB 6.0"}
+const fs={
+"/":{dir:true},
+"/home":{dir:true},
+"/home/alex":{dir:true},
+"/home/alex/Documentos":{dir:true},
+"/home/alex/Descargas":{dir:true},
+"/home/alex/Escritorio":{dir:true},
+"/home/alex/Documentos/nota.txt":{content:"Bienvenido a ALEX LINUX LAB 6.0"}
 };
 let cwd="/home/alex";
 let history=[];
 let logs=[];
 let blocked=[];
-let modes={};
+let permissions={};
 
-const out=(s="")=>{
-const div=document.createElement("div");
-div.className="line";
-div.textContent=s;
-terminal.appendChild(div);
+function out(value){
+const line=document.createElement("div");
+line.className="line";
+line.textContent=String(value??"");
+terminal.appendChild(line);
 terminal.scrollTop=terminal.scrollHeight;
-};
-const prompt=()=>out("alex@lab:"+cwd+"$");
-const log=s=>logs.push(new Date().toLocaleTimeString()+" "+s);
-const norm=p=>{
-if(!p)return cwd;
-let base=p.startsWith("/")?p:cwd+"/"+p;
-let parts=[];
-base.split("/").forEach(x=>{
-if(!x||x===".")return;
-if(x==="..")parts.pop();else parts.push(x);
-});
-return "/"+parts.join("/");
-};
-const exists=p=>Object.prototype.hasOwnProperty.call(files,norm(p));
-const children=p=>Object.keys(files).filter(k=>k!==p&&k.substring(0,k.lastIndexOf("/"))===p);
-
-function help(){
-out("COMANDOS DISPONIBLES:");
-out("help | man | clear | pwd | whoami | id | hostname");
-out("uname | date | uptime | neofetch | ls | cd | mkdir");
-out("touch | cat | write | append | rm | rmdir | cp | mv");
-out("tree | chmod | security | nmap | hash | ports");
-out("firewall status/block/allow | logs | echo | history");
-out("ps | top | free | df | ip addr | ip route | ping");
-out("calc | seq | hack");
-out("Usa: hack para iniciar una misión de seguridad.");
 }
-
+function norm(path){
+if(!path)return cwd;
+let parts=(path.startsWith("/")?path:cwd+"/"+path).split("/");
+let result=[];
+parts.forEach(x=>{
+if(x===".." )result.pop();
+else if(x&&x!==".")result.push(x);
+});
+return "/"+result.join("/");
+}
+function exists(path){return Object.prototype.hasOwnProperty.call(fs,norm(path));}
+function children(path){
+return Object.keys(fs).filter(x=>x!==path&&x.substring(0,x.lastIndexOf("/"))===path);
+}
+function log(message){logs.push(new Date().toLocaleTimeString()+" "+message);}
+function help(){
+out("ALEX LINUX LAB — COMANDOS");
+out("help, man, clear, pwd, whoami, id, hostname");
+out("uname, date, uptime, neofetch, ls, cd, tree");
+out("mkdir, touch, cat, write, append, rm, rmdir");
+out("cp, mv, chmod, security, nmap, ports");
+out("firewall, hash, logs, history, echo");
+out("ps, top, free, df, ip, ping, calc, seq, hack");
+out("Usa: help para consultar esta lista.");
+}
 function hack(){
 out("");
-out("╔════════════════════════════════════╗");
+out("==================================");
 out("       ALEX ETHICAL HACKING");
-out("╚════════════════════════════════════╝");
-out("[+] Misión iniciada.");
+out("==================================");
+out("[+] Iniciando misión virtual...");
 out("[+] Objetivo: lab.local");
-out("[+] Entorno: laboratorio ficticio.");
-out("");
-const stages=[
-"[1/5] Identificando objetivo virtual...",
-"[2/5] Analizando servicios simulados...",
-"[3/5] Revisando puertos...",
-"[4/5] Comprobando configuraciones...",
-"[5/5] Preparando informe..."
-];
-stages.forEach(out);
-out("");
-out("========== INFORME ==========");
-const ports=[21,22,23,80,443,3306];
+out("[+] Entorno controlado.");
+out("[1/5] Identificando objetivo...");
+out("[2/5] Revisando servicios ficticios...");
+out("[3/5] Analizando puertos...");
 let open=0;
-ports.forEach(p=>{
+[21,22,23,80,443,3306].forEach(p=>{
 let state=blocked.includes(p)?"BLOQUEADO":
-([21,22,80,443].includes(p)?"ABIERTO":"CERRADO");
+[21,22,80,443].includes(p)?"ABIERTO":"CERRADO";
 if(state==="ABIERTO")open++;
 out("Puerto "+p+": "+state);
 });
-out("");
+out("[4/5] Revisando permisos...");
+let risks=Object.keys(permissions).filter(x=>permissions[x]==="777");
+out("Archivos con permisos 777: "+risks.length);
+out("[5/5] Preparando informe...");
+out("----------------------------------");
+out("INFORME FINAL");
 out("Servicios abiertos: "+open);
-out("Riesgo potencial: "+(open>2?"MEDIO":"BAJO"));
-out("Recomendación: desactivar servicios innecesarios.");
-out("[+] Misión completada.");
-out("[+] Sin conexiones externas ni ataques reales.");
-out("==============================");
-out("");
+out("Riesgos de permisos: "+risks.length);
+out("Nivel estimado: "+(open>2||risks.length?"MEDIO":"BAJO"));
+out("Recomendación: revisar servicios y permisos.");
+out("[+] Misión terminada.");
+out("[+] No se realizaron conexiones externas.");
+out("==================================");
 log("Misión hack completada");
 }
-
 async function execute(raw){
 const original=raw.trim();
 if(!original)return;
 out("alex@lab:"+cwd+"$ "+original);
 history.push(original);
 log(original);
-const parts=original.match(/(?:[^\s"]+|"[^"]*")+/g)||[];
+const parts=original.match(/"[^"]*"|\S+/g)||[];
 const cmd=(parts.shift()||"").toLowerCase();
 const a=parts.map(x=>x.replace(/^"|"$/g,""));
 const p=norm(a[0]||"");
@@ -160,145 +152,159 @@ case "help":case "man":help();break;
 case "clear":terminal.innerHTML="";break;
 case "pwd":out(cwd);break;
 case "whoami":out("alex");break;
-case "id":out("uid=1000(alex) gid=1000(alex) groups=1000(alex)");break;
+case "id":out("uid=1000(alex) gid=1000(alex)");break;
 case "hostname":out("alex-linux-lab");break;
-case "uname":out("Linux alex-linux-lab 6.0.0 virtual aarch64");break;
+case "uname":out("Linux alex-linux-lab 6.0 virtual aarch64");break;
 case "date":out(new Date().toString());break;
-case "uptime":out("Laboratorio activo durante esta sesión.");break;
+case "uptime":out("Laboratorio activo en esta sesión.");break;
 case "neofetch":
-out("       .--.       ALEX LINUX LAB 6.0");
+out("       .--.       ALEX LINUX LAB");
 out("      |o_o |      OS: Virtual Linux");
 out("      |:_/ |      Kernel: 6.0");
-out("     //   \\ \\     Shell: ALEX-SHELL");
+out("     //   \\\\     Shell: ALEX-SHELL");
 out("    (|     | )    User: alex");
-out("   /'\\_   _/`\\    Mode: Ethical Lab");
-out("   \\___)=(___/");break;
+out("     `.___.`      Mode: Ethical Lab");
+break;
 case "ls":
-children(cwd).forEach(x=>out(x.substring(x.lastIndexOf("/")+1)+(files[x].type==="dir"?"/":"")));
+children(cwd).forEach(x=>out(x.slice(x.lastIndexOf("/")+1)+(fs[x].dir?"/":"")));
 break;
 case "cd":
 if(!a[0])cwd="/home/alex";
-else if(exists(p)&&files[p].type==="dir")cwd=p;
+else if(exists(p)&&fs[p].dir)cwd=p;
 else out("cd: directorio no encontrado");
 break;
 case "mkdir":
 if(!a[0])out("Uso: mkdir nombre");
-else if(exists(p))out("Ya existe.");
-else{files[p]={type:"dir"};out("Directorio creado.");}
+else if(exists(p))out("Ya existe");
+else{fs[p]={dir:true};out("Directorio creado");}
 break;
 case "touch":
 if(!a[0])out("Uso: touch archivo");
-else if(exists(p))out("El archivo ya existe.");
-else{files[p]={type:"file",content:""};out("Archivo creado.");}
+else if(exists(p))out("Ya existe");
+else{fs[p]={content:""};out("Archivo creado");}
 break;
 case "cat":
-if(files[p]?.type==="file")out(files[p].content);
-else out("Archivo no encontrado.");
+if(exists(p)&&!fs[p].dir)out(fs[p].content);
+else out("Archivo no encontrado");
 break;
 case "write":
-if(!a[0]||!exists(p)||files[p].type!=="file")out("Uso: write archivo texto");
-else{files[p].content=a.slice(1).join(" ");out("Contenido guardado.");}
+if(!a[0]||!exists(p)||fs[p].dir)out("Uso: write archivo texto");
+else{fs[p].content=a.slice(1).join(" ");out("Contenido guardado");}
 break;
 case "append":
-if(!a[0]||!exists(p)||files[p].type!=="file")out("Uso: append archivo texto");
-else{files[p].content+="\n"+a.slice(1).join(" ");out("Contenido añadido.");}
+if(!a[0]||!exists(p)||fs[p].dir)out("Uso: append archivo texto");
+else{fs[p].content+="\n"+a.slice(1).join(" ");out("Contenido añadido");}
 break;
 case "rm":
-if(exists(p)&&files[p].type==="file"){delete files[p];out("Archivo eliminado.");}
-else out("Archivo no encontrado o no es archivo.");
+if(exists(p)&&!fs[p].dir){delete fs[p];out("Archivo eliminado");}
+else out("Archivo no encontrado");
 break;
 case "rmdir":
-if(exists(p)&&files[p].type==="dir"&&children(p).length===0){delete files[p];out("Directorio eliminado.");}
-else out("Directorio inexistente o no está vacío.");
+if(exists(p)&&fs[p].dir&&!children(p).length){delete fs[p];out("Directorio eliminado");}
+else out("Directorio inexistente o no vacío");
+break;
+case "tree":
+Object.keys(fs).forEach(x=>out(x));
 break;
 case "cp":{
 const dest=norm(a[1]);
-if(exists(p)&&files[p].type==="file"&&a[1]){files[dest]={...files[p]};out("Copia creada.");}
+if(exists(p)&&!fs[p].dir&&a[1]&&!exists(dest)){fs[dest]={...fs[p]};out("Archivo copiado");}
 else out("Uso: cp origen destino");
-break;}
+break;
+}
 case "mv":{
 const dest=norm(a[1]);
-if(exists(p)&&a[1]&&!exists(dest)){files[dest]=files[p];delete files[p];out("Movido.");}
-else out("No se pudo mover.");
-break;}
-case "tree":
-Object.keys(files).forEach(x=>out(x));
+if(exists(p)&&a[1]&&!exists(dest)){fs[dest]=fs[p];delete fs[p];out("Elemento movido");}
+else out("No se pudo mover");
 break;
+}
 case "chmod":
 if(!a[0]||!a[1]||!exists(norm(a[1])))out("Uso: chmod 777 archivo");
-else{modes[norm(a[1])]=a[0];out("Permisos virtuales: "+a[0]);}
+else{permissions[norm(a[1])]=a[0];out("Permisos virtuales actualizados");}
 break;
 case "security":{
-let risky=Object.keys(modes).filter(x=>modes[x]==="777");
-out("AUDITORÍA DE SEGURIDAD VIRTUAL");
+let risky=Object.keys(permissions).filter(x=>permissions[x]==="777");
+out("AUDITORÍA DE SEGURIDAD");
 out("Archivos con permisos 777: "+risky.length);
 risky.forEach(x=>out("[!] "+x));
-out(risky.length?"Revisar permisos inseguros.":"No se detectaron permisos 777.");
-break;}
-case "nmap":{
-if(!["lab.local","localhost","127.0.0.1"].includes(a[0])){out("Solo se permite el objetivo ficticio lab.local.");break;}
-out("NMAP — SIMULACIÓN LOCAL");
-[21,22,23,80,443,3306].forEach(x=>out(x+"/tcp "+(blocked.includes(x)?"filtered":([21,22,80,443].includes(x)?"open":"closed"))));
-out("Análisis simulado terminado.");break;}
+out(risky.length?"Revisar permisos.":"No se detectaron permisos 777.");
+break;
+}
+case "nmap":
+if(!["lab.local","localhost","127.0.0.1"].includes(a[0])){out("Solo se permite lab.local en esta simulación");break;}
+out("ESCANEO SIMULADO");
+[21,22,23,80,443,3306].forEach(x=>out(x+"/tcp "+(blocked.includes(x)?"filtered":[21,22,80,443].includes(x)?"open":"closed")));
+out("Análisis finalizado");
+break;
 case "ports":
-[21,22,23,80,443,3306].forEach(x=>out(x+"/tcp "+(blocked.includes(x)?"BLOQUEADO":([21,22,80,443].includes(x)?"ABIERTO":"CERRADO"))));
+[21,22,23,80,443,3306].forEach(x=>out(x+"/tcp "+(blocked.includes(x)?"BLOQUEADO":[21,22,80,443].includes(x)?"ABIERTO":"CERRADO")));
 break;
 case "firewall":
-if(a[0]==="status")out("Reglas virtuales: "+(blocked.length?blocked.join(", "):"ninguna"));
-else if(a[0]==="block"&&Number.isInteger(Number(a[1]))&&Number(a[1])>0){if(!blocked.includes(Number(a[1])))blocked.push(Number(a[1]));out("Puerto "+a[1]+" bloqueado en el laboratorio.");}
-else if(a[0]==="allow"){blocked=blocked.filter(x=>x!==Number(a[1]));out("Regla de bloqueo retirada.");}
-else out("Uso: firewall status | block 22 | allow 22");
+if(a[0]==="status")out("Puertos bloqueados: "+(blocked.join(", ")||"ninguno"));
+else if(a[0]==="block"&&Number.isInteger(Number(a[1]))&&Number(a[1])>0){
+if(!blocked.includes(Number(a[1])))blocked.push(Number(a[1]));
+out("Puerto bloqueado en el laboratorio");
+}else if(a[0]==="allow"){
+blocked=blocked.filter(x=>x!==Number(a[1]));
+out("Regla retirada");
+}else out("Uso: firewall status | block 22 | allow 22");
 break;
 case "hash":{
-const value=a.join(" ");
+let value=a.join(" ");
 if(!value){out("Uso: hash texto");break;}
 try{
-const bytes=new TextEncoder().encode(value);
-const digest=await crypto.subtle.digest("SHA-256",bytes);
-out([...new Uint8Array(digest)].map(x=>x.toString(16).padStart(2,"0")).join(""));
-}catch(e){out("SHA-256 no disponible en este navegador.");}
-break;}
+let digest=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(value));
+out(Array.from(new Uint8Array(digest)).map(x=>x.toString(16).padStart(2,"0")).join(""));
+}catch(e){out("Hash no disponible en este navegador");}
+break;
+}
 case "logs":
-logs.length?logs.forEach(out):out("No hay registros.");
+if(logs.length)logs.forEach(out);else out("No hay registros");
 break;
 case "history":
 history.forEach((x,i)=>out((i+1)+" "+x));break;
 case "echo":out(a.join(" "));break;
-case "ps":out("PID 1  SYSTEM\nPID 2  ALEX-SHELL\nPID 3  LAB-SERVICE");break;
+case "ps":out("PID 1 SYSTEM\nPID 2 ALEX-SHELL\nPID 3 LAB-SERVICE");break;
 case "top":out("CPU: 4% | RAM: 128 MB | Procesos: 3");break;
-case "free":out("Memoria virtual: 512 MB | Disponible: 384 MB");break;
-case "df":out("Filesystem: virtual | Size: 2 GB | Used: 300 MB");break;
+case "free":out("RAM virtual: 512 MB | Disponible: 384 MB");break;
+case "df":out("Disco virtual: 2 GB | Usado: 300 MB");break;
 case "ip":
-if(a[0]==="addr")out("lo: 127.0.0.1\nlab0: 192.0.2.10 (IP ficticia de documentación)");
-else if(a[0]==="route")out("default via 192.0.2.1 dev lab0 (simulado)");
+if(a[0]==="addr")out("lo: 127.0.0.1\nlab0: 192.0.2.10 (simulada)");
+else if(a[0]==="route")out("Ruta virtual de laboratorio");
 else out("Uso: ip addr | ip route");
 break;
-case "ping":
-out("PING simulado: solo se permite localhost.");
-out("127.0.0.1: respuesta simulada, tiempo 1 ms.");break;
+case "ping":out("PING simulado: localhost responde en 1 ms");break;
 case "calc":{
-const expr=a.join("");
-if(!/^[0-9+\-*/().% ]+$/.test(expr)){out("Expresión no válida.");break;}
+let expr=a.join("");
+if(!expr||!/^[0-9+\-*/().% ]+$/.test(expr)){out("Expresión no válida");break;}
 try{
-const result=Function('"use strict";return ('+expr+')')();
-out(Number.isFinite(result)?String(result):"Resultado no válido.");
-}catch(e){out("Error de cálculo.");}
-break;}
+let result=Function('"use strict";return ('+expr+')')();
+out(Number.isFinite(result)?result:"Resultado no válido");
+}catch(e){out("Error de cálculo");}
+break;
+}
 case "seq":{
-const n=Math.min(100,Math.max(0,Number(a[0])||0));
-for(let i=1;i<=n;i++)out(String(i));
-break;}
+let n=Number(a[0]);
+if(!Number.isInteger(n)||n<1||n>100){out("Uso: seq 1-100");break;}
+for(let i=1;i<=n;i++)out(i);
+break;
+}
 case "hack":hack();break;
-default:out("Comando no encontrado: "+cmd+". Escribe help.");
+default:out("Comando desconocido: "+cmd+". Escribe help.");
 }
 }
-run.addEventListener("click",()=>{const v=input.value;input.value="";execute(v);});
-input.addEventListener("keydown",e=>{if(e.key==="Enter"){const v=input.value;input.value="";execute(v);}});
-document.querySelectorAll("[data-cmd]").forEach(b=>b.addEventListener("click",()=>execute(b.dataset.cmd)));
+run.addEventListener("click",()=>{
+let value=input.value;input.value="";execute(value);
+});
+input.addEventListener("keydown",e=>{
+if(e.key==="Enter"){let value=input.value;input.value="";execute(value);}
+});
+document.querySelectorAll("[data-cmd]").forEach(button=>{
+button.addEventListener("click",()=>execute(button.dataset.cmd));
+});
 out("ALEX LINUX LAB 6.0 iniciado.");
-out("Sistema virtual preparado.");
+out("Laboratorio virtual preparado.");
 out("Escribe help para ver los comandos.");
-prompt();
 })();
 </script>
 </body>
