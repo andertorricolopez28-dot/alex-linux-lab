@@ -4,203 +4,587 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ALEX LINUX LAB 2.0</title>
+<meta name="theme-color" content="#050b08">
+<title>ALEX LINUX LAB 3.0</title>
 <style>
+:root {
+  --green:#00ff88;
+  --bg:#050b08;
+  --panel:#0b1510;
+  --border:#17452d;
+  --text:#d8ffe7;
+  --muted:#7da98c;
+}
 *{box-sizing:border-box}
 body{
- margin:0;background:#080d0b;color:#eaffef;
- font-family:Arial,sans-serif;padding:16px
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:Consolas,Monaco,monospace;
+  min-height:100vh;
 }
-header{text-align:center;padding:25px 0}
-h1{color:#35ff83;font-size:29px}
-.subtitle{color:#8da99a}
-.card{
- background:#111b16;border:1px solid #245b3b;
- border-radius:14px;padding:17px;margin:15px 0
+header{
+  padding:25px 16px;text-align:center;
+  background:linear-gradient(135deg,#06170d,#0c2918);
+  border-bottom:1px solid var(--border);
 }
-h2{color:#35ff83;font-size:19px}
-button{
- background:#20bd66;color:#001b0c;border:0;
- border-radius:9px;padding:12px;font-weight:bold;
- margin:5px 0;width:100%;cursor:pointer
+header h1{
+  color:var(--green);font-size:clamp(24px,6vw,38px);
+  margin:0;text-shadow:0 0 15px #00ff8860;
 }
-button:active{opacity:.7}
-input{
- background:#050a07;color:#35ff83;
- border:1px solid #35ff83;border-radius:8px;
- padding:12px;width:100%
+header p{color:var(--muted);margin:10px 0 0;font-size:13px}
+main{width:min(1050px,94%);margin:22px auto}
+.panel{
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:12px;padding:17px;margin-bottom:17px;
+  box-shadow:0 0 18px #00ff8808;
+}
+h2{color:var(--green);font-size:17px;margin:0 0 13px}
+.status{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:14px}
+.pill{
+  border:1px solid var(--border);padding:7px 10px;
+  border-radius:20px;font-size:11px;color:var(--green);
 }
 #terminal{
- background:#020604;color:#42ff8c;padding:15px;
- border-radius:10px;min-height:120px;
- white-space:pre-wrap;font-family:monospace;
- overflow-wrap:anywhere
+  height:390px;overflow-y:auto;padding:14px;
+  background:#020604;border:1px solid #16432a;
+  border-radius:9px;white-space:pre-wrap;overflow-wrap:anywhere;
+  font-size:13px;line-height:1.6;
 }
-.small{color:#91aa99;font-size:13px}
-.result{color:#35ff83}
-footer{text-align:center;color:#718b7b;padding:25px}
-hr{border:0;border-top:1px solid #245b3b}
+.line{margin:2px 0}
+.prompt{color:var(--green)}
+.output{color:#c4e9d0}
+.error{color:#ff7777}
+.info{color:#70cfff}
+.success{color:var(--green)}
+.warning{color:#ffd36a}
+.inputrow{
+  display:flex;align-items:center;gap:8px;margin-top:12px;
+  background:#020604;border:1px solid var(--border);
+  border-radius:8px;padding:10px;
+}
+#command{
+  min-width:0;flex:1;background:transparent;border:0;
+  outline:none;color:var(--green);font:inherit;font-size:14px;
+}
+button{
+  background:#07351d;border:1px solid #00a95b;color:var(--green);
+  padding:10px 14px;border-radius:7px;font-weight:bold;
+  font-family:inherit;cursor:pointer;
+}
+button:active{transform:scale(.97)}
+button:hover{background:#0b512b}
+.quick{display:flex;flex-wrap:wrap;gap:8px}
+.quick button{font-size:12px;padding:8px 11px}
+.grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+  gap:10px;
+}
+.tool{
+  border:1px solid var(--border);border-radius:8px;
+  padding:12px;background:#08120c;
+}
+.tool strong{color:var(--green);display:block;margin-bottom:7px}
+.tool span{font-size:12px;color:var(--muted)}
+footer{text-align:center;padding:25px;color:var(--muted);font-size:11px}
+a{color:var(--green)}
+@media(max-width:500px){
+  #terminal{height:340px;font-size:12px}
+  .panel{padding:12px}
+  button{padding:9px 11px}
+}
 </style>
 </head>
 <body>
 
 <header>
-<h1>🐧 ALEX LINUX LAB</h1>
-<p class="subtitle">Hacking ético • Linux • Ciberseguridad</p>
-<p class="small">VERSIÓN 2.0</p>
+  <h1> ALEX-LINUX-LAB </h1>
+  <p>LINUX VIRTUAL ENVIRONMENT · VERSION 3.0</p>
 </header>
 
-<div class="card">
-<h2>🛡️ Bienvenido, Alex</h2>
-<p>Tu laboratorio personal de Linux y ciberseguridad.</p>
-<p>Aprende, practica y protege tus dispositivos.</p>
-</div>
+<main>
+  <section class="panel">
+    <div class="status">
+      <span class="pill">● SYSTEM ONLINE</span>
+      <span class="pill">LINUX SIMULATOR</span>
+      <span class="pill">USER: ALEX</span>
+      <span class="pill">VERSION 3.0</span>
+    </div>
 
-<div class="card">
-<h2>💻 Terminal Linux</h2>
-<p class="small">Terminal educativa simulada. No ejecuta comandos reales.</p>
-<input id="cmd" placeholder="Escribe help..." autocomplete="off">
-<button onclick="run()">EJECUTAR</button>
-<div id="terminal">ALEX LINUX LAB iniciado...
-Escribe help para comenzar.</div>
-</div>
+    <h2>▸ TERMINAL LINUX</h2>
+    <div id="terminal" aria-live="polite"></div>
 
-<div class="card">
-<h2>🐧 Comandos Linux</h2>
-<button onclick="demo('help')">HELP - Ayuda</button>
-<button onclick="demo('pwd')">PWD - Directorio actual</button>
-<button onclick="demo('ls')">LS - Listar archivos</button>
-<button onclick="demo('whoami')">WHOAMI - Usuario</button>
-<button onclick="demo('date')">DATE - Fecha</button>
-<button onclick="demo('ip')">IP - Conceptos de red</button>
-<button onclick="demo('clear')">CLEAR - Limpiar</button>
-</div>
+    <div class="inputrow">
+      <span class="prompt" id="prompt">$</span>
+      <input id="command" type="text" placeholder="Escribe un comando..." autocomplete="off" autocapitalize="off" spellcheck="false">
+      <button id="run">EJECUTAR</button>
+    </div>
+    <p style="color:var(--muted);font-size:11px">
+      ENTER ejecutar · ↑ ↓ historial · Escribe help para ver los comandos.
+    </p>
+  </section>
 
-<div class="card">
-<h2>📡 Laboratorio de redes</h2>
-<p>Aprende cómo se identifican los dispositivos de una red doméstica.</p>
-<button onclick="network()">EXPLORAR RED DE DEMOSTRACIÓN</button>
-<div id="networkResult" class="result"></div>
-<p class="small">Los dispositivos mostrados son ejemplos ficticios. Esta página no escanea tu Wi-Fi.</p>
-</div>
+  <section class="panel">
+    <h2>▸ COMANDOS RÁPIDOS</h2>
+    <div class="quick">
+      <button data-cmd="help">help</button>
+      <button data-cmd="neofetch">neofetch</button>
+      <button data-cmd="ls">ls</button>
+      <button data-cmd="pwd">pwd</button>
+      <button data-cmd="tree">tree</button>
+      <button data-cmd="date">date</button>
+      <button data-cmd="history">history</button>
+      <button data-cmd="clear">clear</button>
+    </div>
+  </section>
 
-<div class="card">
-<h2>🔎 Aprende sobre direcciones IP</h2>
-<p>Una dirección IP identifica un dispositivo dentro de una red.</p>
-<p><b>Ejemplo:</b> 192.168.1.10</p>
-<p><b>Router:</b> conecta los dispositivos de tu casa.</p>
-<p><b>DNS:</b> ayuda a encontrar sitios web por su nombre.</p>
-<button onclick="lesson()">VER LECCIÓN</button>
-<div id="lessonResult" class="result"></div>
-</div>
+  <section class="panel">
+    <h2>▸ HERRAMIENTAS DEL LABORATORIO</h2>
+    <div class="grid">
+      <div class="tool"><strong>Gestión de archivos</strong><span>Crear, leer, copiar, mover y borrar archivos virtuales.</span></div>
+      <div class="tool"><strong>Terminal Linux</strong><span>Directorio actual, historial, variables y comandos.</span></div>
+      <div class="tool"><strong>Calculadora</strong><span>Operaciones matemáticas sin ejecutar código externo.</span></div>
+      <div class="tool"><strong>SHA-256</strong><span>Generar hashes de texto en el navegador.</span></div>
+      <div class="tool"><strong>Base64</strong><span>Codificar y decodificar texto.</span></div>
+      <div class="tool"><strong>JSON</strong><span>Formatear y validar estructuras JSON.</span></div>
+    </div>
+  </section>
 
-<div class="card">
-<h2>📺 Seguridad de Smart TV</h2>
-<p>Aprende a proteger tu televisión inteligente.</p>
-<button onclick="tvCheck()">VER LISTA DE SEGURIDAD</button>
-<div id="tvResult"></div>
-</div>
-
-<div class="card">
-<h2>🔐 Laboratorio de ciberseguridad</h2>
-<p>Practica conceptos en un entorno ficticio y seguro.</p>
-<button onclick="lab('password')">1. Seguridad de contraseñas</button>
-<button onclick="lab('ports')">2. ¿Qué son los puertos?</button>
-<button onclick="lab('firewall')">3. ¿Qué es un firewall?</button>
-<div id="labResult" class="result"></div>
-</div>
-
-<div class="card">
-<h2>🎯 Desafíos</h2>
-<p id="question">¿Qué comando muestra los archivos?</p>
-<button onclick="answer('pwd')">pwd</button>
-<button onclick="answer('ls')">ls</button>
-<button onclick="answer('whoami')">whoami</button>
-<p id="quizResult"></p>
-<p>🏆 Puntos: <span id="points">0</span></p>
-</div>
+  <section class="panel">
+    <h2>▸ PRIMEROS PASOS</h2>
+    <div class="output">
+      help
+      <br>neofetch
+      <br>mkdir proyectos
+      <br>cd proyectos
+      <br>touch prueba.txt
+      <br>write prueba.txt Hola Linux
+      <br>cat prueba.txt
+      <br>tree
+    </div>
+  </section>
+</main>
 
 <footer>
-ALEX LINUX LAB 2.0<br>
-Aprende • Practica • Protege
+  ALEX-LINUX-LAB 3.0 · LABORATORIO EDUCATIVO DE LINUX
+  <br>Aprende · Practica · Construye
 </footer>
 
 <script>
-let points=0;
+"use strict";
 
-function execute(c){
- const out=document.getElementById('terminal');
- const commands={
- help:"Comandos: pwd, ls, whoami, date, ip, clear, help",
- pwd:"/home/alex",
- ls:"Documentos  Descargas  Proyectos  Laboratorio",
- whoami:"alex",
- date:new Date().toLocaleString("es"),
- ip:"Concepto: una IP identifica un dispositivo en una red.",
- clear:""
- };
- out.textContent=commands[c]!==undefined?
- "$ "+c+"\n"+commands[c]:
- "Comando no reconocido. Escribe help.";
-}
+const terminal = document.getElementById("terminal");
+const input = document.getElementById("command");
+const promptLabel = document.getElementById("prompt");
 
-function run(){
- let c=document.getElementById('cmd').value.trim().toLowerCase();
- execute(c);
-}
-function demo(c){
- document.getElementById('cmd').value=c;
- execute(c);
-}
-document.getElementById('cmd').addEventListener('keydown',e=>{
- if(e.key==="Enter")run();
-});
+const FS = {
+  type:"dir",
+  children:{
+    home:{
+      type:"dir",
+      children:{
+        alex:{
+          type:"dir",
+          children:{
+            Documents:{type:"dir",children:{}},
+            Downloads:{type:"dir",children:{}},
+            Projects:{type:"dir",children:{}},
+            "welcome.txt":{
+              type:"file",
+              content:"Bienvenido a ALEX-LINUX-LAB 3.0.\nTu laboratorio Linux virtual está listo."
+            },
+            "notes.txt":{
+              type:"file",
+              content:"Mis primeras prácticas de Linux."
+            }
+          }
+        }
+      }
+    },
+    etc:{type:"dir",children:{
+      "hostname":{type:"file",content:"alex-linux-lab"}
+    }},
+    tmp:{type:"dir",children:{}},
+    var:{type:"dir",children:{}}
+  }
+};
 
-function network(){
- document.getElementById('networkResult').textContent=
- "RED DE EJEMPLO:\n"+
- "Router: 192.168.1.1\n"+
- "Teléfono: 192.168.1.10\n"+
- "Smart TV: 192.168.1.15\n"+
- "Ordenador: 192.168.1.20\n"+
- "Estado: datos ficticios para practicar.";
-}
+let cwd=["home","alex"];
+let history=[];
+let historyIndex=0;
+let env={USER:"alex",HOME:"/home/alex",SHELL:"/bin/bash",LAB:"ALEX-LINUX-LAB"};
+let startTime=Date.now();
 
-function lesson(){
- document.getElementById('lessonResult').textContent=
- "LECCIÓN 1: Las direcciones privadas suelen empezar por "+
- "192.168.x.x, 10.x.x.x o 172.16.x.x a 172.31.x.x. "+
- "No son direcciones públicas de Internet.";
-}
-
-function tvCheck(){
- document.getElementById('tvResult').innerHTML=
- "<p>✓ Actualiza el sistema de la TV.</p>"+
- "<p>✓ Utiliza una contraseña segura.</p>"+
- "<p>✓ Desactiva funciones que no utilices.</p>"+
- "<p>✓ Revisa los dispositivos conectados al router.</p>"+
- "<p>✓ Instala aplicaciones de fuentes confiables.</p>";
+function print(text="",type="output"){
+  const div=document.createElement("div");
+  div.className="line "+type;
+  div.textContent=String(text);
+  terminal.appendChild(div);
+  terminal.scrollTop=terminal.scrollHeight;
 }
 
-function lab(type){
- const lessons={
- password:"Una contraseña segura debe ser larga, única y difícil de adivinar. Usa un gestor de contraseñas y activa la verificación en dos pasos.",
- ports:"Los puertos son puntos de comunicación de los servicios de red. No todos los puertos abiertos representan una vulnerabilidad.",
- firewall:"Un firewall controla el tráfico de red según reglas de seguridad. Ayuda a bloquear conexiones no autorizadas."
- };
- document.getElementById('labResult').textContent=lessons[type];
+function currentPath(){
+  return "/"+cwd.join("/");
 }
 
-function answer(value){
- const result=document.getElementById('quizResult');
- if(value==="ls"){
- result.textContent="¡Correcto! 🎉 ls muestra los archivos.";
- points+=10;
- document.getElementById('points').textContent=points;
- }else{
- result.textContent="Incorrecto. Inténtalo otra vez.";
- }
+function updatePrompt(){
+  promptLabel.textContent="alex@linux-lab:"+currentPath()+"$";
 }
-</script>
-</body>
-</html>
+
+function getNode(parts){
+  let node=FS;
+  for(const part of parts){
+    if(!node || node.type!=="dir" || !node.children[part]) return null;
+    node=node.children[part];
+  }
+  return node;
+}
+
+function resolvePath(path){
+  if(!path || path==="~") return ["home","alex"];
+  let parts=path.startsWith("/")?[]:[...cwd];
+  if(path.startsWith("~")) parts=["home","alex"];
+  const rest=path.startsWith("~")?path.slice(1):path;
+  for(const p of rest.split("/")){
+    if(!p || p===".") continue;
+    if(p==="..") parts.pop();
+    else parts.push(p);
+  }
+  return parts;
+}
+
+function parentAndName(path){
+  const parts=resolvePath(path);
+  const name=parts.pop();
+  return {parent:getNode(parts),name,parts};
+}
+
+function tokenize(str){
+  const result=[];
+  const regex=/"([^"]*)"|'([^']*)'|(\S+)/g;
+  let match;
+  while((match=regex.exec(str))!==null){
+    result.push(match[1] ?? match[2] ?? match[3]);
+  }
+  return result;
+}
+
+function requireNode(path){
+  const node=getNode(resolvePath(path));
+  if(!node) throw new Error("No existe: "+path);
+  return node;
+}
+
+function requireDir(path){
+  const node=requireNode(path);
+  if(node.type!=="dir") throw new Error("No es un directorio: "+path);
+  return node;
+}
+
+function formatTree(node,prefix="",isLast=true,name="."){
+  let result=prefix+(isLast?"└── ":"├── ")+name;
+  if(node.type==="dir"){
+    const entries=Object.entries(node.children);
+    entries.forEach(([key,value],i)=>{
+      result+="\n"+formatTree(value,prefix+(isLast?"    ":"│   "),i===entries.length-1,key);
+    });
+  }
+  return result;
+}
+
+function parseExpression(expression){
+  const tokens=expression.match(/\d+(?:\.\d+)?|[()+\-*/%]/g);
+  if(!tokens || tokens.join("")!==expression.replace(/\s/g,""))
+    throw new Error("Expresión no válida.");
+
+  let pos=0;
+  function primary(){
+    const t=tokens[pos++];
+    if(t==="+") return primary();
+    if(t==="-") return -primary();
+    if(t==="("){
+      const value=addSub();
+      if(tokens[pos++]!==")") throw new Error("Falta cerrar paréntesis.");
+      return value;
+    }
+    const n=Number(t);
+    if(!Number.isFinite(n)) throw new Error("Número no válido.");
+    return n;
+  }
+  function mulDiv(){
+    let v=primary();
+    while(["*","/","%"].includes(tokens[pos])){
+      const op=tokens[pos++];
+      const b=primary();
+      if((op==="/" || op==="%") && b===0) throw new Error("No se puede dividir por cero.");
+      if(op==="*") v*=b;
+      if(op==="/") v/=b;
+      if(op==="%") v%=b;
+    }
+    return v;
+  }
+  function addSub(){
+    let v=mulDiv();
+    while(tokens[pos]==="+" || tokens[pos]==="-"){
+      const op=tokens[pos++];
+      const b=mulDiv();
+      v=op==="+"?v+b:v-b;
+    }
+    return v;
+  }
+  const answer=addSub();
+  if(pos!==tokens.length || !Number.isFinite(answer)) throw new Error("Expresión incorrecta.");
+  return answer;
+}
+
+function help(){
+  print("========== ALEX LINUX LAB 3.0 ==========","success");
+  print("NAVEGACIÓN");
+  print("pwd                 Mostrar directorio actual");
+  print("ls [ruta]           Listar archivos");
+  print("cd [ruta]           Cambiar directorio");
+  print("tree                Mostrar árbol de carpetas");
+  print("find [ruta] [texto] Buscar nombres");
+  print("");
+  print("ARCHIVOS Y CARPETAS","success");
+  print("mkdir [nombre]      Crear directorio");
+  print("touch [archivo]     Crear archivo");
+  print("cat [archivo]       Leer archivo");
+  print("write [archivo] texto  Escribir archivo");
+  print("append [archivo] texto Añadir texto");
+  print("rm [archivo]        Eliminar archivo");
+  print("rmdir [carpeta]     Eliminar carpeta vacía");
+  print("cp [origen] [destino]  Copiar");
+  print("mv [origen] [destino]  Mover o renombrar");
+  print("stat [archivo]      Información del archivo");
+  print("");
+  print("SISTEMA");
+  print("whoami, id, uname, hostname, date, uptime");
+  print("neofetch, env, export, echo, which, history");
+  print("");
+  print("UTILIDADES","success");
+  print("calc [operación]    Calculadora");
+  print("seq [inicio] [fin]  Secuencia numérica");
+  print("wc [archivo]        Contar líneas y palabras");
+  print("head [archivo]      Primeras líneas");
+  print("tail [archivo]      Últimas líneas");
+  print("grep [texto] [archivo] Buscar texto");
+  print("sha256 [texto]      Hash SHA-256");
+  print("base64 encode|decode [texto]");
+  print("url encode|decode [texto]");
+  print("json [texto JSON]   Formatear JSON");
+  print("clear               Limpiar terminal");
+  print("help                Mostrar esta ayuda");
+  print("");
+  print("Escribe man [comando] para consultar un comando.","info");
+}
+
+function findFiles(node,parts,query,results){
+  if(node.type!=="dir") return;
+  for(const [name,child] of Object.entries(node.children)){
+    const full="/"+parts.concat(name).join("/");
+    if(name.toLowerCase().includes(query.toLowerCase())) results.push(full);
+    findFiles(child,parts.concat(name),query,results);
+  }
+}
+
+async function execute(raw){
+  const line=raw.trim();
+  if(!line) return;
+  print("alex@linux-lab:"+currentPath()+"$ "+line,"prompt");
+  history.push(line);
+  historyIndex=history.length;
+
+  const args=tokenize(line);
+  const cmd=args.shift().toLowerCase();
+
+  try{
+    switch(cmd){
+
+      case "help": help(); break;
+      case "clear": terminal.innerHTML=""; break;
+      case "pwd": print(currentPath()); break;
+      case "whoami": print("alex"); break;
+      case "hostname": print("alex-linux-lab"); break;
+      case "date": print(new Date().toString()); break;
+      case "uname":
+        print(args[0]==="-a"
+          ?"Linux alex-linux-lab 6.0.0-virtual #1 SMP Virtual x86_64 GNU/Linux"
+          :"Linux");
+        break;
+      case "id": print("uid=1000(alex) gid=1000(alex) groups=1000(alex)"); break;
+      case "uptime":{
+        const sec=Math.floor((Date.now()-startTime)/1000);
+        print("up "+sec+" seconds, 1 user, load average: 0.00, 0.00, 0.00");
+        break;
+      }
+      case "neofetch":
+        print("       .---.        alex@linux-lab","success");
+        print("      /     \\       ----------------");
+        print("      | () () |     OS: Alex Linux Lab 3.0");
+        print("       \\  ^  /      Kernel: Virtual Browser Kernel");
+        print("        |||||       Shell: AlexShell");
+        print("        |||||       User: alex");
+        print("                    Filesystem: Virtual");
+        print("                    Terminal: Web Terminal");
+        break;
+      case "env":
+        Object.entries(env).forEach(([k,v])=>print(k+"="+v));
+        break;
+      case "export":{
+        const value=args.join(" ");
+        const idx=value.indexOf("=");
+        if(idx<1) throw new Error("Uso: export NOMBRE=valor");
+        const key=value.slice(0,idx);
+        if(!/^[A-Za-z_][A-Za-z0-9_]*$/.test(key)) throw new Error("Nombre de variable inválido.");
+        env[key]=value.slice(idx+1);
+        print("Variable guardada: "+key,"success");
+        break;
+      }
+      case "echo":{
+        let value=args.join(" ");
+        value=value.replace(/\$([A-Za-z_][A-Za-z0-9_]*)/g,(_,k)=>env[k]??"");
+        print(value);
+        break;
+      }
+      case "which":{
+        const known=["ls","cd","pwd","mkdir","touch","cat","echo","grep","cp","mv","rm","calc","sha256","help"];
+        print(known.includes(args[0])?"/usr/bin/"+args[0]:"Comando no encontrado: "+(args[0]||""),known.includes(args[0])?"success":"error");
+        break;
+      }
+      case "history":
+        history.forEach((h,i)=>print((i+1)+"  "+h));
+        break;
+
+      case "ls":{
+        const path=args[0]||".";
+        const node=requireDir(path);
+        const names=Object.entries(node.children);
+        if(!names.length){print("(directorio vacío)");break;}
+        names.forEach(([name,n])=>print(n.type==="dir"?name+"/":name,n.type==="dir"?"info":"output"));
+        break;
+      }
+      case "cd":{
+        const path=args[0]||"~";
+        const parts=resolvePath(path);
+        const node=getNode(parts);
+        if(!node || node.type!=="dir") throw new Error("Directorio no encontrado: "+path);
+        cwd=parts;
+        updatePrompt();
+        break;
+      }
+      case "tree":{
+        const path=args[0]||".";
+        const node=requireDir(path);
+        print(formatTree(node,"",true,path));
+        break;
+      }
+      case "mkdir":{
+        if(!args[0]) throw new Error("Uso: mkdir nombre");
+        const {parent,name}=parentAndName(args[0]);
+        if(!parent || parent.type!=="dir") throw new Error("Directorio padre no encontrado.");
+        if(parent.children[name]) throw new Error("Ya existe: "+name);
+        parent.children[name]={type:"dir",children:{}};
+        print("Directorio creado: "+name,"success");
+        break;
+      }
+      case "touch":{
+        if(!args[0]) throw new Error("Uso: touch archivo");
+        const {parent,name}=parentAndName(args[0]);
+        if(!parent || parent.type!=="dir") throw new Error("Directorio padre no encontrado.");
+        if(!parent.children[name]) parent.children[name]={type:"file",content:""};
+        print("Archivo preparado: "+name,"success");
+        break;
+      }
+      case "cat":{
+        if(!args[0]) throw new Error("Uso: cat archivo");
+        const node=requireNode(args[0]);
+        if(node.type!=="file") throw new Error("No es un archivo.");
+        print(node.content||"(archivo vacío)");
+        break;
+      }
+      case "write":
+      case "append":{
+        if(args.length<2) throw new Error("Uso: "+cmd+" archivo texto");
+        const path=args.shift();
+        const {parent,name}=parentAndName(path);
+        if(!parent || parent.type!=="dir") throw new Error("Directorio padre no encontrado.");
+        if(parent.children[name] && parent.children[name].type!=="file") throw new Error("No es un archivo.");
+        if(!parent.children[name]) parent.children[name]={type:"file",content:""};
+        const text=args.join(" ");
+        if(cmd==="append" && parent.children[name].content) parent.children[name].content+="\n";
+        parent.children[name].content+=text;
+        print("Contenido guardado en "+name,"success");
+        break;
+      }
+      case "rm":{
+        if(!args[0]) throw new Error("Uso: rm archivo");
+        const {parent,name}=parentAndName(args[0]);
+        if(!parent || !parent.children[name]) throw new Error("Archivo no encontrado.");
+        if(parent.children[name].type==="dir") throw new Error("Usa rmdir para carpetas vacías.");
+        delete parent.children[name];
+        print("Archivo eliminado: "+name,"success");
+        break;
+      }
+      case "rmdir":{
+        if(!args[0]) throw new Error("Uso: rmdir carpeta");
+        const {parent,name}=parentAndName(args[0]);
+        const node=parent?.children[name];
+        if(!node || node.type!=="dir") throw new Error("Directorio no encontrado.");
+        if(Object.keys(node.children).length) throw new Error("El directorio no está vacío.");
+        delete parent.children[name];
+        print("Directorio eliminado: "+name,"success");
+        break;
+      }
+      case "cp":
+      case "mv":{
+        if(args.length<2) throw new Error("Uso: "+cmd+" origen destino");
+        const src=parentAndName(args[0]);
+        const dest=parentAndName(args[1]);
+        if(!src.parent?.children[src.name]) throw new Error("Origen no encontrado.");
+        if(!dest.parent) throw new Error("Destino no encontrado.");
+        if(dest.parent.children[dest.name]) throw new Error("El destino ya existe.");
+        const original=src.parent.children[src.name];
+        dest.parent.children[dest.name]=JSON.parse(JSON.stringify(original));
+        if(cmd==="mv") delete src.parent.children[src.name];
+        print(cmd==="cp"?"Copia creada.":"Elemento movido.","success");
+        break;
+      }
+      case "stat":{
+        const node=requireNode(args[0]);
+        print("Tipo: "+node.type);
+        print("Nombre: "+args[0]);
+        print("Tamaño: "+(node.type==="file"?node.content.length:"directorio")+"");
+        break;
+      }
+      case "find":{
+        const path=args[0]||".";
+        const query=args[1]||"";
+        if(!query) throw new Error("Uso: find ruta nombre");
+        const node=requireDir(path);
+        const results=[];
+        findFiles(node,resolvePath(path),query,results);
+        results.length?results.forEach(x=>print(x)):print("Sin resultados.");
+        break;
+      }
+      case "grep":{
+        if(args.length<2) throw new Error("Uso: grep palabra archivo");
+        const word=args.shift();
+        const node=requireNode(args[0]);
+        if(node.type!=="file") throw new Error("No es un archivo.");
+        const matches=node.content.split("\n").filter(x=>x.includes(word));
+        matches.length?matches.forEach(x=>print(x)):print("Sin coincidencias.");
+        break;
+      }
+      case "wc":{
+        const node=requireNode(args[0]);
+        if(node.type!=="file") throw new Error("No es un archivo.");
+        const s=node.content;
+        print("Líneas: "+(s? s.split("\n").length:0));
+        print("Palabras: "+(s.trim()?s.trim().split(/\s+/).length:0));
+        print("Caracteres: "+s.length);
+        break;
+      }
+      case "head":
+      case "tail":{
+        const node=requireNode(args[0]);
+        if(node.type!=="file") throw new Error("No es un archivo.");
+        c
