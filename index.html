@@ -4,15 +4,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ALEX LINUX LAB</title>
+<title>ALEX LINUX LAB 2.0</title>
 <style>
 *{box-sizing:border-box}
 body{
  margin:0;background:#080d0b;color:#eaffef;
- font-family:Arial,sans-serif;padding:20px
+ font-family:Arial,sans-serif;padding:16px
 }
 header{text-align:center;padding:25px 0}
-h1{color:#35ff83;font-size:30px}
+h1{color:#35ff83;font-size:29px}
 .subtitle{color:#8da99a}
 .card{
  background:#111b16;border:1px solid #245b3b;
@@ -22,87 +22,184 @@ h2{color:#35ff83;font-size:19px}
 button{
  background:#20bd66;color:#001b0c;border:0;
  border-radius:9px;padding:12px;font-weight:bold;
- margin:5px 0;width:100%
+ margin:5px 0;width:100%;cursor:pointer
 }
+button:active{opacity:.7}
 input{
- background:#050a07;color:#35ff83;border:1px solid #35ff83;
- border-radius:8px;padding:12px;width:100%
+ background:#050a07;color:#35ff83;
+ border:1px solid #35ff83;border-radius:8px;
+ padding:12px;width:100%
 }
 #terminal{
  background:#020604;color:#42ff8c;padding:15px;
- border-radius:10px;min-height:110px;white-space:pre-wrap;
- font-family:monospace
+ border-radius:10px;min-height:120px;
+ white-space:pre-wrap;font-family:monospace;
+ overflow-wrap:anywhere
 }
+.small{color:#91aa99;font-size:13px}
+.result{color:#35ff83}
 footer{text-align:center;color:#718b7b;padding:25px}
+hr{border:0;border-top:1px solid #245b3b}
 </style>
 </head>
 <body>
 
 <header>
 <h1>🐧 ALEX LINUX LAB</h1>
-<p class="subtitle">Aprende Linux desde cero</p>
+<p class="subtitle">Hacking ético • Linux • Ciberseguridad</p>
+<p class="small">VERSIÓN 2.0</p>
 </header>
 
 <div class="card">
-<h2>🛡️ Bienvenido</h2>
-<p>Tu laboratorio gratuito de Linux y ciberseguridad.</p>
-<p>Aprende comandos, archivos, permisos y redes.</p>
+<h2>🛡️ Bienvenido, Alex</h2>
+<p>Tu laboratorio personal de Linux y ciberseguridad.</p>
+<p>Aprende, practica y protege tus dispositivos.</p>
 </div>
 
 <div class="card">
-<h2>💻 Terminal Linux simulada</h2>
-<input id="cmd" placeholder="Escribe un comando...">
-<button onclick="run()">EJECUTAR COMANDO</button>
-<div id="terminal">Alex Linux Lab iniciado...
-Escribe: help</div>
+<h2>💻 Terminal Linux</h2>
+<p class="small">Terminal educativa simulada. No ejecuta comandos reales.</p>
+<input id="cmd" placeholder="Escribe help..." autocomplete="off">
+<button onclick="run()">EJECUTAR</button>
+<div id="terminal">ALEX LINUX LAB iniciado...
+Escribe help para comenzar.</div>
 </div>
 
 <div class="card">
-<h2>📚 Comandos básicos</h2>
+<h2>🐧 Comandos Linux</h2>
 <button onclick="demo('help')">HELP - Ayuda</button>
-<button onclick="demo('pwd')">PWD - Ubicación</button>
-<button onclick="demo('ls')">LS - Archivos</button>
+<button onclick="demo('pwd')">PWD - Directorio actual</button>
+<button onclick="demo('ls')">LS - Listar archivos</button>
 <button onclick="demo('whoami')">WHOAMI - Usuario</button>
 <button onclick="demo('date')">DATE - Fecha</button>
+<button onclick="demo('ip')">IP - Conceptos de red</button>
 <button onclick="demo('clear')">CLEAR - Limpiar</button>
 </div>
 
 <div class="card">
-<h2>🎯 Tu primer desafío</h2>
-<p>¿Qué comando muestra los archivos de una carpeta?</p>
-<button onclick="quiz(false)">pwd</button>
-<button onclick="quiz(true)">ls</button>
-<button onclick="quiz(false)">whoami</button>
-<p id="result"></p>
+<h2>📡 Laboratorio de redes</h2>
+<p>Aprende cómo se identifican los dispositivos de una red doméstica.</p>
+<button onclick="network()">EXPLORAR RED DE DEMOSTRACIÓN</button>
+<div id="networkResult" class="result"></div>
+<p class="small">Los dispositivos mostrados son ejemplos ficticios. Esta página no escanea tu Wi-Fi.</p>
+</div>
+
+<div class="card">
+<h2>🔎 Aprende sobre direcciones IP</h2>
+<p>Una dirección IP identifica un dispositivo dentro de una red.</p>
+<p><b>Ejemplo:</b> 192.168.1.10</p>
+<p><b>Router:</b> conecta los dispositivos de tu casa.</p>
+<p><b>DNS:</b> ayuda a encontrar sitios web por su nombre.</p>
+<button onclick="lesson()">VER LECCIÓN</button>
+<div id="lessonResult" class="result"></div>
+</div>
+
+<div class="card">
+<h2>📺 Seguridad de Smart TV</h2>
+<p>Aprende a proteger tu televisión inteligente.</p>
+<button onclick="tvCheck()">VER LISTA DE SEGURIDAD</button>
+<div id="tvResult"></div>
+</div>
+
+<div class="card">
+<h2>🔐 Laboratorio de ciberseguridad</h2>
+<p>Practica conceptos en un entorno ficticio y seguro.</p>
+<button onclick="lab('password')">1. Seguridad de contraseñas</button>
+<button onclick="lab('ports')">2. ¿Qué son los puertos?</button>
+<button onclick="lab('firewall')">3. ¿Qué es un firewall?</button>
+<div id="labResult" class="result"></div>
+</div>
+
+<div class="card">
+<h2>🎯 Desafíos</h2>
+<p id="question">¿Qué comando muestra los archivos?</p>
+<button onclick="answer('pwd')">pwd</button>
+<button onclick="answer('ls')">ls</button>
+<button onclick="answer('whoami')">whoami</button>
+<p id="quizResult"></p>
+<p>🏆 Puntos: <span id="points">0</span></p>
 </div>
 
 <footer>
-ALEX LINUX LAB • VERSIÓN 1.0<br>
-Aprende. Practica. Protege.
+ALEX LINUX LAB 2.0<br>
+Aprende • Practica • Protege
 </footer>
 
 <script>
+let points=0;
+
 function execute(c){
  const out=document.getElementById('terminal');
  const commands={
- help:"Comandos disponibles: pwd, ls, whoami, date, clear, help",
+ help:"Comandos: pwd, ls, whoami, date, ip, clear, help",
  pwd:"/home/alex",
- ls:"Documentos  Descargas  Proyectos",
+ ls:"Documentos  Descargas  Proyectos  Laboratorio",
  whoami:"alex",
  date:new Date().toLocaleString("es"),
+ ip:"Concepto: una IP identifica un dispositivo en una red.",
  clear:""
  };
  out.textContent=commands[c]!==undefined?
- "$ "+c+"\n"+commands[c]:"Comando no reconocido. Escribe help.";
+ "$ "+c+"\n"+commands[c]:
+ "Comando no reconocido. Escribe help.";
 }
+
 function run(){
  let c=document.getElementById('cmd').value.trim().toLowerCase();
  execute(c);
 }
-function demo(c){document.getElementById('cmd').value=c;execute(c)}
-function quiz(ok){
- document.getElementById('result').textContent=
- ok?"¡Correcto! 🎉 ls muestra los archivos.":"Inténtalo otra vez.";
+function demo(c){
+ document.getElementById('cmd').value=c;
+ execute(c);
+}
+document.getElementById('cmd').addEventListener('keydown',e=>{
+ if(e.key==="Enter")run();
+});
+
+function network(){
+ document.getElementById('networkResult').textContent=
+ "RED DE EJEMPLO:\n"+
+ "Router: 192.168.1.1\n"+
+ "Teléfono: 192.168.1.10\n"+
+ "Smart TV: 192.168.1.15\n"+
+ "Ordenador: 192.168.1.20\n"+
+ "Estado: datos ficticios para practicar.";
+}
+
+function lesson(){
+ document.getElementById('lessonResult').textContent=
+ "LECCIÓN 1: Las direcciones privadas suelen empezar por "+
+ "192.168.x.x, 10.x.x.x o 172.16.x.x a 172.31.x.x. "+
+ "No son direcciones públicas de Internet.";
+}
+
+function tvCheck(){
+ document.getElementById('tvResult').innerHTML=
+ "<p>✓ Actualiza el sistema de la TV.</p>"+
+ "<p>✓ Utiliza una contraseña segura.</p>"+
+ "<p>✓ Desactiva funciones que no utilices.</p>"+
+ "<p>✓ Revisa los dispositivos conectados al router.</p>"+
+ "<p>✓ Instala aplicaciones de fuentes confiables.</p>";
+}
+
+function lab(type){
+ const lessons={
+ password:"Una contraseña segura debe ser larga, única y difícil de adivinar. Usa un gestor de contraseñas y activa la verificación en dos pasos.",
+ ports:"Los puertos son puntos de comunicación de los servicios de red. No todos los puertos abiertos representan una vulnerabilidad.",
+ firewall:"Un firewall controla el tráfico de red según reglas de seguridad. Ayuda a bloquear conexiones no autorizadas."
+ };
+ document.getElementById('labResult').textContent=lessons[type];
+}
+
+function answer(value){
+ const result=document.getElementById('quizResult');
+ if(value==="ls"){
+ result.textContent="¡Correcto! 🎉 ls muestra los archivos.";
+ points+=10;
+ document.getElementById('points').textContent=points;
+ }else{
+ result.textContent="Incorrecto. Inténtalo otra vez.";
+ }
 }
 </script>
 </body>
