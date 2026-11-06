@@ -3,306 +3,303 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ALEX LINUX LAB 6.0</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ALEX-LINUX-LAB 7.0</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;padding:15px;background:#050b08;color:#00ff88;font-family:monospace}
-main{max-width:900px;margin:auto}
-h1{text-align:center;text-shadow:0 0 12px #00ff88}
-.sub{text-align:center;color:#8affbd;margin-bottom:18px}
-.panel{background:#08140e;border:1px solid #00ff88;border-radius:10px;padding:12px}
-#terminal{height:380px;overflow:auto;background:#020604;border:1px solid #145b38;padding:12px;border-radius:7px;white-space:pre-wrap;overflow-wrap:anywhere}
-.line{margin:0 0 7px}
-.inputrow{display:flex;gap:8px;margin-top:12px}
-input{min-width:0;flex:1;background:#020604;color:#00ff88;border:1px solid #00ff88;border-radius:6px;padding:13px;font-family:monospace}
-button{background:#06351e;color:#00ff88;border:1px solid #00ff88;border-radius:6px;padding:10px;font-family:monospace;cursor:pointer}
-button:active{background:#00ff88;color:#001b0d}
-.quick{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
-.small{text-align:center;color:#8affbd;font-size:12px;margin-top:14px}
+body{
+ margin:0;background:#030806;color:#00ff83;
+ font-family:Consolas,monospace;
+}
+header{
+ padding:18px;background:#06130d;
+ border-bottom:1px solid #00ff83;
+ text-align:center;
+}
+h1{margin:0;font-size:23px;text-shadow:0 0 12px #00ff83}
+header p{color:#8bffbd;font-size:12px}
+main{max-width:1000px;margin:auto;padding:15px}
+.terminal,.panel{
+ background:#06100b;border:1px solid #087d49;
+ border-radius:9px;padding:15px;margin-bottom:15px;
+ box-shadow:0 0 15px #003d21;
+}
+#output{
+ height:300px;overflow:auto;white-space:pre-wrap;
+ line-height:1.6;font-size:13px;
+}
+.inputrow{display:flex;gap:8px}
+input{
+ flex:1;min-width:0;background:#020603;
+ border:1px solid #00a85b;color:#00ff83;
+ padding:13px;font-family:inherit;outline:none;
+}
+button{
+ background:#063d24;border:1px solid #00ff83;
+ color:#00ff83;padding:11px;cursor:pointer;
+ font-family:inherit;border-radius:5px;
+}
+button:hover{background:#087d49}
+#forensics{display:none}
+h2{font-size:19px}
+.grid{
+ display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+ gap:10px;margin:15px 0;
+}
+.tool{background:#091b11;border:1px solid #087d49;padding:14px;border-radius:7px}
+.tool b{display:block;margin-bottom:7px}
+.result{
+ background:#020603;border:1px solid #087d49;
+ padding:12px;min-height:100px;white-space:pre-wrap;
+ overflow-wrap:anywhere;font-size:12px;
+}
+textarea{
+ width:100%;height:110px;background:#020603;
+ border:1px solid #00a85b;color:#00ff83;
+ padding:12px;font-family:inherit;resize:vertical;
+}
+.small{font-size:11px;color:#8bffbd}
+.back{margin-bottom:15px}
+.hidden{display:none}
+footer{text-align:center;color:#397d58;font-size:11px;padding:20px}
 </style>
 </head>
 <body>
+<header>
+<h1>⚡ ALEX-LINUX-LAB 7.0</h1>
+<p>DIGITAL FORENSICS // VIRTUAL CYBER LAB</p>
+</header>
+
 <main>
-<h1>ALEX-LINUX-LAB 6.0</h1>
-<div class="sub">LINUX • ETHICAL HACKING • CYBERSECURITY</div>
-<div class="panel">
-<div id="terminal"></div>
+<section id="terminal" class="terminal">
+<div id="output">ALEX-LINUX-LAB [7.0]
+Sistema virtual iniciado correctamente.
+Escribe help para ver los comandos.
+
+alex@linux:~$ </div>
 <div class="inputrow">
 <input id="command" placeholder="Escribe un comando..." autocomplete="off">
-<button id="run">EJECUTAR</button>
+<button onclick="execute()">EJECUTAR</button>
 </div>
-<div class="quick">
-<button data-cmd="help">HELP</button>
-<button data-cmd="ls">LS</button>
-<button data-cmd="pwd">PWD</button>
-<button data-cmd="security">SECURITY</button>
-<button data-cmd="nmap lab.local">NMAP</button>
-<button data-cmd="ports">PORTS</button>
-<button data-cmd="hash hola">HASH</button>
-<button data-cmd="hack">HACK</button>
-<button data-cmd="logs">LOGS</button>
-<button data-cmd="firewall status">FIREWALL</button>
-<button data-cmd="neofetch">NEOFETCH</button>
-<button data-cmd="clear">CLEAR</button>
+<p class="small">Comando especial: forensics</p>
+</section>
+
+<section id="forensics" class="panel">
+<button class="back" onclick="closeLab()">← VOLVER A TERMINAL</button>
+<h2>🔬 DIGITAL FORENSICS</h2>
+<p class="small">CENTRO DE ANÁLISIS DIGITAL — LABORATORIO LOCAL</p>
+
+<div class="grid">
+<div class="tool">
+<b>01 / HASH ENGINE</b>
+<button onclick="hashText()">Calcular SHA-256</button>
+</div>
+<div class="tool">
+<b>02 / FILE SCANNER</b>
+<button onclick="scanText()">Analizar texto</button>
+</div>
+<div class="tool">
+<b>03 / INTEGRITY</b>
+<button onclick="checkIntegrity()">Verificar integridad</button>
+</div>
+<div class="tool">
+<b>04 / METADATA</b>
+<button onclick="metadata()">Metadatos</button>
+</div>
+<div class="tool">
+<b>05 / THREAT LAB</b>
+<button onclick="threatScan()">Simular análisis</button>
+</div>
+<div class="tool">
+<b>06 / LIVE SYSTEM</b>
+<button onclick="systemInfo()">Estado del laboratorio</button>
 </div>
 </div>
-<div class="small">ALEX LINUX LAB 6.0 — LABORATORIO VIRTUAL</div>
+
+<h3>ARCHIVO DE PRUEBA</h3>
+<textarea id="sample">ALEX LINUX LAB 7.0
+Digital Forensics
+Archivo de prueba para análisis de integridad.</textarea>
+<p class="small">Puedes modificar el contenido y comprobar cómo cambia su hash.</p>
+<div id="result" class="result">Esperando operación...</div>
+</section>
 </main>
+
+<footer>ALEX-LINUX-LAB 7.0 · ENTORNO EDUCATIVO LOCAL</footer>
+
 <script>
-(function(){
-"use strict";
-const terminal=document.getElementById("terminal");
+const output=document.getElementById("output");
 const input=document.getElementById("command");
-const run=document.getElementById("run");
-const fs={
-"/":{dir:true},
-"/home":{dir:true},
-"/home/alex":{dir:true},
-"/home/alex/Documentos":{dir:true},
-"/home/alex/Descargas":{dir:true},
-"/home/alex/Escritorio":{dir:true},
-"/home/alex/Documentos/nota.txt":{content:"Bienvenido a ALEX LINUX LAB 6.0"}
-};
-let cwd="/home/alex";
+const terminal=document.getElementById("terminal");
+const lab=document.getElementById("forensics");
+const result=document.getElementById("result");
 let history=[];
-let logs=[];
-let blocked=[];
-let permissions={};
-function out(value){
-const line=document.createElement("div");
-line.className="line";
-line.textContent=String(value??"");
-terminal.appendChild(line);
-terminal.scrollTop=terminal.scrollHeight;
+let virtualFiles={"readme.txt":"Bienvenido a ALEX-LINUX-LAB 7.0"};
+
+function print(text){
+ output.textContent+=text+"\n";
+ output.scrollTop=output.scrollHeight;
 }
-function norm(path){
-if(!path)return cwd;
-let parts=(path.startsWith("/")?path:cwd+"/"+path).split("/");
-let result=[];
-parts.forEach(x=>{
-if(x===".." )result.pop();
-else if(x&&x!==".")result.push(x);
-});
-return "/"+result.join("/");
+function execute(){
+ let cmd=input.value.trim();
+ if(!cmd)return;
+ history.push(cmd);
+ print("alex@linux:~$ "+cmd);
+ input.value="";
+ let parts=cmd.split(" ");
+ let name=parts[0].toLowerCase();
+ let arg=parts.slice(1).join(" ");
+
+ switch(name){
+ case "help":
+ print(`COMANDOS DISPONIBLES:
+help       - Lista comandos
+clear      - Limpiar terminal
+whoami     - Usuario actual
+pwd        - Directorio actual
+date       - Fecha actual
+uname      - Sistema virtual
+ls         - Listar archivos
+cat        - Leer archivo
+write      - Crear archivo: write nombre texto
+rm         - Eliminar archivo virtual
+history    - Historial
+forensics  - Abrir Digital Forensics
+neofetch   - Información visual del sistema
+security   - Diagnóstico simulado
+`);break;
+ case "clear":output.textContent="";break;
+ case "whoami":print("alex");break;
+ case "pwd":print("/home/alex");break;
+ case "date":print(new Date().toString());break;
+ case "uname":print("ALEX-LINUX-LAB 7.0 Virtual Kernel");break;
+ case "ls":print(Object.keys(virtualFiles).join("   ")||"Directorio vacío");break;
+ case "cat":print(virtualFiles[arg]??"Archivo no encontrado.");break;
+ case "write":{
+ let p=arg.split(" ");
+ let filename=p.shift();
+ if(filename)virtualFiles[filename]=p.join(" ");
+ print(filename?"Archivo virtual guardado.":"Uso: write nombre texto");
+ break;
+ }
+ case "rm":
+ if(arg in virtualFiles){delete virtualFiles[arg];print("Archivo virtual eliminado.");}
+ else print("Archivo no encontrado.");
+ break;
+ case "history":print(history.join("\n"));break;
+ case "forensics":openLab();break;
+ case "neofetch":
+ print(`
+   ALEX LINUX LAB 7.0
+   OS: Virtual Linux
+   Shell: Alex Terminal
+   Modules: Digital Forensics
+   Security: Simulation
+   Status: ONLINE
+ `);break;
+ case "security":
+ print("DIAGNÓSTICO VIRTUAL\nTerminal: ACTIVA\nArchivos: "+Object.keys(virtualFiles).length+"\nMotor SHA-256: Disponible\n");break;
+ default:print("Comando no reconocido. Escribe help.");
+ }
 }
-function exists(path){return Object.prototype.hasOwnProperty.call(fs,norm(path));}
-function children(path){
-return Object.keys(fs).filter(x=>x!==path&&x.substring(0,x.lastIndexOf("/"))===path);
+input.addEventListener("keydown",e=>{if(e.key==="Enter")execute()});
+
+function openLab(){
+ terminal.style.display="none";
+ lab.style.display="block";
+ result.textContent="DIGITAL FORENSICS iniciado.\nSelecciona una herramienta.";
 }
-function log(message){logs.push(new Date().toLocaleTimeString()+" "+message);}
-function help(){
-out("ALEX LINUX LAB — COMANDOS");
-out("help, man, clear, pwd, whoami, id, hostname");
-out("uname, date, uptime, neofetch, ls, cd, tree");
-out("mkdir, touch, cat, write, append, rm, rmdir");
-out("cp, mv, chmod, security, nmap, ports");
-out("firewall, hash, logs, history, echo");
-out("ps, top, free, df, ip, ping, calc, seq, hack");
-out("Usa: help para consultar esta lista.");
+function closeLab(){
+ lab.style.display="none";
+ terminal.style.display="block";
+ input.focus();
 }
-function hack(){
-out("");
-out("==================================");
-out("       ALEX ETHICAL HACKING");
-out("==================================");
-out("[+] Iniciando misión virtual...");
-out("[+] Objetivo: lab.local");
-out("[+] Entorno controlado.");
-out("[1/5] Identificando objetivo...");
-out("[2/5] Revisando servicios ficticios...");
-out("[3/5] Analizando puertos...");
-let open=0;
-[21,22,23,80,443,3306].forEach(p=>{
-let state=blocked.includes(p)?"BLOQUEADO":
-[21,22,80,443].includes(p)?"ABIERTO":"CERRADO";
-if(state==="ABIERTO")open++;
-out("Puerto "+p+": "+state);
-});
-out("[4/5] Revisando permisos...");
-let risks=Object.keys(permissions).filter(x=>permissions[x]==="777");
-out("Archivos con permisos 777: "+risks.length);
-out("[5/5] Preparando informe...");
-out("----------------------------------");
-out("INFORME FINAL");
-out("Servicios abiertos: "+open);
-out("Riesgos de permisos: "+risks.length);
-out("Nivel estimado: "+(open>2||risks.length?"MEDIO":"BAJO"));
-out("Recomendación: revisar servicios y permisos.");
-out("[+] Misión terminada.");
-out("[+] No se realizaron conexiones externas.");
-out("==================================");
-log("Misión hack completada");
+function getText(){return document.getElementById("sample").value}
+
+async function hashText(){
+ result.textContent="Calculando SHA-256...";
+ try{
+ const data=new TextEncoder().encode(getText());
+ const digest=await crypto.subtle.digest("SHA-256",data);
+ const hash=Array.from(new Uint8Array(digest))
+ .map(b=>b.toString(16).padStart(2,"0")).join("");
+ result.textContent="ANÁLISIS SHA-256\n\n"+hash+"\n\nCálculo completado.";
+ }catch(e){result.textContent="SHA-256 no disponible en este navegador."}
 }
-async function execute(raw){
-const original=raw.trim();
-if(!original)return;
-out("alex@lab:"+cwd+"$ "+original);
-history.push(original);
-log(original);
-const parts=original.match(/"[^"]*"|\S+/g)||[];
-const cmd=(parts.shift()||"").toLowerCase();
-const a=parts.map(x=>x.replace(/^"|"$/g,""));
-const p=norm(a[0]||"");
-switch(cmd){
-case "help":case "man":help();break;
-case "clear":terminal.innerHTML="";break;
-case "pwd":out(cwd);break;
-case "whoami":out("alex");break;
-case "id":out("uid=1000(alex) gid=1000(alex)");break;
-case "hostname":out("alex-linux-lab");break;
-case "uname":out("Linux alex-linux-lab 6.0 virtual aarch64");break;
-case "date":out(new Date().toString());break;
-case "uptime":out("Laboratorio activo en esta sesión.");break;
-case "neofetch":
-out("       .--.       ALEX LINUX LAB");
-out("      |o_o |      OS: Virtual Linux");
-out("      |:_/ |      Kernel: 6.0");
-out("     //   \\\\     Shell: ALEX-SHELL");
-out("    (|     | )    User: alex");
-out("     `.___.`      Mode: Ethical Lab");
-break;
-case "ls":
-children(cwd).forEach(x=>out(x.slice(x.lastIndexOf("/")+1)+(fs[x].dir?"/":"")));
-break;
-case "cd":
-if(!a[0])cwd="/home/alex";
-else if(exists(p)&&fs[p].dir)cwd=p;
-else out("cd: directorio no encontrado");
-break;
-case "mkdir":
-if(!a[0])out("Uso: mkdir nombre");
-else if(exists(p))out("Ya existe");
-else{fs[p]={dir:true};out("Directorio creado");}
-break;
-case "touch":
-if(!a[0])out("Uso: touch archivo");
-else if(exists(p))out("Ya existe");
-else{fs[p]={content:""};out("Archivo creado");}
-break;
-case "cat":
-if(exists(p)&&!fs[p].dir)out(fs[p].content);
-else out("Archivo no encontrado");
-break;
-case "write":
-if(!a[0]||!exists(p)||fs[p].dir)out("Uso: write archivo texto");
-else{fs[p].content=a.slice(1).join(" ");out("Contenido guardado");}
-break;
-case "append":
-if(!a[0]||!exists(p)||fs[p].dir)out("Uso: append archivo texto");
-else{fs[p].content+="\n"+a.slice(1).join(" ");out("Contenido añadido");}
-break;
-case "rm":
-if(exists(p)&&!fs[p].dir){delete fs[p];out("Archivo eliminado");}
-else out("Archivo no encontrado");
-break;
-case "rmdir":
-if(exists(p)&&fs[p].dir&&!children(p).length){delete fs[p];out("Directorio eliminado");}
-else out("Directorio inexistente o no vacío");
-break;
-case "tree":
-Object.keys(fs).forEach(x=>out(x));
-break;
-case "cp":{
-const dest=norm(a[1]);
-if(exists(p)&&!fs[p].dir&&a[1]&&!exists(dest)){fs[dest]={...fs[p]};out("Archivo copiado");}
-else out("Uso: cp origen destino");
-break;
+
+function scanText(){
+ let t=getText();
+ let lines=t.split("\n");
+ let words=t.trim()?t.trim().split(/\s+/).length:0;
+ result.textContent=
+ "FILE SCANNER\n\n"+
+ "Caracteres: "+t.length+
+ "\nPalabras: "+words+
+ "\nLíneas: "+lines.length+
+ "\nBytes UTF-8: "+new TextEncoder().encode(t).length+
+ "\n\nAnálisis de contenido completado.";
 }
-case "mv":{
-const dest=norm(a[1]);
-if(exists(p)&&a[1]&&!exists(dest)){fs[dest]=fs[p];delete fs[p];out("Elemento movido");}
-else out("No se pudo mover");
-break;
+
+async function checkIntegrity(){
+ const data=new TextEncoder().encode(getText());
+ const digest=await crypto.subtle.digest("SHA-256",data);
+ const hash=Array.from(new Uint8Array(digest))
+ .map(b=>b.toString(16).padStart(2,"0")).join("");
+ if(!window.previousHash){
+ window.previousHash=hash;
+ result.textContent="HUELLA DE REFERENCIA GUARDADA:\n"+hash+
+ "\n\nVuelve a pulsar después de modificar el archivo para comparar.";
+ }else{
+ result.textContent=(hash===window.previousHash?
+ "INTEGRIDAD CONFIRMADA: sin cambios.":
+ "CAMBIO DETECTADO: el contenido es diferente.")+
+ "\n\nHash actual:\n"+hash+
+ "\n\nHash de referencia:\n"+window.previousHash;
+ }
 }
-case "chmod":
-if(!a[0]||!a[1]||!exists(norm(a[1])))out("Uso: chmod 777 archivo");
-else{permissions[norm(a[1])]=a[0];out("Permisos virtuales actualizados");}
-break;
-case "security":{
-let risky=Object.keys(permissions).filter(x=>permissions[x]==="777");
-out("AUDITORÍA DE SEGURIDAD");
-out("Archivos con permisos 777: "+risky.length);
-risky.forEach(x=>out("[!] "+x));
-out(risky.length?"Revisar permisos.":"No se detectaron permisos 777.");
-break;
+
+function metadata(){
+ let t=getText();
+ let bytes=new TextEncoder().encode(t).length;
+ result.textContent=
+ "METADATA ANALYZER\n\n"+
+ "Nombre: archivo-de-prueba.txt"+
+ "\nTipo: texto plano (estimado)"+
+ "\nTamaño: "+bytes+" bytes"+
+ "\nFecha del análisis: "+new Date().toLocaleString()+
+ "\nOrigen: laboratorio virtual";
 }
-case "nmap":
-if(!["lab.local","localhost","127.0.0.1"].includes(a[0])){out("Solo se permite lab.local en esta simulación");break;}
-out("ESCANEO SIMULADO");
-[21,22,23,80,443,3306].forEach(x=>out(x+"/tcp "+(blocked.includes(x)?"filtered":[21,22,80,443].includes(x)?"open":"closed")));
-out("Análisis finalizado");
-break;
-case "ports":
-[21,22,23,80,443,3306].forEach(x=>out(x+"/tcp "+(blocked.includes(x)?"BLOQUEADO":[21,22,80,443].includes(x)?"ABIERTO":"CERRADO")));
-break;
-case "firewall":
-if(a[0]==="status")out("Puertos bloqueados: "+(blocked.join(", ")||"ninguno"));
-else if(a[0]==="block"&&Number.isInteger(Number(a[1]))&&Number(a[1])>0){
-if(!blocked.includes(Number(a[1])))blocked.push(Number(a[1]));
-out("Puerto bloqueado en el laboratorio");
-}else if(a[0]==="allow"){
-blocked=blocked.filter(x=>x!==Number(a[1]));
-out("Regla retirada");
-}else out("Uso: firewall status | block 22 | allow 22");
-break;
-case "hash":{
-let value=a.join(" ");
-if(!value){out("Uso: hash texto");break;}
-try{
-let digest=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(value));
-out(Array.from(new Uint8Array(digest)).map(x=>x.toString(16).padStart(2,"0")).join(""));
-}catch(e){out("Hash no disponible en este navegador");}
-break;
+
+function threatScan(){
+ result.textContent="Iniciando motor de simulación...\n";
+ let steps=[
+ "Preparando entorno...",
+ "Revisando contenido de prueba...",
+ "Evaluando patrones de texto...",
+ "Comprobando integridad...",
+ "Generando informe..."
+ ];
+ let i=0;
+ let timer=setInterval(()=>{
+ result.textContent+=steps[i]+"\n";
+ i++;
+ if(i===steps.length){
+ clearInterval(timer);
+ result.textContent+="\nANÁLISIS FINALIZADO\nNo se ejecutaron archivos ni se realizó ninguna conexión externa.";
+ }
+ },650);
 }
-case "logs":
-if(logs.length)logs.forEach(out);else out("No hay registros");
-break;
-case "history":
-history.forEach((x,i)=>out((i+1)+" "+x));break;
-case "echo":out(a.join(" "));break;
-case "ps":out("PID 1 SYSTEM\nPID 2 ALEX-SHELL\nPID 3 LAB-SERVICE");break;
-case "top":out("CPU: 4% | RAM: 128 MB | Procesos: 3");break;
-case "free":out("RAM virtual: 512 MB | Disponible: 384 MB");break;
-case "df":out("Disco virtual: 2 GB | Usado: 300 MB");break;
-case "ip":
-if(a[0]==="addr")out("lo: 127.0.0.1\nlab0: 192.0.2.10 (simulada)");
-else if(a[0]==="route")out("Ruta virtual de laboratorio");
-else out("Uso: ip addr | ip route");
-break;
-case "ping":out("PING simulado: localhost responde en 1 ms");break;
-case "calc":{
-let expr=a.join("");
-if(!expr||!/^[0-9+\-*/().% ]+$/.test(expr)){out("Expresión no válida");break;}
-try{
-let result=Function('"use strict";return ('+expr+')')();
-out(Number.isFinite(result)?result:"Resultado no válido");
-}catch(e){out("Error de cálculo");}
-break;
+
+function systemInfo(){
+ result.textContent=
+ "ALEX-LINUX-LAB 7.0\n"+
+ "Motor: JavaScript\n"+
+ "Plataforma: Navegador\n"+
+ "Laboratorio: ACTIVO\n"+
+ "Archivos virtuales: "+Object.keys(virtualFiles).length+
+ "\nMódulo forense: ACTIVO\n"+
+ "Red externa: No utilizada por el laboratorio.";
 }
-case "seq":{
-let n=Number(a[0]);
-if(!Number.isInteger(n)||n<1||n>100){out("Uso: seq 1-100");break;}
-for(let i=1;i<=n;i++)out(i);
-break;
-}
-case "hack":hack();break;
-default:out("Comando desconocido: "+cmd+". Escribe help.");
-}
-}
-run.addEventListener("click",()=>{
-let value=input.value;input.value="";execute(value);
-});
-input.addEventListener("keydown",e=>{
-if(e.key==="Enter"){let value=input.value;input.value="";execute(value);}
-});
-document.querySelectorAll("[data-cmd]").forEach(button=>{
-button.addEventListener("click",()=>execute(button.dataset.cmd));
-});
-out("ALEX LINUX LAB 6.0 iniciado.");
-out("Laboratorio virtual preparado.");
-out("Escribe help para ver los comandos.");
-})();
 </script>
 </body>
 </html>
