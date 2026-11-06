@@ -3,477 +3,204 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#030906">
-<title>ALEX-LINUX-LAB 13.0</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ALEX-LINUX-LAB 14.0</title>
 <style>
-:root{--g:#00ff88;--bg:#030906;--p:#08130d;--line:#17452e;--muted:#82a993;--red:#ff5368;--yellow:#ffd166}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--g);font-family:monospace}
-header{padding:17px 14px;background:#061009;border-bottom:1px solid var(--line)}
-h1{font-size:21px;margin:0 0 6px;letter-spacing:1px}
-header p{font-size:11px;color:var(--muted);margin:0}
-main{max-width:1000px;margin:auto;padding:13px}
-.panel{background:var(--p);border:1px solid var(--line);border-radius:9px;padding:13px;margin-bottom:13px}
-h2{font-size:13px;color:#c1ffda;margin:0 0 12px}
-h3{font-size:12px;color:#c1ffda;margin:0 0 8px}
-.status{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:11px;color:var(--muted)}
-.green{color:var(--g)}
-.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
-.metric{background:#020805;border:1px solid var(--line);padding:12px;border-radius:7px}
-.metric strong{display:block;font-size:19px;margin-bottom:5px}
-.metric small{font-size:10px;color:var(--muted)}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.tool{background:#061009;border:1px solid var(--line);border-radius:7px;padding:11px;min-width:0}
-.tool p{font-size:11px;line-height:1.5;color:var(--muted);min-height:28px}
-input,textarea,select{width:100%;background:#020805;color:var(--g);border:1px solid #20583b;border-radius:6px;padding:10px;font-family:monospace;margin:4px 0;outline:none}
-button{background:#062516;color:var(--g);border:1px solid #16834e;border-radius:6px;padding:10px;font-family:monospace;font-weight:bold;cursor:pointer}
-button:active{background:#14502f}
-.tool button{width:100%;margin-top:6px;font-size:11px}
-.result{font-size:11px;line-height:1.6;color:#c4f4d6;white-space:pre-wrap;overflow-wrap:anywhere;margin-top:8px}
-#terminal{height:280px;overflow:auto;background:#010402;border:1px solid var(--line);border-radius:6px;padding:12px;font-size:12px;line-height:1.6;white-space:pre-wrap;overflow-wrap:anywhere}
-.line{margin-bottom:4px}
-.prompt{color:var(--g)}
-.warn{color:var(--yellow)}
-.error{color:var(--red)}
-.inputrow{display:flex;gap:7px;margin-top:8px}
-.inputrow input{min-width:0}
-.quick{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
-.quick button{font-size:10px;min-height:38px}
-.radar{position:relative;width:min(270px,75vw);aspect-ratio:1;border:1px solid #087844;border-radius:50%;margin:12px auto;background:repeating-radial-gradient(circle,transparent 0 24px,#125333 25px 26px),linear-gradient(90deg,transparent 49.5%,#125333 50%,transparent 50.5%),linear-gradient(transparent 49.5%,#125333 50%,transparent 50.5%);overflow:hidden}
-.radar:before{content:"";position:absolute;inset:0;background:conic-gradient(from 0deg,transparent 0deg,#00ff8830 55deg,transparent 90deg);animation:spin 4s linear infinite;border-radius:50%}
-.radar:after{content:"";position:absolute;width:7px;height:7px;background:var(--g);border-radius:50%;top:27%;left:68%;box-shadow:0 0 12px var(--g),-80px 65px 0 #00ff88,35px 100px 0 #00ff88}
-@keyframes spin{to{transform:rotate(360deg)}}
-.bar{height:7px;background:#102519;border-radius:9px;overflow:hidden;margin-top:8px}
-.bar span{display:block;height:100%;width:0;background:var(--g);transition:width .5s}
-footer{text-align:center;color:#527563;font-size:10px;padding:15px}
-@media(max-width:560px){.grid{grid-template-columns:1fr}.quick{grid-template-columns:repeat(2,1fr)}.metrics{grid-template-columns:repeat(3,1fr)}}
+body{margin:0;background:#050b08;color:#00ff88;font-family:monospace}
+header{padding:18px;background:#08150f;border-bottom:1px solid #00ff8855}
+h1{margin:0;font-size:22px;text-shadow:0 0 12px #00ff88}
+.sub{color:#7bba98;font-size:12px;margin-top:7px}
+main{max-width:1000px;margin:auto;padding:14px}
+.panel{background:#08130e;border:1px solid #00ff8844;border-radius:9px;padding:14px;margin-bottom:13px;box-shadow:0 0 15px #00ff880b}
+h2{font-size:15px;color:#00ff88;margin:0 0 12px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stat{background:#020805;padding:12px;border:1px solid #00ff8833;border-radius:7px}
+.stat b{display:block;font-size:19px;margin-bottom:5px}
+.stat small{color:#83b99b}
+button{background:#092416;color:#00ff88;border:1px solid #00ff8877;border-radius:5px;padding:10px;cursor:pointer;font-family:monospace}
+button:active{background:#00ff88;color:#001b0d}
+button:hover{box-shadow:0 0 10px #00ff8866}
+.actions{display:flex;flex-wrap:wrap;gap:7px}
+#terminal{height:310px;overflow-y:auto;background:#020604;border:1px solid #00ff8844;padding:12px;border-radius:6px;line-height:1.6;font-size:13px;white-space:pre-wrap}
+.line{margin-bottom:5px}
+.ok{color:#00ff88}.warn{color:#ffc45c}.bad{color:#ff6969}.muted{color:#80a991}
+.inputrow{display:flex;gap:7px;margin-top:10px}
+input{min-width:0;flex:1;background:#020805;color:#00ff88;border:1px solid #00ff8866;padding:12px;border-radius:5px;font-family:monospace}
+input:focus{outline:1px solid #00ff88}
+.mission{padding:10px;border-bottom:1px solid #00ff8822;color:#b7d9c5}
+.mission b{color:#00ff88}
+.bar{height:8px;background:#15251b;border-radius:8px;overflow:hidden;margin-top:9px}
+#progress{height:100%;width:0%;background:#00ff88;transition:.4s}
+footer{text-align:center;padding:18px;color:#507b62;font-size:11px}
+@media(max-width:500px){.stats{grid-template-columns:1fr 1fr}#terminal{height:280px}}
 </style>
 </head>
 <body>
 <header>
-<h1>⚡ ALEX-LINUX-LAB 13.0</h1>
-<p>CYBER COMMAND CENTER // WEB & SERVER SECURITY</p>
+<h1>⌁ ALEX-LINUX-LAB 14.0</h1>
+<div class="sub">INTELBRAS CCTV CYBER LAB // ETHICAL SECURITY TRAINING</div>
+<div class="sub">SYSTEM: ONLINE · MODE: VIRTUAL LAB · ACCESS: LOCAL SIMULATION</div>
 </header>
+
 <main>
+<section class="panel">
+<h2>▣ CONTROL CENTER</h2>
+<div class="stats">
+<div class="stat"><b id="status">ONLINE</b><small>LAB STATUS</small></div>
+<div class="stat"><b id="done">0/6</b><small>MISSIONS</small></div>
+<div class="stat"><b id="level">01</b><small>SECURITY LEVEL</small></div>
+</div>
+<div class="bar"><div id="progress"></div></div>
+</section>
 
 <section class="panel">
-<div class="status">
-<span>● SYSTEM ONLINE</span>
-<span>MODE: TRAINING</span>
-<span>BUILD: 13.0</span>
+<h2>▣ VIRTUAL DVR TARGET</h2>
+<div class="mission">
+<b>DEVICE:</b> INTELBRAS DVR/XVR (SIMULATED)<br>
+<b>HOST:</b> DVR-LAB-01<br>
+<b>IP:</b> 192.168.15.50 (FICTICIA)<br>
+<b>NETWORK:</b> ISOLATED TRAINING ENVIRONMENT<br>
+<b>CAMERA:</b> HDCVI BULLET SIMULATION
 </div>
-<div class="metrics">
-<div class="metric"><strong id="commands">0</strong><small>COMMANDS</small></div>
-<div class="metric"><strong id="missions">0/5</strong><small>MISSIONS</small></div>
-<div class="metric"><strong id="score">0</strong><small>LAB SCORE</small></div>
+<div class="actions" style="margin-top:12px">
+<button onclick="run('dvr')">IDENTIFY DVR</button>
+<button onclick="run('scan')">PORT SCAN</button>
+<button onclick="run('rtsp')">RTSP ANALYSIS</button>
+<button onclick="run('onvif')">ONVIF CHECK</button>
+<button onclick="run('firmware')">FIRMWARE AUDIT</button>
+<button onclick="run('secure')">HARDENING</button>
 </div>
 </section>
 
 <section class="panel">
-<h2>▣ NETWORK RADAR // SIMULATED</h2>
-<div class="radar"></div>
-<div class="status"><span>● LOCAL TRAINING NETWORK</span><span>EXTERNAL SCAN: DISABLED</span></div>
-<p class="result">Radar visual de entrenamiento. No representa dispositivos reales ni realiza escaneos.</p>
-</section>
-
-<section class="panel">
-<h2>▣ LIVE CYBER TERMINAL</h2>
-<div id="terminal" aria-live="polite"></div>
+<h2>▣ TERMINAL — ALEX SHELL</h2>
+<div id="terminal">
+<div class="ok">ALEX-LINUX-LAB 14.0 iniciado.</div>
+<div class="ok">CCTV CYBER LAB cargado correctamente.</div>
+<div class="muted">Escribe help para ver los comandos.</div>
+<div class="warn">AVISO: todos los resultados son simulados. No se envían paquetes ni se accede a dispositivos reales.</div>
+</div>
 <div class="inputrow">
-<input id="cmd" placeholder="Escribe help y pulsa ENTER" autocomplete="off" spellcheck="false">
-<button id="execute">RUN</button>
-</div>
-</section>
-
-<section class="panel">
-<h2>▣ QUICK OPERATIONS</h2>
-<div class="quick">
-<button data-command="help">HELP</button>
-<button data-command="modules">MODULES</button>
-<button data-command="recon">RECON</button>
-<button data-command="web">WEB LAB</button>
-<button data-command="server">SERVER</button>
-<button data-command="forensics">FORENSICS</button>
-<button data-command="missions">MISSIONS</button>
-<button data-command="report">REPORT</button>
-<button data-command="history">HISTORY</button>
-<button data-command="status">STATUS</button>
-<button data-command="clear">CLEAR</button>
-<button data-command="whoami">WHOAMI</button>
-</div>
-</section>
-
-<section class="panel">
-<h2>▣ CYBER OPERATIONS CENTER</h2>
-<div class="grid">
-
-<div class="tool">
-<h3>01 // WEB RECON</h3>
-<p>Examina la estructura de una URL escrita. Sin conectarte al sitio.</p>
-<input id="reconUrl" placeholder="https://example.com/login">
-<button onclick="recon()">START RECON</button>
-<div class="result" id="reconOut">Esperando objetivo de ejemplo...</div>
-</div>
-
-<div class="tool">
-<h3>02 // VULNERABILITY ANALYZER</h3>
-<p>Detecta patrones básicos en una entrada de prueba.</p>
-<input id="vulnInput" placeholder="Introduce una entrada ficticia">
-<button onclick="vuln()">ANALYZE INPUT</button>
-<div class="result" id="vulnOut">Esperando...</div>
-</div>
-
-<div class="tool">
-<h3>03 // HTTP TRAFFIC INSPECTOR</h3>
-<p>Construye una petición HTTP de ejemplo.</p>
-<select id="httpMethod">
-<option>GET</option><option>POST</option><option>PUT</option><option>DELETE</option>
-</select>
-<input id="httpPath" value="/login">
-<button onclick="httpInspect()">INSPECT REQUEST</button>
-<div class="result" id="httpOut">Esperando...</div>
-</div>
-
-<div class="tool">
-<h3>04 // SERVER SECURITY AUDIT</h3>
-<p>Revisa una lista de controles importantes para servidores.</p>
-<button onclick="serverAudit()">RUN AUDIT</button>
-<div class="result" id="serverOut">Auditoría pendiente...</div>
-</div>
-
-<div class="tool">
-<h3>05 // LOG FORENSICS</h3>
-<p>Busca errores y eventos sospechosos en registros de ejemplo pegados.</p>
-<textarea id="logs" rows="4" placeholder="Ejemplo: 401 Unauthorized&#10;500 Internal Server Error"></textarea>
-<button onclick="analyzeLogs()">ANALYZE LOGS</button>
-<div class="result" id="logsOut">Esperando registros...</div>
-</div>
-
-<div class="tool">
-<h3>06 // SECURITY HEADERS</h3>
-<p>Comprueba cabeceras HTTP copiadas manualmente.</p>
-<textarea id="headers" rows="4" placeholder="HTTP/1.1 200 OK&#10;Content-Type: text/html"></textarea>
-<button onclick="analyzeHeaders()">SCAN HEADERS</button>
-<div class="result" id="headersOut">Esperando cabeceras...</div>
-</div>
-
-<div class="tool">
-<h3>07 // SHA-256 FORENSICS</h3>
-<p>Calcula el hash SHA-256 de un texto local.</p>
-<input id="hashText" placeholder="Texto de prueba">
-<button onclick="hashText()">GENERATE HASH</button>
-<div class="result" id="hashOut">Esperando...</div>
-</div>
-
-<div class="tool">
-<h3>08 // FILE INTEGRITY</h3>
-<p>Calcula el hash de un archivo elegido. Se procesa localmente.</p>
-<input id="fileInput" type="file">
-<button onclick="hashFile()">ANALYZE FILE</button>
-<div class="result" id="fileOut">Ningún archivo seleccionado.</div>
-</div>
-
-<div class="tool">
-<h3>09 // ACCESS CONTROL</h3>
-<p>Simula permisos de usuarios en una aplicación.</p>
-<select id="role">
-<option value="guest">Invitado</option>
-<option value="user">Usuario</option>
-<option value="admin">Administrador</option>
-</select>
-<select id="resource">
-<option value="public">Página pública</option>
-<option value="profile">Perfil</option>
-<option value="admin">Panel administrativo</option>
-</select>
-<button onclick="accessTest()">TEST ACCESS</button>
-<div class="result" id="accessOut">Esperando...</div>
-</div>
-
-<div class="tool">
-<h3>10 // INCIDENT RESPONSE</h3>
-<p>Practica una secuencia de respuesta ante un incidente ficticio.</p>
-<button onclick="incident()">START INCIDENT</button>
-<div class="result" id="incidentOut">Sistema esperando incidente de práctica.</div>
-</div>
-
+<input id="cmd" placeholder="alex@lab:~$ escribe un comando..." autocomplete="off">
+<button onclick="execute()">EXECUTE</button>
 </div>
 </section>
 
 <section class="panel">
 <h2>▣ MISSION CONTROL</h2>
-<div class="result" id="missionText">Misión 1: analiza una URL.
-Misión 2: interpreta una respuesta HTTP.
-Misión 3: revisa cabeceras de seguridad.
-Misión 4: comprueba permisos.
-Misión 5: analiza un registro de ejemplo.</div>
-<div class="bar"><span id="progress"></span></div>
-<button style="width:100%;margin-top:10px" onclick="nextMission()">COMPLETE NEXT MISSION</button>
-</section>
-
-<section class="panel">
-<h2>▣ TRAINING CONNECTIONS</h2>
-<p class="result">Laboratorios externos diseñados para aprender seguridad web:</p>
-<button style="width:100%;margin:4px 0" onclick="window.open('https://owasp.org/www-project-juice-shop/','_blank')">OPEN OWASP JUICE SHOP</button>
-<button style="width:100%;margin:4px 0" onclick="window.open('https://portswigger.net/web-security','_blank')">OPEN PORTSWIGGER ACADEMY</button>
-<button style="width:100%;margin:4px 0" onclick="window.open('https://tryhackme.com/','_blank')">OPEN TRYHACKME</button>
-</section>
-
-<section class="panel">
-<h2>▣ SYSTEM INFORMATION</h2>
-<div class="result">ALEX-LINUX-LAB 13.0
-Platform: Browser
-Environment: Local simulation
-External target scanning: Disabled
-File processing: Local browser
-Network access to Termux: Not available
-Purpose: Ethical cybersecurity training</div>
+<div class="mission" id="m1">○ <b>01 Reconocimiento:</b> identificar el DVR virtual.</div>
+<div class="mission" id="m2">○ <b>02 Puertos:</b> interpretar servicios de red.</div>
+<div class="mission" id="m3">○ <b>03 RTSP:</b> comprender la transmisión de vídeo.</div>
+<div class="mission" id="m4">○ <b>04 ONVIF:</b> comprender el protocolo.</div>
+<div class="mission" id="m5">○ <b>05 Firmware:</b> detectar riesgos de versiones.</div>
+<div class="mission" id="m6">○ <b>06 Defensa:</b> proteger el DVR.</div>
 </section>
 </main>
-<footer>ALEX-LINUX-LAB 13.0 // THINK · TEST · PROTECT</footer>
+
+<footer>ALEX-LINUX-LAB 14.0 · EDUCATIONAL CYBERSECURITY ENVIRONMENT</footer>
 
 <script>
 const terminal=document.getElementById("terminal");
-const cmd=document.getElementById("cmd");
-let history=[];
-let score=0;
-let completed=0;
-let commandCount=0;
+const completed=new Set();
 
-const tasks=[
-"Analiza una URL con Web Recon.",
-"Construye una petición HTTP.",
-"Analiza las cabeceras de seguridad.",
-"Prueba permisos con Access Control.",
-"Analiza un registro con Log Forensics."
-];
-
-function log(text,type="result"){
+function out(text,type="ok"){
  const d=document.createElement("div");
  d.className="line "+type;
  d.textContent=text;
  terminal.appendChild(d);
  terminal.scrollTop=terminal.scrollHeight;
 }
-function updateStats(){
- document.getElementById("commands").textContent=commandCount;
- document.getElementById("missions").textContent=completed+"/5";
- document.getElementById("score").textContent=score;
+function finish(n){
+ completed.add(n);
+ document.getElementById("m"+n).innerHTML="✓ "+document.getElementById("m"+n).innerHTML.replace(/^○ /,"");
+ document.getElementById("done").textContent=completed.size+"/6";
+ document.getElementById("progress").style.width=(completed.size/6*100)+"%";
+ document.getElementById("level").textContent=String(Math.min(6,completed.size+1)).padStart(2,"0");
 }
-function execute(raw){
- const value=raw.trim();
- if(!value)return;
- commandCount++;
- history.push(value);
- updateStats();
- log("alex@cyber-center:~$ "+value,"prompt");
- const p=value.split(/\s+/);
- const c=p[0].toLowerCase();
- const arg=p.slice(1).join(" ");
- switch(c){
- case "help":
- log("help | modules | status | recon | web | server | forensics");
- log("missions | report | history | whoami | echo | clear");
- break;
- case "modules":
- log("01 WEB RECON | 02 VULNERABILITY ANALYZER | 03 HTTP INSPECTOR");
- log("04 SERVER AUDIT | 05 LOG FORENSICS | 06 SECURITY HEADERS");
- log("07 SHA-256 | 08 FILE INTEGRITY | 09 ACCESS CONTROL | 10 INCIDENT RESPONSE");
- break;
- case "status":
- log("SYSTEM ONLINE // LOCAL TRAINING // EXTERNAL SCANNING DISABLED");
- break;
- case "recon":
- log("RECON: abre el módulo WEB RECON para analizar una URL escrita.");
- break;
- case "web":
- log("WEB LAB: estudia HTTP, validación, XSS, SQL Injection y control de acceso.");
- break;
- case "server":
- serverAudit();
- log("Auditoría de configuración de ejemplo ejecutada.");
- break;
- case "forensics":
- log("FORENSICS: analiza hashes y registros con los módulos de esta página.");
- break;
- case "missions":
- log(tasks.slice(completed).join("\n")||"Todas las misiones completadas.");
- break;
- case "report":
- log("CYBER OPERATIONS REPORT","prompt");
- log("Comandos: "+commandCount);
- log("Misiones completadas: "+completed+"/5");
- log("Puntuación: "+score);
- log("No se han realizado conexiones ni ataques externos.");
- break;
- case "history":
- history.forEach((x,i)=>log((i+1)+". "+x));
- break;
- case "whoami":
- log("alex-trainee // ETHICAL SECURITY STUDENT");
- break;
- case "echo":
- log(arg);
- break;
- case "clear":
- terminal.textContent="";
- break;
- default:
- log("Comando desconocido. Escribe help.","error");
+function run(task){
+ out("alex@lab:~$ "+task.toUpperCase(),"muted");
+ if(task==="dvr"){
+ out("[+] Iniciando reconocimiento del objetivo virtual...");
+ out("[+] Dispositivo: DVR-LAB-01");
+ out("[+] Fabricante de práctica: Intelbras");
+ out("[+] Tecnología de cámara: HDCVI");
+ out("[+] Dirección ficticia: 192.168.15.50");
+ out("[+] Objetivo identificado correctamente.");
+ finish(1);
  }
-}
-document.getElementById("execute").onclick=()=>{
- execute(cmd.value);cmd.value="";
-};
-cmd.addEventListener("keydown",e=>{
- if(e.key==="Enter"){execute(cmd.value);cmd.value="";}
-});
-document.querySelectorAll("[data-command]").forEach(b=>{
- b.onclick=()=>execute(b.dataset.command);
-});
-
-function recon(){
- const raw=document.getElementById("reconUrl").value.trim();
- const out=document.getElementById("reconOut");
- try{
- const u=new URL(raw);
- out.textContent="WEB RECON REPORT\n"+
- "Protocol: "+u.protocol+"\n"+
- "Hostname: "+u.hostname+"\n"+
- "Port: "+(u.port||"default")+"\n"+
- "Path: "+u.pathname+"\n"+
- "Query: "+(u.search||"none")+"\n"+
- "Fragment: "+(u.hash||"none")+
- "\n\nNo network connection was made.";
- }catch(e){out.textContent="URL inválida. Incluye https://";}
-}
-function vuln(){
- const v=document.getElementById("vulnInput").value;
- const out=document.getElementById("vulnOut");
- if(!v){out.textContent="Introduce una entrada de prueba.";return;}
- const patterns=[
- ["HTML/Script markup",/<script|<iframe|onerror\s*=/i],
- ["SQL-like patterns",/('|--|\bunion\b|\bor\b)/i],
- ["Path traversal",/\.\.[/\\]/],
- ["Other input",""]
- ];
- let found=[];
- patterns.forEach(([name,re])=>{if(re&&re.test(v))found.push(name);});
- out.textContent=found.length?
- "PATRONES QUE REQUIEREN REVISIÓN:\n"+found.join("\n")+
- "\n\nDetección orientativa. No se ejecutó ningún payload.":
- "No se detectaron patrones básicos.\nEsto no garantiza que la entrada sea segura.";
-}
-function httpInspect(){
- let method=document.getElementById("httpMethod").value;
- let path=document.getElementById("httpPath").value.trim();
- if(!path.startsWith("/"))path="/"+path;
- document.getElementById("httpOut").textContent=
- "REQUEST PREVIEW\n"+method+" "+path+" HTTP/1.1\n"+
- "Host: example.local\nAccept: */*\nUser-Agent: AlexLab/13.0\n\n"+
- "RESPONSE EXAMPLE\nHTTP/1.1 200 OK\nContent-Type: application/json\n\n"+
- '{"training":true,"status":"ok"}'+
- "\n\nPetición de ejemplo: no fue enviada.";
-}
-function serverAudit(){
- document.getElementById("serverOut").textContent=
- "SERVER HARDENING AUDIT\n"+
- "[REVIEW] HTTPS and TLS certificate\n"+
- "[REVIEW] Security headers\n"+
- "[REVIEW] MFA for administrator accounts\n"+
- "[REVIEW] Least privilege permissions\n"+
- "[REVIEW] Software and dependency updates\n"+
- "[REVIEW] Backups and recovery testing\n"+
- "[REVIEW] Error messages and secret handling\n"+
- "[REVIEW] Logging and monitoring\n\n"+
- "Auditoría de ejemplo. Ningún servidor fue contactado.";
-}
-function analyzeLogs(){
- const v=document.getElementById("logs").value;
- const out=document.getElementById("logsOut");
- if(!v.trim()){out.textContent="Pega registros de ejemplo.";return;}
- const lines=v.split(/\r?\n/);
- let findings=[];
- lines.forEach((line,i)=>{
- if(/\b401\b|\b403\b/i.test(line))findings.push("Línea "+(i+1)+": evento de autenticación o permiso.");
- if(/\b500\b|\b502\b|\b503\b/i.test(line))findings.push("Línea "+(i+1)+": error de servidor.");
- if(/failed|denied|invalid/i.test(line))findings.push("Línea "+(i+1)+": revisar fallo registrado.");
- });
- out.textContent="LOG ANALYSIS\nLíneas: "+lines.length+"\n"+
- (findings.length?findings.join("\n"):"No se detectaron patrones básicos.")+
- "\n\nAnálisis del texto pegado; no se accedió a registros del sistema.";
-}
-function analyzeHeaders(){
- const v=document.getElementById("headers").value;
- const out=document.getElementById("headersOut");
- if(!v.trim()){out.textContent="Pega cabeceras primero.";return;}
- const names=["Content-Security-Policy","Strict-Transport-Security","X-Content-Type-Options","Referrer-Policy","Permissions-Policy"];
- out.textContent=names.map(n=>(new RegExp("^"+n+":","im").test(v)?"[PRESENTE] ":"[REVISAR] ")+n).join("\n")+
- "\n\nAnálisis del texto pegado, no de un servidor.";
-}
-async function hashText(){
- const v=document.getElementById("hashText").value;
- const out=document.getElementById("hashOut");
- if(!v){out.textContent="Escribe un texto.";return;}
- if(!crypto.subtle){out.textContent="SHA-256 no disponible en este navegador.";return;}
- try{
- const d=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(v));
- out.textContent=Array.from(new Uint8Array(d)).map(x=>x.toString(16).padStart(2,"0")).join("");
- }catch(e){out.textContent="No se pudo calcular el hash.";}
-}
-async function hashFile(){
- const f=document.getElementById("fileInput").files[0];
- const out=document.getElementById("fileOut");
- if(!f){out.textContent="Selecciona un archivo.";return;}
- if(!crypto.subtle){out.textContent="SHA-256 no disponible en este navegador.";return;}
- try{
- const bytes=await f.arrayBuffer();
- const d=await crypto.subtle.digest("SHA-256",bytes);
- const h=Array.from(new Uint8Array(d)).map(x=>x.toString(16).padStart(2,"0")).join("");
- out.textContent="Archivo: "+f.name+"\nTamaño: "+f.size+" bytes\nSHA-256:\n"+h+"\n\nProcesado localmente.";
- }catch(e){out.textContent="No se pudo leer el archivo.";}
-}
-function accessTest(){
- const role=document.getElementById("role").value;
- const resource=document.getElementById("resource").value;
- const allowed=resource==="public"||
- (resource==="profile"&&(role==="user"||role==="admin"))||
- (resource==="admin"&&role==="admin");
- document.getElementById("accessOut").textContent=
- "ROLE: "+role+"\nRESOURCE: "+resource+
- "\nRESULT: "+(allowed?"ACCESS GRANTED":"ACCESS DENIED")+
- "\n\nSimulación educativa. El servidor real debe verificar cada permiso.";
-}
-function incident(){
- document.getElementById("incidentOut").textContent=
- "INCIDENT RESPONSE SIMULATION\n"+
- "1. DETECT: evento sospechoso identificado.\n"+
- "2. ANALYZE: revisar registros y alcance.\n"+
- "3. CONTAIN: aislar el sistema afectado según el plan.\n"+
- "4. RECOVER: restaurar desde copias verificadas.\n"+
- "5. REVIEW: documentar y corregir la causa.\n"+
- "\nEscenario ficticio, sin acciones sobre dispositivos reales.";
-}
-function nextMission(){
- if(completed>=5){
- document.getElementById("missionText").textContent="¡Todas las misiones completadas!";
- return;
+ else if(task==="scan"){
+ out("[+] Escaneo didáctico de puertos del DVR simulado...");
+ out("PORT       STATE       SERVICE");
+ out("80/tcp     OPEN        HTTP (interfaz web)");
+ out("443/tcp    CLOSED      HTTPS");
+ out("554/tcp    OPEN        RTSP (transmisión)");
+ out("37777/tcp  OPEN        Servicio propietario simulado");
+ out("[!] Un puerto abierto no significa automáticamente una vulnerabilidad.","warn");
+ out("[+] Práctica completada.");
+ finish(2);
  }
- completed++;
- score+=100;
- document.getElementById("missionText").textContent=
- "COMPLETADA: "+tasks[completed-1]+"\n"+
- (tasks[completed]||"¡Todas las misiones completadas!");
- document.getElementById("progress").style.width=(completed*20)+"%";
- updateStats();
- log("MISSION "+completed+" COMPLETED // +100 POINTS","prompt");
+ else if(task==="rtsp"){
+ out("[+] Analizando concepto RTSP...");
+ out("[i] RTSP permite controlar sesiones de transmisión multimedia.");
+ out("[i] El puerto habitual es TCP 554.");
+ out("[!] Una transmisión debe requerir autenticación cuando el equipo lo permita.","warn");
+ out("[+] Recomendación: restringir el acceso a la red autorizada.");
+ finish(3);
+ }
+ else if(task==="onvif"){
+ out("[+] Analizando protocolo ONVIF...");
+ out("[i] ONVIF facilita la interoperabilidad entre dispositivos de vídeo.");
+ out("[i] Puede permitir descubrimiento, configuración y gestión.");
+ out("[!] Los servicios de descubrimiento no deben exponerse a redes no confiables.","warn");
+ out("[+] Análisis conceptual terminado.");
+ finish(4);
+ }
+ else if(task==="firmware"){
+ out("[+] Auditoría didáctica de firmware...");
+ out("[i] Revisar fabricante, modelo y versión instalada.");
+ out("[i] Comparar la versión con los avisos oficiales del fabricante.");
+ out("[!] Firmware antiguo puede contener vulnerabilidades conocidas.","warn");
+ out("[+] No se ha instalado ni modificado ningún firmware.");
+ finish(5);
+ }
+ else if(task==="secure"){
+ out("[+] Iniciando plan de protección...");
+ out("[✓] Cambiar contraseña predeterminada.");
+ out("[✓] Usar una contraseña única y robusta.");
+ out("[✓] Instalar firmware oficial actualizado.");
+ out("[✓] Desactivar servicios innecesarios.");
+ out("[✓] Limitar el acceso remoto.");
+ out("[✓] Evitar exponer RTSP directamente a Internet.");
+ out("[+] Plan de defensa completado.");
+ finish(6);
+ }
+ else out("Comando no reconocido. Escribe help.","bad");
 }
-log("ALEX-LINUX-LAB 13.0 iniciado.","prompt");
-log("CYBER COMMAND CENTER // TRAINING MODE");
-log("Escribe help para comenzar.");
-log("---------------------------------------");
-updateStats();
+function execute(){
+ const input=document.getElementById("cmd");
+ const c=input.value.trim().toLowerCase();
+ if(!c)return;
+ input.value="";
+ out("alex@lab:~$ "+c,"muted");
+ const commands={
+ help:()=>{out("COMANDOS DISPONIBLES:");out("help       - mostrar comandos");out("dvr        - identificar DVR virtual");out("scan       - analizar puertos simulados");out("rtsp       - estudiar RTSP");out("onvif      - estudiar ONVIF");out("firmware   - auditoría de firmware");out("secure     - plan de protección");out("missions   - ver misiones");out("status     - estado del laboratorio");out("report     - generar informe");out("clear      - limpiar terminal");},
+ dvr:()=>run("dvr"),
+ scan:()=>run("scan"),
+ rtsp:()=>run("rtsp"),
+ onvif:()=>run("onvif"),
+ firmware:()=>run("firmware"),
+ secure:()=>run("secure"),
+ missions:()=>{for(let i=1;i<=6;i++)out(document.getElementById("m"+i).innerText);},
+ status:()=>{out("LAB: ONLINE");out("MISSIONS: "+completed.size+"/6");out("MODE: SIMULATED");},
+ report:()=>{out("========== AUDIT REPORT ==========");out("Target: DVR-LAB-01 (fictional)");out("Completed missions: "+completed.size+"/6");out("Network access: NONE");out("Real devices modified: NONE");out("=================================");},
+ clear:()=>{terminal.innerHTML="";out("Terminal limpia.");}
+ };
+ if(commands[c])commands[c]();
+ else if(c.startsWith("echo "))out(c.slice(5));
+ else out("Comando desconocido. Escribe help.","bad");
+}
+document.getElementById("cmd").addEventListener("keydown",e=>{if(e.key==="Enter")execute()});
 </script>
 </body>
 </html>
