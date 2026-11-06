@@ -4,203 +4,265 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ALEX-LINUX-LAB 14.0</title>
+<title>ALEX-LINUX-LAB 16.0</title>
 <style>
+:root {
+  --green:#00ff88;
+  --bg:#050907;
+  --panel:#0a1510;
+  --border:#16452e;
+  --muted:#83a995;
+}
 *{box-sizing:border-box}
-body{margin:0;background:#050b08;color:#00ff88;font-family:monospace}
-header{padding:18px;background:#08150f;border-bottom:1px solid #00ff8855}
-h1{margin:0;font-size:22px;text-shadow:0 0 12px #00ff88}
-.sub{color:#7bba98;font-size:12px;margin-top:7px}
-main{max-width:1000px;margin:auto;padding:14px}
-.panel{background:#08130e;border:1px solid #00ff8844;border-radius:9px;padding:14px;margin-bottom:13px;box-shadow:0 0 15px #00ff880b}
-h2{font-size:15px;color:#00ff88;margin:0 0 12px}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.stat{background:#020805;padding:12px;border:1px solid #00ff8833;border-radius:7px}
-.stat b{display:block;font-size:19px;margin-bottom:5px}
-.stat small{color:#83b99b}
-button{background:#092416;color:#00ff88;border:1px solid #00ff8877;border-radius:5px;padding:10px;cursor:pointer;font-family:monospace}
-button:active{background:#00ff88;color:#001b0d}
-button:hover{box-shadow:0 0 10px #00ff8866}
-.actions{display:flex;flex-wrap:wrap;gap:7px}
-#terminal{height:310px;overflow-y:auto;background:#020604;border:1px solid #00ff8844;padding:12px;border-radius:6px;line-height:1.6;font-size:13px;white-space:pre-wrap}
-.line{margin-bottom:5px}
-.ok{color:#00ff88}.warn{color:#ffc45c}.bad{color:#ff6969}.muted{color:#80a991}
-.inputrow{display:flex;gap:7px;margin-top:10px}
-input{min-width:0;flex:1;background:#020805;color:#00ff88;border:1px solid #00ff8866;padding:12px;border-radius:5px;font-family:monospace}
-input:focus{outline:1px solid #00ff88}
-.mission{padding:10px;border-bottom:1px solid #00ff8822;color:#b7d9c5}
-.mission b{color:#00ff88}
-.bar{height:8px;background:#15251b;border-radius:8px;overflow:hidden;margin-top:9px}
-#progress{height:100%;width:0%;background:#00ff88;transition:.4s}
-footer{text-align:center;padding:18px;color:#507b62;font-size:11px}
-@media(max-width:500px){.stats{grid-template-columns:1fr 1fr}#terminal{height:280px}}
+body{
+  margin:0;background:var(--bg);color:#d9ffe9;
+  font-family:Consolas,Monaco,monospace;
+}
+header{
+  padding:22px 16px;text-align:center;
+  background:linear-gradient(135deg,#06130b,#102b1b);
+  border-bottom:1px solid var(--green);
+}
+h1{color:var(--green);margin:0;font-size:27px}
+header p{color:var(--muted);font-size:12px}
+.status{color:var(--green);font-size:12px;margin-top:12px}
+main{max-width:1050px;margin:auto;padding:15px}
+.panel{
+  background:var(--panel);border:1px solid var(--border);
+  border-radius:10px;padding:15px;margin-bottom:15px;
+  box-shadow:0 0 15px #00ff8810;
+}
+h2{font-size:15px;color:var(--green);margin-top:0}
+.grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));
+  gap:10px;
+}
+button{
+  background:#071b10;color:var(--green);
+  border:1px solid #087b46;border-radius:7px;
+  padding:14px 9px;font-family:inherit;
+  cursor:pointer;font-weight:bold;min-height:62px;
+  transition:.2s;
+}
+button:hover{
+  background:#0b3920;box-shadow:0 0 12px #00ff8866;
+  transform:translateY(-2px);
+}
+button small{display:block;color:#9bbca8;font-weight:normal;margin-top:5px}
+.terminal{
+  background:#020503;border:1px solid #17603b;
+  border-radius:8px;min-height:260px;padding:13px;
+  overflow:auto;
+}
+#output{
+  white-space:pre-wrap;overflow-wrap:anywhere;
+  font-size:13px;line-height:1.6;color:#b8ffd2;
+  min-height:195px;
+}
+.prompt{color:var(--green)}
+.inputrow{display:flex;gap:8px;margin-top:10px}
+input{
+  min-width:0;flex:1;background:#07110b;
+  color:var(--green);border:1px solid #17603b;
+  padding:12px;border-radius:5px;font-family:inherit;
+}
+.run{min-height:auto;padding:10px 17px}
+.muted{color:var(--muted);font-size:12px;line-height:1.6}
+.tag{color:var(--green)}
+footer{text-align:center;color:#557764;font-size:11px;padding:20px}
+a{color:var(--green)}
 </style>
 </head>
 <body>
 <header>
-<h1>⌁ ALEX-LINUX-LAB 14.0</h1>
-<div class="sub">INTELBRAS CCTV CYBER LAB // ETHICAL SECURITY TRAINING</div>
-<div class="sub">SYSTEM: ONLINE · MODE: VIRTUAL LAB · ACCESS: LOCAL SIMULATION</div>
+  <h1>⚡ ALEX-LINUX-LAB 16.0</h1>
+  <p>ADVANCED CYBERSECURITY OPERATIONS</p>
+  <div class="status">● SYSTEM ONLINE | ALL IN ONE</div>
 </header>
 
 <main>
-<section class="panel">
-<h2>▣ CONTROL CENTER</h2>
-<div class="stats">
-<div class="stat"><b id="status">ONLINE</b><small>LAB STATUS</small></div>
-<div class="stat"><b id="done">0/6</b><small>MISSIONS</small></div>
-<div class="stat"><b id="level">01</b><small>SECURITY LEVEL</small></div>
-</div>
-<div class="bar"><div id="progress"></div></div>
-</section>
+  <section class="panel">
+    <h2>▰ CONTROL CENTER</h2>
+    <div class="grid">
+      <button onclick="openLab('https://portswigger.net/web-security')">
+        WEB HACKING<small>Web Security Academy</small>
+      </button>
+      <button onclick="openLab('https://owasp.org/www-project-juice-shop/')">
+        SQL INJECTION<small>OWASP Juice Shop</small>
+      </button>
+      <button onclick="openLab('https://portswigger.net/web-security/cross-site-scripting')">
+        XSS LAB<small>Cross-site scripting</small>
+      </button>
+      <button onclick="openLab('https://nmap.org/book/man.html')">
+        NETWORK TOOLS<small>Nmap documentation</small>
+      </button>
+      <button onclick="openLab('https://www.kali.org/docs/')">
+        KALI LINUX<small>Official Kali guides</small>
+      </button>
+      <button onclick="openLab('https://tryhackme.com/')">
+        HACKING LABS<small>TryHackMe</small>
+      </button>
+      <button onclick="openLab('https://owasp.org/www-project-top-ten/')">
+        OWASP TOP 10<small>Web vulnerabilities</small>
+      </button>
+      <button onclick="openLab('https://github.com/OWASP')">
+        SECURITY TOOLS<small>OWASP projects</small>
+      </button>
+    </div>
+  </section>
 
-<section class="panel">
-<h2>▣ VIRTUAL DVR TARGET</h2>
-<div class="mission">
-<b>DEVICE:</b> INTELBRAS DVR/XVR (SIMULATED)<br>
-<b>HOST:</b> DVR-LAB-01<br>
-<b>IP:</b> 192.168.15.50 (FICTICIA)<br>
-<b>NETWORK:</b> ISOLATED TRAINING ENVIRONMENT<br>
-<b>CAMERA:</b> HDCVI BULLET SIMULATION
-</div>
-<div class="actions" style="margin-top:12px">
-<button onclick="run('dvr')">IDENTIFY DVR</button>
-<button onclick="run('scan')">PORT SCAN</button>
-<button onclick="run('rtsp')">RTSP ANALYSIS</button>
-<button onclick="run('onvif')">ONVIF CHECK</button>
-<button onclick="run('firmware')">FIRMWARE AUDIT</button>
-<button onclick="run('secure')">HARDENING</button>
-</div>
-</section>
+  <section class="panel">
+    <h2>▰ LOCAL WEB SECURITY LAB</h2>
+    <div class="grid">
+      <button onclick="sqlDemo()">SQL INJECTION DEMO<small>Consulta vulnerable simulada</small></button>
+      <button onclick="xssDemo()">XSS DEMO<small>Entrada segura de texto</small></button>
+      <button onclick="headerDemo()">SERVER AUDIT<small>Revisar cabeceras de ejemplo</small></button>
+      <button onclick="passwordDemo()">PASSWORD CHECK<small>Evaluación local de contraseña</small></button>
+    </div>
+    <p class="muted">Estas demostraciones funcionan localmente en esta página. No envían datos a servidores externos.</p>
+  </section>
 
-<section class="panel">
-<h2>▣ TERMINAL — ALEX SHELL</h2>
-<div id="terminal">
-<div class="ok">ALEX-LINUX-LAB 14.0 iniciado.</div>
-<div class="ok">CCTV CYBER LAB cargado correctamente.</div>
-<div class="muted">Escribe help para ver los comandos.</div>
-<div class="warn">AVISO: todos los resultados son simulados. No se envían paquetes ni se accede a dispositivos reales.</div>
-</div>
-<div class="inputrow">
-<input id="cmd" placeholder="alex@lab:~$ escribe un comando..." autocomplete="off">
-<button onclick="execute()">EXECUTE</button>
-</div>
-</section>
+  <section class="panel">
+    <h2>▰ ALEX TERMINAL 16.0</h2>
+    <div class="terminal">
+      <div id="output">ALEX-LINUX-LAB [16.0]
+Inicializando centro de operaciones...
+Sistema listo.
+Escribe <span class="tag">help</span> para ver los comandos.
 
-<section class="panel">
-<h2>▣ MISSION CONTROL</h2>
-<div class="mission" id="m1">○ <b>01 Reconocimiento:</b> identificar el DVR virtual.</div>
-<div class="mission" id="m2">○ <b>02 Puertos:</b> interpretar servicios de red.</div>
-<div class="mission" id="m3">○ <b>03 RTSP:</b> comprender la transmisión de vídeo.</div>
-<div class="mission" id="m4">○ <b>04 ONVIF:</b> comprender el protocolo.</div>
-<div class="mission" id="m5">○ <b>05 Firmware:</b> detectar riesgos de versiones.</div>
-<div class="mission" id="m6">○ <b>06 Defensa:</b> proteger el DVR.</div>
-</section>
+</div>
+      <div class="inputrow">
+        <span class="prompt">alex@lab:~$</span>
+        <input id="command" placeholder="Escribe un comando..." autocomplete="off">
+        <button class="run" onclick="runCommand()">EXEC</button>
+      </div>
+    </div>
+    <p class="muted">Terminal educativo. No es una shell real de Linux.</p>
+  </section>
+
+  <section class="panel">
+    <h2>▰ QUICK ACCESS</h2>
+    <div class="grid">
+      <button onclick="openLab('https://portswigger.net/web-security/sql-injection')">SQLi GUIDE</button>
+      <button onclick="openLab('https://portswigger.net/web-security/authentication')">AUTH TESTING</button>
+      <button onclick="openLab('https://portswigger.net/web-security/file-path-traversal')">PATH TRAVERSAL</button>
+      <button onclick="openLab('https://owasp.org/www-project-web-security-testing-guide/')">WEB TEST GUIDE</button>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>▰ SYSTEM INFORMATION</h2>
+    <p class="muted">
+      VERSION: <span class="tag">16.0 ALL IN ONE</span><br>
+      PLATFORM: GITHUB PAGES<br>
+      MODE: EDUCATIONAL / LOCAL SIMULATION<br>
+      NETWORK ATTACKS: DISABLED<br>
+      STATUS: <span class="tag">READY</span>
+    </p>
+  </section>
 </main>
 
-<footer>ALEX-LINUX-LAB 14.0 · EDUCATIONAL CYBERSECURITY ENVIRONMENT</footer>
+<footer>ALEX-LINUX-LAB 16.0 · ETHICAL SECURITY TRAINING</footer>
 
 <script>
-const terminal=document.getElementById("terminal");
-const completed=new Set();
+const output=document.getElementById("output");
+const input=document.getElementById("command");
 
-function out(text,type="ok"){
- const d=document.createElement("div");
- d.className="line "+type;
- d.textContent=text;
- terminal.appendChild(d);
- terminal.scrollTop=terminal.scrollHeight;
+function print(text){
+  output.textContent += "\n"+text;
+  output.scrollTop=output.scrollHeight;
 }
-function finish(n){
- completed.add(n);
- document.getElementById("m"+n).innerHTML="✓ "+document.getElementById("m"+n).innerHTML.replace(/^○ /,"");
- document.getElementById("done").textContent=completed.size+"/6";
- document.getElementById("progress").style.width=(completed.size/6*100)+"%";
- document.getElementById("level").textContent=String(Math.min(6,completed.size+1)).padStart(2,"0");
+function openLab(url){
+  const tab=window.open(url,"_blank","noopener");
+  if(!tab) print("El navegador bloqueó la pestaña. Permite ventanas emergentes para este sitio.");
+  else print("Abriendo laboratorio: "+url);
 }
-function run(task){
- out("alex@lab:~$ "+task.toUpperCase(),"muted");
- if(task==="dvr"){
- out("[+] Iniciando reconocimiento del objetivo virtual...");
- out("[+] Dispositivo: DVR-LAB-01");
- out("[+] Fabricante de práctica: Intelbras");
- out("[+] Tecnología de cámara: HDCVI");
- out("[+] Dirección ficticia: 192.168.15.50");
- out("[+] Objetivo identificado correctamente.");
- finish(1);
- }
- else if(task==="scan"){
- out("[+] Escaneo didáctico de puertos del DVR simulado...");
- out("PORT       STATE       SERVICE");
- out("80/tcp     OPEN        HTTP (interfaz web)");
- out("443/tcp    CLOSED      HTTPS");
- out("554/tcp    OPEN        RTSP (transmisión)");
- out("37777/tcp  OPEN        Servicio propietario simulado");
- out("[!] Un puerto abierto no significa automáticamente una vulnerabilidad.","warn");
- out("[+] Práctica completada.");
- finish(2);
- }
- else if(task==="rtsp"){
- out("[+] Analizando concepto RTSP...");
- out("[i] RTSP permite controlar sesiones de transmisión multimedia.");
- out("[i] El puerto habitual es TCP 554.");
- out("[!] Una transmisión debe requerir autenticación cuando el equipo lo permita.","warn");
- out("[+] Recomendación: restringir el acceso a la red autorizada.");
- finish(3);
- }
- else if(task==="onvif"){
- out("[+] Analizando protocolo ONVIF...");
- out("[i] ONVIF facilita la interoperabilidad entre dispositivos de vídeo.");
- out("[i] Puede permitir descubrimiento, configuración y gestión.");
- out("[!] Los servicios de descubrimiento no deben exponerse a redes no confiables.","warn");
- out("[+] Análisis conceptual terminado.");
- finish(4);
- }
- else if(task==="firmware"){
- out("[+] Auditoría didáctica de firmware...");
- out("[i] Revisar fabricante, modelo y versión instalada.");
- out("[i] Comparar la versión con los avisos oficiales del fabricante.");
- out("[!] Firmware antiguo puede contener vulnerabilidades conocidas.","warn");
- out("[+] No se ha instalado ni modificado ningún firmware.");
- finish(5);
- }
- else if(task==="secure"){
- out("[+] Iniciando plan de protección...");
- out("[✓] Cambiar contraseña predeterminada.");
- out("[✓] Usar una contraseña única y robusta.");
- out("[✓] Instalar firmware oficial actualizado.");
- out("[✓] Desactivar servicios innecesarios.");
- out("[✓] Limitar el acceso remoto.");
- out("[✓] Evitar exponer RTSP directamente a Internet.");
- out("[+] Plan de defensa completado.");
- finish(6);
- }
- else out("Comando no reconocido. Escribe help.","bad");
+function sqlDemo(){
+  print("\n[SQL INJECTION LAB]");
+  print("Ejemplo de consulta insegura:");
+  print("SELECT * FROM users WHERE name = '"+ "entrada_del_usuario" +"';");
+  print("Riesgo: concatenar entradas directamente puede permitir modificar la consulta.");
+  print("Defensa: usar consultas preparadas y parámetros.");
+  print("No se ha conectado a ninguna base de datos.");
 }
-function execute(){
- const input=document.getElementById("cmd");
- const c=input.value.trim().toLowerCase();
- if(!c)return;
- input.value="";
- out("alex@lab:~$ "+c,"muted");
- const commands={
- help:()=>{out("COMANDOS DISPONIBLES:");out("help       - mostrar comandos");out("dvr        - identificar DVR virtual");out("scan       - analizar puertos simulados");out("rtsp       - estudiar RTSP");out("onvif      - estudiar ONVIF");out("firmware   - auditoría de firmware");out("secure     - plan de protección");out("missions   - ver misiones");out("status     - estado del laboratorio");out("report     - generar informe");out("clear      - limpiar terminal");},
- dvr:()=>run("dvr"),
- scan:()=>run("scan"),
- rtsp:()=>run("rtsp"),
- onvif:()=>run("onvif"),
- firmware:()=>run("firmware"),
- secure:()=>run("secure"),
- missions:()=>{for(let i=1;i<=6;i++)out(document.getElementById("m"+i).innerText);},
- status:()=>{out("LAB: ONLINE");out("MISSIONS: "+completed.size+"/6");out("MODE: SIMULATED");},
- report:()=>{out("========== AUDIT REPORT ==========");out("Target: DVR-LAB-01 (fictional)");out("Completed missions: "+completed.size+"/6");out("Network access: NONE");out("Real devices modified: NONE");out("=================================");},
- clear:()=>{terminal.innerHTML="";out("Terminal limpia.");}
- };
- if(commands[c])commands[c]();
- else if(c.startsWith("echo "))out(c.slice(5));
- else out("Comando desconocido. Escribe help.","bad");
+function xssDemo(){
+  const value=prompt("Escribe un texto de prueba para el laboratorio:");
+  if(value===null)return;
+  const box=document.createElement("div");
+  box.textContent=value;
+  box.style.cssText="margin-top:10px;padding:10px;border:1px solid #17603b;color:#00ff88;overflow-wrap:anywhere";
+  output.appendChild(box);
+  print("[XSS LAB] Entrada mostrada como texto, sin ejecutar HTML ni JavaScript.");
 }
-document.getElementById("cmd").addEventListener("keydown",e=>{if(e.key==="Enter")execute()});
+function headerDemo(){
+  print("\n[SERVER AUDIT - DATOS DE EJEMPLO]");
+  const headers={
+    "Content-Security-Policy":"No configurado",
+    "Strict-Transport-Security":"No detectado",
+    "X-Content-Type-Options":"No detectado",
+    "Referrer-Policy":"No configurado"
+  };
+  Object.entries(headers).forEach(([k,v])=>print(k+": "+v));
+  print("Recomendación: revisar y configurar estas cabeceras en el servidor real.");
+  print("Son datos ficticios; no se ha consultado ningún servidor.");
+}
+function passwordDemo(){
+  const value=prompt("Introduce una contraseña de ejemplo (no uses tu contraseña real):");
+  if(value===null)return;
+  let score=0;
+  if(value.length>=12)score++;
+  if(/[A-Z]/.test(value))score++;
+  if(/[a-z]/.test(value))score++;
+  if(/[0-9]/.test(value))score++;
+  if(/[^A-Za-z0-9]/.test(value))score++;
+  const levels=["Muy débil","Débil","Media","Buena","Fuerte","Muy fuerte"];
+  print("\n[PASSWORD CHECK] Resultado: "+levels[score]);
+  print("Criterios cumplidos: "+score+"/5. Evaluación local aproximada.");
+}
+function runCommand(){
+  const cmd=input.value.trim();
+  if(!cmd)return;
+  print("\nalex@lab:~$ "+cmd);
+  input.value="";
+  const parts=cmd.split(/\s+/);
+  switch(parts[0].toLowerCase()){
+    case "help":
+      print("COMANDOS DISPONIBLES:");
+      print("help | status | tools | web | sqli | xss | headers | password | clear");
+      break;
+    case "status":
+      print("ALEX-LINUX-LAB 16.0: ONLINE");
+      print("Modo: simulación local educativa.");
+      break;
+    case "tools":
+      print("WEB HACKING, SQL INJECTION, XSS, NMAP DOCS, KALI, TRYHACKME.");
+      print("Escribe web para abrir el laboratorio web.");
+      break;
+    case "web":
+      openLab("https://portswigger.net/web-security");
+      break;
+    case "sqli":
+      sqlDemo();
+      break;
+    case "xss":
+      xssDemo();
+      break;
+    case "headers":
+      headerDemo();
+      break;
+    case "password":
+      passwordDemo();
+      break;
+    case "clear":
+      output.textContent="ALEX TERMINAL 16.0\n";
+      break;
+    default:
+      print("Comando no reconocido. Escribe help.");
+  }
+}
+input.addEventListener("keydown",e=>{
+  if(e.key==="Enter")runCommand();
+});
 </script>
 </body>
 </html>
