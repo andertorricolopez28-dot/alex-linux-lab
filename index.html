@@ -3,303 +3,434 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ALEX-LINUX-LAB 7.0</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ALEX-LINUX-LAB 8.0</title>
 <style>
 *{box-sizing:border-box}
-body{
- margin:0;background:#030806;color:#00ff83;
- font-family:Consolas,monospace;
-}
-header{
- padding:18px;background:#06130d;
- border-bottom:1px solid #00ff83;
- text-align:center;
-}
-h1{margin:0;font-size:23px;text-shadow:0 0 12px #00ff83}
-header p{color:#8bffbd;font-size:12px}
-main{max-width:1000px;margin:auto;padding:15px}
-.terminal,.panel{
- background:#06100b;border:1px solid #087d49;
- border-radius:9px;padding:15px;margin-bottom:15px;
- box-shadow:0 0 15px #003d21;
-}
-#output{
- height:300px;overflow:auto;white-space:pre-wrap;
- line-height:1.6;font-size:13px;
-}
-.inputrow{display:flex;gap:8px}
-input{
- flex:1;min-width:0;background:#020603;
- border:1px solid #00a85b;color:#00ff83;
- padding:13px;font-family:inherit;outline:none;
-}
-button{
- background:#063d24;border:1px solid #00ff83;
- color:#00ff83;padding:11px;cursor:pointer;
- font-family:inherit;border-radius:5px;
-}
-button:hover{background:#087d49}
-#forensics{display:none}
-h2{font-size:19px}
-.grid{
- display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
- gap:10px;margin:15px 0;
-}
-.tool{background:#091b11;border:1px solid #087d49;padding:14px;border-radius:7px}
-.tool b{display:block;margin-bottom:7px}
-.result{
- background:#020603;border:1px solid #087d49;
- padding:12px;min-height:100px;white-space:pre-wrap;
- overflow-wrap:anywhere;font-size:12px;
-}
-textarea{
- width:100%;height:110px;background:#020603;
- border:1px solid #00a85b;color:#00ff83;
- padding:12px;font-family:inherit;resize:vertical;
-}
-.small{font-size:11px;color:#8bffbd}
-.back{margin-bottom:15px}
-.hidden{display:none}
-footer{text-align:center;color:#397d58;font-size:11px;padding:20px}
+body{margin:0;padding:14px;background:#020604;color:#00ff75;font-family:monospace}
+header,.panel{border:1px solid #00ff75;padding:13px;margin-bottom:12px;box-shadow:0 0 12px #00ff7520}
+h1{margin:0;font-size:22px;text-shadow:0 0 10px #00ff75}
+small{color:#8affb8}
+#stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:12px 0}
+.stat{border:1px solid #087b43;padding:10px;background:#001509}
+.stat b{display:block;font-size:18px;margin-top:5px}
+#terminal{height:53vh;min-height:300px;overflow-y:auto;background:#000;border:1px solid #087b43;padding:12px;box-shadow:0 0 15px #00ff7520}
+.line{white-space:pre-wrap;overflow-wrap:anywhere;margin:5px 0}
+.system{color:#65ffae}.error{color:#ff6464}.info{color:#58caff}.warning{color:#ffca58}
+#inputrow{display:flex;gap:7px;margin-top:10px}
+#cmd{flex:1;min-width:0;background:#001509;color:#00ff75;border:1px solid #00ff75;padding:13px;font:inherit;outline:none}
+button{background:#003b20;color:#00ff75;border:1px solid #00ff75;padding:12px;font:inherit;cursor:pointer}
+button:active{background:#00ff75;color:#000}
+.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+.actions button{flex:1}
+#help{line-height:1.8}
+footer{text-align:center;color:#468c67;padding:15px;font-size:11px}
 </style>
 </head>
 <body>
+
 <header>
-<h1>⚡ ALEX-LINUX-LAB 7.0</h1>
-<p>DIGITAL FORENSICS // VIRTUAL CYBER LAB</p>
+<h1>⚡ ALEX-LINUX-LAB 8.0</h1>
+<small>ADVANCED LINUX • ETHICAL CYBERSECURITY</small>
+<p id="status">● SISTEMA ACTIVO | LABORATORIO VIRTUAL</p>
 </header>
 
-<main>
-<section id="terminal" class="terminal">
-<div id="output">ALEX-LINUX-LAB [7.0]
-Sistema virtual iniciado correctamente.
-Escribe help para ver los comandos.
-
-alex@linux:~$ </div>
-<div class="inputrow">
-<input id="command" placeholder="Escribe un comando..." autocomplete="off">
-<button onclick="execute()">EJECUTAR</button>
-</div>
-<p class="small">Comando especial: forensics</p>
-</section>
-
-<section id="forensics" class="panel">
-<button class="back" onclick="closeLab()">← VOLVER A TERMINAL</button>
-<h2>🔬 DIGITAL FORENSICS</h2>
-<p class="small">CENTRO DE ANÁLISIS DIGITAL — LABORATORIO LOCAL</p>
-
-<div class="grid">
-<div class="tool">
-<b>01 / HASH ENGINE</b>
-<button onclick="hashText()">Calcular SHA-256</button>
-</div>
-<div class="tool">
-<b>02 / FILE SCANNER</b>
-<button onclick="scanText()">Analizar texto</button>
-</div>
-<div class="tool">
-<b>03 / INTEGRITY</b>
-<button onclick="checkIntegrity()">Verificar integridad</button>
-</div>
-<div class="tool">
-<b>04 / METADATA</b>
-<button onclick="metadata()">Metadatos</button>
-</div>
-<div class="tool">
-<b>05 / THREAT LAB</b>
-<button onclick="threatScan()">Simular análisis</button>
-</div>
-<div class="tool">
-<b>06 / LIVE SYSTEM</b>
-<button onclick="systemInfo()">Estado del laboratorio</button>
-</div>
+<div id="stats">
+<div class="stat">CPU VIRTUAL<b id="cpu">12%</b></div>
+<div class="stat">RAM VIRTUAL<b id="ram">34%</b></div>
+<div class="stat">PROCESOS<b id="proc">6</b></div>
+<div class="stat">SEGURIDAD<b id="safe">ACTIVA</b></div>
 </div>
 
-<h3>ARCHIVO DE PRUEBA</h3>
-<textarea id="sample">ALEX LINUX LAB 7.0
-Digital Forensics
-Archivo de prueba para análisis de integridad.</textarea>
-<p class="small">Puedes modificar el contenido y comprobar cómo cambia su hash.</p>
-<div id="result" class="result">Esperando operación...</div>
-</section>
-</main>
+<div id="terminal">
+<div class="line system">ALEX-LINUX-LAB 8.0 iniciado correctamente.</div>
+<div class="line">Inicializando entorno virtual...</div>
+<div class="line info">Monitor, archivos y laboratorio de redes disponibles.</div>
+<div class="line">Escribe help para comenzar.</div>
+</div>
 
-<footer>ALEX-LINUX-LAB 7.0 · ENTORNO EDUCATIVO LOCAL</footer>
+<div id="inputrow">
+<input id="cmd" placeholder="kali@alex:~$ escribe un comando" autocomplete="off">
+<button onclick="run()">EJECUTAR</button>
+</div>
+
+<div class="actions">
+<button onclick="runQuick('help')">HELP</button>
+<button onclick="runQuick('dashboard')">DASHBOARD</button>
+<button onclick="runQuick('monitor')">MONITOR</button>
+<button onclick="runQuick('clear')">LIMPIAR</button>
+</div>
+
+<div class="panel" id="help">
+<b>COMANDOS ALEX-LINUX-LAB 8.0</b>
+<p>
+help · clear · neofetch · dashboard · monitor · uptime · date<br>
+pwd · whoami · id · uname · ls · cd · mkdir · touch · cat<br>
+write · append · rm · cp · mv · find · tree · chmod · stat<br>
+ps · top · free · df · du · history · env · which<br>
+ip · ping · nmap · ports · netstat · hash · security · scan<br>
+logs · alerts · lab · report · echo
+</p>
+</div>
+
+<footer>ALEX-LINUX-LAB 8.0 | ENTORNO EDUCATIVO LOCAL</footer>
 
 <script>
-const output=document.getElementById("output");
-const input=document.getElementById("command");
 const terminal=document.getElementById("terminal");
-const lab=document.getElementById("forensics");
-const result=document.getElementById("result");
-let history=[];
-let virtualFiles={"readme.txt":"Bienvenido a ALEX-LINUX-LAB 7.0"};
+const input=document.getElementById("cmd");
 
-function print(text){
- output.textContent+=text+"\n";
- output.scrollTop=output.scrollHeight;
+const files={
+"/home/kali/readme.txt":"Bienvenido a ALEX-LINUX-LAB 8.0",
+"/home/kali/notas.txt":"Laboratorio de aprendizaje Linux"
+};
+const dirs=["/","/home","/home/kali"];
+const history=[];
+const logs=["Sistema iniciado","Monitor virtual activado"];
+const blockedPorts=[];
+const permissions={};
+const processes=["init","systemd","terminal","monitor","security","network-lab"];
+let current="/home/kali";
+let labActive=true;
+let commandCount=0;
+
+function out(text,type=""){
+ const d=document.createElement("div");
+ d.className="line "+type;
+ d.textContent=String(text);
+ terminal.appendChild(d);
+ terminal.scrollTop=terminal.scrollHeight;
 }
-function execute(){
- let cmd=input.value.trim();
- if(!cmd)return;
- history.push(cmd);
- print("alex@linux:~$ "+cmd);
+function path(p){
+ if(!p||p==="~")return "/home/kali";
+ if(p.startsWith("/"))return p.replace(/\/$/,"")||"/";
+ return (current+"/"+p).replace(/\/+/g,"/").replace(/\/$/,"")||"/";
+}
+function existsDir(p){return dirs.includes(p);}
+function children(p){
+ let prefix=p==="/" ? "/" : p+"/";
+ let names=new Set();
+ dirs.forEach(d=>{
+  if(d!==p&&d.startsWith(prefix)){
+   let rest=d.slice(prefix.length);
+   if(rest&&!rest.includes("/"))names.add(rest+"/");
+  }
+ });
+ Object.keys(files).forEach(f=>{
+  if(f.startsWith(prefix)){
+   let rest=f.slice(prefix.length);
+   if(rest&&!rest.includes("/"))names.add(rest);
+  }
+ });
+ return [...names].sort();
+}
+function log(msg){logs.push(new Date().toLocaleTimeString()+" | "+msg);}
+function runQuick(c){input.value=c;run();}
+function run(){
+ const raw=input.value.trim();
+ if(!raw)return;
  input.value="";
- let parts=cmd.split(" ");
- let name=parts[0].toLowerCase();
- let arg=parts.slice(1).join(" ");
+ out("kali@alex:"+current+"$ "+raw,"system");
+ history.push(raw);
+ commandCount++;
+ const parts=raw.match(/(?:[^\s"]+|"[^"]*")+/g)||[];
+ const c=(parts.shift()||"").toLowerCase();
+ const a=parts.map(x=>x.replace(/^"|"$/g,""));
+ const arg=a.join(" ");
+ const target=path(a[0]);
 
- switch(name){
+ switch(c){
+
  case "help":
- print(`COMANDOS DISPONIBLES:
-help       - Lista comandos
-clear      - Limpiar terminal
-whoami     - Usuario actual
-pwd        - Directorio actual
-date       - Fecha actual
-uname      - Sistema virtual
-ls         - Listar archivos
-cat        - Leer archivo
-write      - Crear archivo: write nombre texto
-rm         - Eliminar archivo virtual
-history    - Historial
-forensics  - Abrir Digital Forensics
-neofetch   - Información visual del sistema
-security   - Diagnóstico simulado
-`);break;
- case "clear":output.textContent="";break;
- case "whoami":print("alex");break;
- case "pwd":print("/home/alex");break;
- case "date":print(new Date().toString());break;
- case "uname":print("ALEX-LINUX-LAB 7.0 Virtual Kernel");break;
- case "ls":print(Object.keys(virtualFiles).join("   ")||"Directorio vacío");break;
- case "cat":print(virtualFiles[arg]??"Archivo no encontrado.");break;
- case "write":{
- let p=arg.split(" ");
- let filename=p.shift();
- if(filename)virtualFiles[filename]=p.join(" ");
- print(filename?"Archivo virtual guardado.":"Uso: write nombre texto");
+ out("=== ALEX-LINUX-LAB 8.0 ===","info");
+ out("Sistema: dashboard monitor uptime date neofetch");
+ out("Archivos: pwd ls cd mkdir touch cat write append rm cp mv find tree stat chmod");
+ out("Procesos: ps top free df du env which history");
+ out("Red: ip ping nmap ports netstat");
+ out("Seguridad: hash security scan alerts logs report");
+ out("Escribe man comando para consultar una ayuda.");
  break;
- }
- case "rm":
- if(arg in virtualFiles){delete virtualFiles[arg];print("Archivo virtual eliminado.");}
- else print("Archivo no encontrado.");
+
+ case "man":
+ out({
+  "nmap":"nmap localhost | Escaneo de demostración del laboratorio.",
+  "hash":"hash archivo.txt | Calcula SHA-256 del archivo virtual.",
+  "monitor":"monitor | Estado de recursos simulados.",
+  "find":"find palabra | Busca nombres de archivos.",
+  "chmod":"chmod 755 archivo.txt | Permisos de demostración.",
+  "scan":"scan | Auditoría educativa local."
+ }[a[0]]||"Sin página de ayuda para ese comando.");
  break;
- case "history":print(history.join("\n"));break;
- case "forensics":openLab();break;
+
+ case "clear":terminal.innerHTML="";break;
+ case "pwd":out(current);break;
+ case "whoami":out("kali");break;
+ case "id":out("uid=1000(kali) gid=1000(kali) groups=1000(kali)");break;
+ case "uname":out("Linux alex-lab 6.6.0-kali aarch64 GNU/Linux");break;
+ case "date":out(new Date().toString());break;
+ case "uptime":out("Sesión virtual activa. Comandos ejecutados: "+commandCount);break;
+
  case "neofetch":
- print(`
-   ALEX LINUX LAB 7.0
-   OS: Virtual Linux
-   Shell: Alex Terminal
-   Modules: Digital Forensics
-   Security: Simulation
-   Status: ONLINE
- `);break;
+ out("    .---.       ALEX LINUX LAB");
+ out("   /     \\      OS: Kali Linux virtual");
+ out("  | () () |     VERSION: 8.0");
+ out("   \\  ^  /      SHELL: ALEX-SHELL");
+ out("    |||||       ARCH: aarch64");
+ out("    |||||       STATUS: ONLINE");
+ break;
+
+ case "dashboard":
+ out("╔══════════════════════════════╗","info");
+ out("       ALEX CONTROL CENTER");
+ out(" CPU: "+document.getElementById("cpu").textContent);
+ out(" RAM: "+document.getElementById("ram").textContent);
+ out(" PROCESOS: "+processes.length);
+ out(" ARCHIVOS: "+Object.keys(files).length);
+ out(" LAB: "+(labActive?"ACTIVO":"PAUSADO"));
+ out("╚══════════════════════════════╝","info");
+ break;
+
+ case "monitor":
+ out("=== MONITOR DEL SISTEMA ===","info");
+ out("CPU virtual: "+document.getElementById("cpu").textContent);
+ out("RAM virtual: "+document.getElementById("ram").textContent);
+ out("Procesos: "+processes.length);
+ out("Actividad: "+commandCount+" comandos");
+ out("Estado: NORMAL","system");
+ break;
+
+ case "ls":
+ children(current).forEach(x=>out(x));
+ break;
+
+ case "cd":
+ if(!a[0]){current="/home/kali";break;}
+ if(a[0]===".."){
+ current=current.substring(0,current.lastIndexOf("/"))||"/";
+ break;
+ }
+ if(existsDir(target))current=target;
+ else out("Directorio no encontrado.","error");
+ break;
+
+ case "mkdir":
+ if(!a[0]){out("Uso: mkdir nombre","error");break;}
+ if(existsDir(target)||files[target]!==undefined){out("Ya existe.","error");break;}
+ dirs.push(target);out("Directorio creado: "+target);log("mkdir "+target);
+ break;
+
+ case "touch":
+ if(!a[0]){out("Uso: touch archivo","error");break;}
+ files[target]=files[target]||"";
+ out("Archivo creado: "+target);log("touch "+target);
+ break;
+
+ case "cat":
+ if(files[target]!==undefined)out(files[target]);
+ else out("Archivo no encontrado.","error");
+ break;
+
+ case "write":
+ if(a.length<2){out('Uso: write archivo "texto"',"error");break;}
+ files[path(a[0])]=a.slice(1).join(" ");
+ out("Archivo guardado.");log("write "+a[0]);
+ break;
+
+ case "append":
+ if(a.length<2){out('Uso: append archivo "texto"',"error");break;}
+ files[path(a[0])]=(files[path(a[0])]||"")+a.slice(1).join(" ");
+ out("Contenido añadido.");
+ break;
+
+ case "rm":
+ if(files[target]!==undefined){delete files[target];out("Archivo eliminado.");log("rm "+target);}
+ else out("Archivo no encontrado.","error");
+ break;
+
+ case "cp":
+ if(a.length<2||files[path(a[0])]===undefined){out("Uso: cp origen destino","error");break;}
+ files[path(a[1])]=files[path(a[0])];
+ out("Copia creada.");
+ break;
+
+ case "mv":
+ if(a.length<2||files[path(a[0])]===undefined){out("Uso: mv origen destino","error");break;}
+ files[path(a[1])]=files[path(a[0])];delete files[path(a[0])];
+ out("Archivo movido.");
+ break;
+
+ case "find":
+ {
+ const term=(a[0]||"").toLowerCase();
+ const found=Object.keys(files).filter(f=>f.toLowerCase().includes(term));
+ found.length?found.forEach(out):out("No se encontraron archivos.");
+ }
+ break;
+
+ case "tree":
+ out("/home/kali");
+ dirs.filter(d=>d!=="/home/kali").forEach(d=>out("├── "+d));
+ Object.keys(files).forEach(f=>out("├── "+f));
+ break;
+
+ case "stat":
+ if(files[target]===undefined){out("Archivo no encontrado.","error");break;}
+ out("Archivo: "+target);
+ out("Tamaño: "+new TextEncoder().encode(files[target]).length+" bytes");
+ out("Permisos: "+(permissions[target]||"644"));
+ break;
+
+ case "chmod":
+ if(a.length<2||files[path(a[1])]===undefined){out("Uso: chmod 755 archivo","error");break;}
+ permissions[path(a[1])]=a[0];
+ out("Permisos virtuales actualizados: "+a[0]);
+ break;
+
+ case "ps":
+ processes.forEach((p,i)=>out((i+1)+"  "+p));
+ break;
+
+ case "top":
+ out("PID    PROCESO");
+ processes.forEach((p,i)=>out((100+i)+"    "+p));
+ break;
+
+ case "free":
+ out("RAM virtual: 2048 MB total | 700 MB usada | 1348 MB libre");
+ break;
+
+ case "df":
+ out("Filesystem     Size   Used   Available");
+ out("virtual-root   10G    2.1G   7.9G");
+ break;
+
+ case "du":
+ out("Archivos: "+Object.keys(files).length);
+ out("Tamaño total: "+Object.values(files).reduce((n,v)=>n+v.length,0)+" caracteres");
+ break;
+
+ case "history":
+ history.forEach((h,i)=>out((i+1)+" "+h));
+ break;
+
+ case "env":
+ out("USER=kali");
+ out("HOME=/home/kali");
+ out("SHELL=ALEX-SHELL");
+ out("LAB_MODE=VIRTUAL");
+ break;
+
+ case "which":
+ out(({nmap:"/usr/bin/nmap",python:"/usr/bin/python3",python3:"/usr/bin/python3",git:"/usr/bin/git"})[a[0]]||"Programa no registrado en el simulador.");
+ break;
+
+ case "ip":
+ out("wlan0: 192.168.15.6 (dato de ejemplo)");
+ out("lo: 127.0.0.1");
+ out("Modo: red virtual");
+ break;
+
+ case "ping":
+ if(["localhost","127.0.0.1","lab.local"].includes(a[0])){
+ out("PING "+a[0]+" (simulado)");
+ for(let i=1;i<=4;i++)out("64 bytes: tiempo="+(2+i)+" ms");
+ out("4 enviados, 4 recibidos.");
+ }else out("Solo se permite localhost o lab.local.","error");
+ break;
+
+ case "nmap":
+ if(!["localhost","127.0.0.1","lab.local"].includes(a[0])){
+ out("Objetivo no permitido. Usa: nmap localhost","error");break;
+ }
+ out("ANÁLISIS SIMULADO: "+a[0],"info");
+ out("PORT     STATE       SERVICE");
+ out("22/tcp   closed      ssh");
+ out("80/tcp   open        http (demo)");
+ out("443/tcp  open        https (demo)");
+ out("Resultado educativo. Sin conexiones reales.");
+ log("Análisis simulado");
+ break;
+
+ case "ports":
+ [22,53,80,443,8080].forEach(p=>out(p+"/tcp "+(blockedPorts.includes(p)?"BLOCKED":"SIMULATED")));
+ break;
+
+ case "netstat":
+ out("Conexiones de red de demostración:");
+ out("127.0.0.1:8080  LISTEN (virtual)");
+ out("Sin conexiones externas.");
+ break;
+
+ case "hash":
+ if(files[target]===undefined){out("Uso: hash archivo.txt","error");break;}
+ crypto.subtle.digest("SHA-256",new TextEncoder().encode(files[target]))
+ .then(buf=>out([...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,"0")).join("")));
+ break;
+
  case "security":
- print("DIAGNÓSTICO VIRTUAL\nTerminal: ACTIVA\nArchivos: "+Object.keys(virtualFiles).length+"\nMotor SHA-256: Disponible\n");break;
- default:print("Comando no reconocido. Escribe help.");
- }
-}
-input.addEventListener("keydown",e=>{if(e.key==="Enter")execute()});
+ out("=== CENTRO DE SEGURIDAD ===","info");
+ out("Archivos virtuales: "+Object.keys(files).length);
+ out("Procesos simulados: "+processes.length);
+ out("Permisos modificados: "+Object.keys(permissions).length);
+ out("Conexiones externas: ninguna");
+ out("Estado: PROTECCIÓN ACTIVA","system");
+ break;
 
-function openLab(){
- terminal.style.display="none";
- lab.style.display="block";
- result.textContent="DIGITAL FORENSICS iniciado.\nSelecciona una herramienta.";
-}
-function closeLab(){
- lab.style.display="none";
- terminal.style.display="block";
- input.focus();
-}
-function getText(){return document.getElementById("sample").value}
+ case "scan":
+ out("INICIANDO AUDITORÍA LOCAL...");
+ out("[OK] Archivos virtuales revisados");
+ out("[OK] Procesos de demostración");
+ out("[OK] Permisos simulados");
+ out("[OK] Red aislada");
+ out("AUDITORÍA TERMINADA","system");
+ log("Auditoría local ejecutada");
+ break;
 
-async function hashText(){
- result.textContent="Calculando SHA-256...";
- try{
- const data=new TextEncoder().encode(getText());
- const digest=await crypto.subtle.digest("SHA-256",data);
- const hash=Array.from(new Uint8Array(digest))
- .map(b=>b.toString(16).padStart(2,"0")).join("");
- result.textContent="ANÁLISIS SHA-256\n\n"+hash+"\n\nCálculo completado.";
- }catch(e){result.textContent="SHA-256 no disponible en este navegador."}
-}
+ case "alerts":
+ out("=== ALERTAS ===","info");
+ out("No hay alertas críticas.");
+ out("Entorno aislado y simulado.");
+ break;
 
-function scanText(){
- let t=getText();
- let lines=t.split("\n");
- let words=t.trim()?t.trim().split(/\s+/).length:0;
- result.textContent=
- "FILE SCANNER\n\n"+
- "Caracteres: "+t.length+
- "\nPalabras: "+words+
- "\nLíneas: "+lines.length+
- "\nBytes UTF-8: "+new TextEncoder().encode(t).length+
- "\n\nAnálisis de contenido completado.";
-}
+ case "logs":
+ logs.forEach(out);
+ break;
 
-async function checkIntegrity(){
- const data=new TextEncoder().encode(getText());
- const digest=await crypto.subtle.digest("SHA-256",data);
- const hash=Array.from(new Uint8Array(digest))
- .map(b=>b.toString(16).padStart(2,"0")).join("");
- if(!window.previousHash){
- window.previousHash=hash;
- result.textContent="HUELLA DE REFERENCIA GUARDADA:\n"+hash+
- "\n\nVuelve a pulsar después de modificar el archivo para comparar.";
- }else{
- result.textContent=(hash===window.previousHash?
- "INTEGRIDAD CONFIRMADA: sin cambios.":
- "CAMBIO DETECTADO: el contenido es diferente.")+
- "\n\nHash actual:\n"+hash+
- "\n\nHash de referencia:\n"+window.previousHash;
+ case "report":
+ out("=== INFORME DEL LABORATORIO ===");
+ out("Versión: 8.0");
+ out("Comandos ejecutados: "+commandCount);
+ out("Archivos: "+Object.keys(files).length);
+ out("Registros: "+logs.length);
+ out("Estado: "+(labActive?"ACTIVO":"PAUSADO"));
+ break;
+
+ case "lab":
+ labActive=!labActive;
+ out("Laboratorio "+(labActive?"ACTIVADO":"PAUSADO"));
+ log("Estado del laboratorio cambiado");
+ break;
+
+ case "echo":
+ out(arg);
+ break;
+
+ default:
+ out("Comando desconocido: "+c,"error");
+ out("Escribe help para consultar los comandos.");
  }
 }
 
-function metadata(){
- let t=getText();
- let bytes=new TextEncoder().encode(t).length;
- result.textContent=
- "METADATA ANALYZER\n\n"+
- "Nombre: archivo-de-prueba.txt"+
- "\nTipo: texto plano (estimado)"+
- "\nTamaño: "+bytes+" bytes"+
- "\nFecha del análisis: "+new Date().toLocaleString()+
- "\nOrigen: laboratorio virtual";
-}
+input.addEventListener("keydown",e=>{if(e.key==="Enter")run();});
 
-function threatScan(){
- result.textContent="Iniciando motor de simulación...\n";
- let steps=[
- "Preparando entorno...",
- "Revisando contenido de prueba...",
- "Evaluando patrones de texto...",
- "Comprobando integridad...",
- "Generando informe..."
- ];
- let i=0;
- let timer=setInterval(()=>{
- result.textContent+=steps[i]+"\n";
- i++;
- if(i===steps.length){
- clearInterval(timer);
- result.textContent+="\nANÁLISIS FINALIZADO\nNo se ejecutaron archivos ni se realizó ninguna conexión externa.";
- }
- },650);
-}
-
-function systemInfo(){
- result.textContent=
- "ALEX-LINUX-LAB 7.0\n"+
- "Motor: JavaScript\n"+
- "Plataforma: Navegador\n"+
- "Laboratorio: ACTIVO\n"+
- "Archivos virtuales: "+Object.keys(virtualFiles).length+
- "\nMódulo forense: ACTIVO\n"+
- "Red externa: No utilizada por el laboratorio.";
-}
+setInterval(()=>{
+ document.getElementById("cpu").textContent=(8+Math.floor(Math.random()*25))+"%";
+ document.getElementById("ram").textContent=(30+Math.floor(Math.random()*20))+"%";
+ document.getElementById("proc").textContent=processes.length;
+ document.getElementById("safe").textContent=labActive?"ACTIVA":"PAUSADA";
+ document.getElementById("status").textContent=labActive?
+ "● SISTEMA ACTIVO | LABORATORIO VIRTUAL":
+ "● LABORATORIO PAUSADO";
+},2000);
 </script>
 </body>
 </html>
