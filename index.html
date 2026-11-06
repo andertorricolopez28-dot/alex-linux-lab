@@ -49,14 +49,12 @@ button:active{background:#00ff88;color:#001b0d}
 </div>
 <div class="small">ALEX LINUX LAB 6.0 — LABORATORIO VIRTUAL</div>
 </main>
-
 <script>
 (function(){
 "use strict";
 const terminal=document.getElementById("terminal");
 const input=document.getElementById("command");
 const run=document.getElementById("run");
-
 const fs={
 "/":{dir:true},
 "/home":{dir:true},
@@ -71,7 +69,6 @@ let history=[];
 let logs=[];
 let blocked=[];
 let permissions={};
-
 function out(value){
 const line=document.createElement("div");
 line.className="line";
