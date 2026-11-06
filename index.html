@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ALEX-LINUX-LAB 9.0</title>
+<title>ALEX-LINUX-LAB 10.0</title>
 <style>
 *{box-sizing:border-box}
 body{margin:0;padding:14px;background:#020604;color:#00ff75;font-family:monospace}
@@ -14,11 +14,12 @@ small{color:#8affb8}
 #stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:12px 0}
 .stat{border:1px solid #087b43;padding:10px;background:#001509}
 .stat b{display:block;font-size:18px;margin-top:5px}
-#terminal{height:45vh;min-height:280px;overflow-y:auto;background:#000;border:1px solid #087b43;padding:12px;box-shadow:0 0 15px #00ff7520}
+#terminal{height:42vh;min-height:270px;overflow-y:auto;background:#000;border:1px solid #087b43;padding:12px}
 .line{white-space:pre-wrap;overflow-wrap:anywhere;margin:5px 0}
 .system{color:#65ffae}.error{color:#ff6464}.info{color:#58caff}.warning{color:#ffca58}
 #inputrow{display:flex;gap:7px;margin-top:10px}
-#cmd{flex:1;min-width:0;background:#001509;color:#00ff75;border:1px solid #00ff75;padding:13px;font:inherit;outline:none}
+input,textarea,select{width:100%;background:#001509;color:#00ff75;border:1px solid #00ff75;padding:11px;font:inherit;margin:5px 0}
+textarea{min-height:95px;resize:vertical}
 button{background:#003b20;color:#00ff75;border:1px solid #00ff75;padding:11px;font:inherit;cursor:pointer}
 button:active{background:#00ff75;color:#000}
 .actions{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin:12px 0}
@@ -26,106 +27,142 @@ button:active{background:#00ff75;color:#000}
 .module h3{margin:0 0 8px;color:#8affb8}
 .module p{line-height:1.5;color:#b5eacb}
 .module button{width:100%;margin-top:5px}
-#help{line-height:1.8}
+.result{border:1px solid #087b43;padding:10px;margin-top:8px;white-space:pre-wrap;overflow-wrap:anywhere}
 footer{text-align:center;color:#468c67;padding:15px;font-size:11px}
 </style>
 </head>
 <body>
 
 <header>
-<h1>⚡ ALEX-LINUX-LAB 9.0</h1>
-<small>WEB HACKING • ETHICAL CYBERSECURITY</small>
-<p id="status">● CYBER CENTER ONLINE</p>
+<h1>⚡ ALEX-LINUX-LAB 10.0</h1>
+<small>CYBER OPERATIONS PRO • ETHICAL SECURITY</small>
+<p id="status">● SYSTEM ONLINE | LOCAL LAB</p>
 </header>
 
 <div id="stats">
-<div class="stat">MÓDULOS<b>06 ACTIVOS</b></div>
-<div class="stat">PRÁCTICAS<b id="practiceCount">0</b></div>
-<div class="stat">COMANDOS<b id="commandCount">0</b></div>
-<div class="stat">SEGURIDAD<b>PROTEGIDA</b></div>
+<div class="stat">MÓDULOS<b>08</b></div>
+<div class="stat">MISIONES<b id="missions">0</b></div>
+<div class="stat">COMANDOS<b id="commands">0</b></div>
+<div class="stat">NIVEL<b id="level">1</b></div>
 </div>
 
 <div class="panel">
 <b>◈ CYBER OPERATIONS CENTER</b>
 <div class="actions">
-<button onclick="module('juice')">01 JUICE SHOP</button>
-<button onclick="module('http')">02 HTTP ANALYZER</button>
-<button onclick="module('sqli')">03 SQL INJECTION</button>
-<button onclick="module('xss')">04 XSS LAB</button>
-<button onclick="module('burp')">05 BURP SUITE</button>
-<button onclick="module('scanner')">06 SECURITY SCANNER</button>
+<button onclick="module('web')">01 WEB LAB</button>
+<button onclick="module('http')">02 HTTP INSPECTOR</button>
+<button onclick="module('network')">03 NETWORK LAB</button>
+<button onclick="module('forensics')">04 FORENSICS</button>
+<button onclick="module('audit')">05 SECURITY AUDIT</button>
+<button onclick="module('python')">06 PYTHON LAB</button>
+<button onclick="module('missions')">07 MISSION CONTROL</button>
+<button onclick="module('kali')">08 KALI BRIDGE</button>
 </div>
 </div>
 
 <div id="terminal">
-<div class="line system">ALEX-LINUX-LAB 9.0 iniciado.</div>
-<div class="line">Centro de operaciones web cargado.</div>
-<div class="line info">Seis módulos educativos disponibles.</div>
-<div class="line">Escribe help para comenzar.</div>
+<div class="line system">ALEX-LINUX-LAB 10.0 iniciado.</div>
+<div class="line">Centro de operaciones cargado.</div>
+<div class="line info">8 módulos disponibles. Escribe help.</div>
 </div>
 
 <div id="inputrow">
 <input id="cmd" placeholder="kali@alex:~$ escribe un comando" autocomplete="off">
-<button onclick="run()">EJECUTAR</button>
-</div>
-
-<div class="panel" id="help">
-<b>COMANDOS</b>
-<p>
-help · modules · status · clear · history<br>
-juice · http · sqli · xss · burp · scanner<br>
-quiz · report · whoami · date · echo
-</p>
+<button onclick="run()">RUN</button>
 </div>
 
 <div class="panel">
-<b>◈ INFORMACIÓN DE LOS MÓDULOS</b>
+<b>◈ HERRAMIENTAS INTERACTIVAS</b>
 
 <div class="module">
-<h3>01 — OWASP JUICE SHOP</h3>
-<p>Conoce una aplicación web vulnerable creada para aprender seguridad informática. Incluye una guía de instalación y prácticas controladas.</p>
-<button onclick="module('juice')">ABRIR MÓDULO</button>
-</div>
-
-<div class="module">
-<h3>02 — HTTP ANALYZER</h3>
-<p>Estudia solicitudes HTTP, métodos, cabeceras, códigos de respuesta y cookies de ejemplo.</p>
-<button onclick="module('http')">ABRIR MÓDULO</button>
+<h3>FILE FORENSICS — SHA-256 REAL</h3>
+<p>Selecciona un archivo para calcular su hash en este navegador. El archivo no se envía a ningún servidor.</p>
+<input type="file" id="fileInput">
+<button onclick="hashFile()">CALCULAR HASH</button>
+<div class="result" id="hashResult">Esperando archivo...</div>
 </div>
 
 <div class="module">
-<h3>03 — SQL INJECTION LAB</h3>
-<p>Aprende cómo se producen las inyecciones SQL mediante una simulación aislada, sin conectarse a bases de datos reales.</p>
-<button onclick="module('sqli')">ABRIR MÓDULO</button>
+<h3>HTTP HEADER INSPECTOR</h3>
+<p>Pega cabeceras HTTP obtenidas de tu propio laboratorio para revisar configuraciones de seguridad.</p>
+<textarea id="headers" placeholder="Content-Security-Policy: default-src 'self'&#10;X-Content-Type-Options: nosniff"></textarea>
+<button onclick="analyzeHeaders()">ANALIZAR CABECERAS</button>
+<div class="result" id="headerResult">Esperando cabeceras...</div>
 </div>
 
 <div class="module">
-<h3>04 — XSS LAB</h3>
-<p>Comprende los riesgos de Cross-Site Scripting y aprende a reconocer y neutralizar contenido peligroso.</p>
-<button onclick="module('xss')">ABRIR MÓDULO</button>
+<h3>URL STRUCTURE ANALYZER</h3>
+<p>Examina la estructura de una URL sin conectarse al sitio.</p>
+<input id="urlInput" placeholder="https://example.com/login">
+<button onclick="analyzeURL()">ANALIZAR URL</button>
+<div class="result" id="urlResult">Esperando URL...</div>
 </div>
 
 <div class="module">
-<h3>05 — BURP SUITE</h3>
-<p>Aprende a configurar un proxy de pruebas y examinar solicitudes de tu propio laboratorio.</p>
-<button onclick="module('burp')">ABRIR MÓDULO</button>
+<h3>HTTP REQUEST BUILDER</h3>
+<p>Construye una solicitud de ejemplo. No se envía a ningún servidor.</p>
+<select id="method">
+<option>GET</option><option>POST</option><option>PUT</option><option>DELETE</option>
+</select>
+<input id="endpoint" value="/laboratorio">
+<button onclick="buildRequest()">GENERAR SOLICITUD</button>
+<div class="result" id="requestResult">Esperando...</div>
+</div>
 </div>
 
+<div class="panel">
+<b>◈ MÓDULOS DE ENTRENAMIENTO</b>
 <div class="module">
-<h3>06 — SECURITY SCANNER</h3>
-<p>Comprueba cabeceras de seguridad en ejemplos y aprende qué configuraciones debes revisar.</p>
-<button onclick="module('scanner')">ABRIR MÓDULO</button>
+<h3>01 — WEB SECURITY LAB</h3>
+<p>Prácticas de SQL Injection, XSS, autenticación y control de acceso en aplicaciones intencionalmente vulnerables.</p>
+<button onclick="module('web')">ABRIR</button>
+</div>
+<div class="module">
+<h3>02 — HTTP INSPECTOR</h3>
+<p>Estudia métodos HTTP, códigos de respuesta, cookies y cabeceras.</p>
+<button onclick="module('http')">ABRIR</button>
+</div>
+<div class="module">
+<h3>03 — NETWORK LAB</h3>
+<p>Comprende puertos, protocolos y reconocimiento de redes en un entorno controlado.</p>
+<button onclick="module('network')">ABRIR</button>
+</div>
+<div class="module">
+<h3>04 — DIGITAL FORENSICS</h3>
+<p>Hashes reales de archivos locales, integridad y análisis de evidencias.</p>
+<button onclick="module('forensics')">ABRIR</button>
+</div>
+<div class="module">
+<h3>05 — SECURITY AUDIT</h3>
+<p>Auditoría de cabeceras, configuraciones y buenas prácticas.</p>
+<button onclick="module('audit')">ABRIR</button>
+</div>
+<div class="module">
+<h3>06 — PYTHON CYBER LAB</h3>
+<p>Ejercicios de programación y análisis seguro de cadenas de texto.</p>
+<button onclick="module('python')">ABRIR</button>
+</div>
+<div class="module">
+<h3>07 — MISSION CONTROL</h3>
+<p>Retos, progreso, niveles y reportes.</p>
+<button onclick="module('missions')">ABRIR</button>
+</div>
+<div class="module">
+<h3>08 — KALI BRIDGE</h3>
+<p>Conecta tu aprendizaje con comandos que ejecutarás directamente en Kali NetHunter.</p>
+<button onclick="module('kali')">ABRIR</button>
 </div>
 </div>
 
-<footer>ALEX-LINUX-LAB 9.0 | EDUCATIONAL CYBERSECURITY ENVIRONMENT</footer>
+<footer>ALEX-LINUX-LAB 10.0 | ETHICAL CYBERSECURITY</footer>
 
 <script>
 const terminal=document.getElementById("terminal");
 const input=document.getElementById("cmd");
-const history=[];
-let practices=0;
+let history=[];
 let commands=0;
+let missions=0;
+let completed={};
 
 function out(t,type=""){
  const d=document.createElement("div");
@@ -136,118 +173,176 @@ function out(t,type=""){
 }
 function title(t){
  out("");
- out("════════════════════════════════","info");
- out("  "+t,"system");
- out("════════════════════════════════","info");
+ out("══════════════════════════════","info");
+ out(t,"system");
+ out("══════════════════════════════","info");
 }
-function practice(){
- practices++;
- document.getElementById("practiceCount").textContent=practices;
+function complete(id){
+ if(!completed[id]){
+  completed[id]=true;
+  missions++;
+  document.getElementById("missions").textContent=missions;
+  document.getElementById("level").textContent=1+Math.floor(missions/3);
+ }
 }
 function module(name){
- title("MÓDULO "+name.toUpperCase());
- practice();
+ title("MODULE: "+name.toUpperCase());
 
- if(name==="juice"){
- out("OWASP JUICE SHOP — LABORATORIO");
- out("Aplicación de entrenamiento para aprender vulnerabilidades web.");
- out("");
- out("PARA PRACTICAR:");
- out("1. Prepara un entorno propio con OWASP Juice Shop.");
- out("2. Inicia la aplicación en tu ordenador o entorno autorizado.");
- out("3. Abre el laboratorio desde el navegador.");
- out("4. Practica únicamente en esa aplicación.");
- out("");
- out("Proyecto oficial: https://owasp.org/www-project-juice-shop/");
- out("Esta página no instala ni ejecuta Juice Shop.");
+ if(name==="web"){
+ out("WEB SECURITY TRAINING");
+ out("Estudia vulnerabilidades en aplicaciones preparadas para pruebas.");
+ out("SQL Injection: comprende consultas parametrizadas.");
+ out("XSS: estudia escape de salida y sanitización.");
+ out("Access Control: revisa permisos y autorización.");
+ out("Laboratorio recomendado: OWASP Juice Shop.");
+ out("https://demo.owasp-juice.shop/#/");
+ out("Solo utiliza el laboratorio de entrenamiento.");
+ complete("web");
  }
-
  if(name==="http"){
- out("HTTP ANALYZER — SOLICITUD DE EJEMPLO");
- out("");
- out("GET /laboratorio HTTP/1.1");
- out("Host: lab.local");
- out("User-Agent: AlexBrowser/9.0");
- out("Accept: text/html");
- out("");
- out("HTTP/1.1 200 OK");
- out("Content-Type: text/html");
- out("Cache-Control: no-store");
- out("");
- out("GET: solicita un recurso.");
- out("POST: envía información.");
- out("200: respuesta correcta.");
- out("404: recurso no encontrado.");
- out("403: acceso prohibido.");
- out("Todo el tráfico mostrado es de ejemplo.");
+ out("HTTP INSPECTOR");
+ out("GET: solicitar un recurso.");
+ out("POST: enviar información.");
+ out("PUT: actualizar un recurso.");
+ out("DELETE: eliminar un recurso.");
+ out("200: correcto | 301: redirección");
+ out("403: prohibido | 404: no encontrado");
+ out("Usa el constructor HTTP de esta página.");
+ complete("http");
  }
-
- if(name==="sqli"){
- out("SQL INJECTION — SIMULADOR AISLADO");
- out("");
- out("Base de datos ficticia:");
- out("usuarios = alex, invitado");
- out("");
- out("Prueba los comandos:");
- out("login alex");
- out("login desconocido");
- out("login ' OR '1'='1");
- out("");
- out("La última entrada representa un patrón de inyección.");
- out("El simulador explica el riesgo, no ejecuta SQL.");
- out("DEFENSA: consultas preparadas y parámetros.");
+ if(name==="network"){
+ out("NETWORK LAB");
+ out("IP privada: dirección de un dispositivo dentro de una red.");
+ out("Puerto: punto lógico de comunicación.");
+ out("TCP: protocolo orientado a conexión.");
+ out("UDP: protocolo sin conexión.");
+ out("Prueba únicamente tus equipos o un laboratorio autorizado.");
+ out("Comandos de estudio: ip addr | ss -tuln | nmap --version");
+ complete("network");
  }
-
- if(name==="xss"){
- out("XSS LAB — PRUEBA SEGURA");
- out("");
- out("Prueba:");
- out("xss <script>alert(1)</script>");
- out("");
- out("El texto se mostrará como texto plano, nunca se ejecutará.");
- out("Riesgo: un sitio inseguro podría interpretar contenido");
- out("no confiable como código.");
- out("DEFENSA: escape de salida, sanitización y CSP.");
+ if(name==="forensics"){
+ out("DIGITAL FORENSICS");
+ out("Selecciona un archivo en el módulo File Forensics.");
+ out("SHA-256 permite comparar la integridad de archivos.");
+ out("Una coincidencia de hashes indica que el contenido coincide.");
+ complete("forensics");
  }
-
- if(name==="burp"){
- out("BURP SUITE — GUÍA DE APRENDIZAJE");
- out("");
- out("1. Instala Burp Suite Community en un equipo compatible.");
- out("2. Abre una aplicación web de laboratorio propia.");
- out("3. Configura el navegador de pruebas para usar el proxy.");
- out("4. Examina las solicitudes y respuestas.");
- out("5. No interceptes tráfico de otras personas.");
- out("");
- out("Documentación: https://portswigger.net/burp/documentation");
- out("Esta página no controla Burp Suite.");
+ if(name==="audit"){
+ out("SECURITY AUDIT");
+ out("Comprueba:");
+ out("[1] Content-Security-Policy");
+ out("[2] Strict-Transport-Security");
+ out("[3] X-Content-Type-Options");
+ out("[4] Referrer-Policy");
+ out("[5] X-Frame-Options");
+ out("Pega cabeceras en HTTP Header Inspector.");
+ complete("audit");
  }
-
- if(name==="scanner"){
- out("SECURITY SCANNER — ANÁLISIS DE EJEMPLO");
- out("");
- const headers={
- "Content-Security-Policy":true,
- "Strict-Transport-Security":true,
- "X-Content-Type-Options":false,
- "X-Frame-Options":true,
- "Referrer-Policy":false
- };
- Object.entries(headers).forEach(([k,v])=>{
- out((v?"[OK] ":"[REVISAR] ")+k,v?"system":"warning");
- });
- out("");
- out("Informe ilustrativo: cabeceras de ejemplo.");
- out("No se ha consultado ningún servidor.");
- out("Usa estos criterios para auditar tu propio sitio.");
+ if(name==="python"){
+ out("PYTHON CYBER LAB");
+ out("Ejercicio: reconocer una cadena sospechosa.");
+ out("En Kali puedes practicar con:");
+ out("python3 --version");
+ out("python3 -c 'print(\"ALEX CYBER LAB\")'");
+ out("Este módulo web no ejecuta Python del sistema.");
+ complete("python");
+ }
+ if(name==="missions"){
+ out("MISSION CONTROL");
+ out("Misión 1: analizar cabeceras HTTP.");
+ out("Misión 2: calcular hash de un archivo.");
+ out("Misión 3: reconocer una URL.");
+ out("Misión 4: estudiar una cabecera de seguridad.");
+ out("Módulos completados: "+missions);
+ out("Nivel actual: "+(1+Math.floor(missions/3)));
+ }
+ if(name==="kali"){
+ out("KALI BRIDGE — COMANDOS PARA TERMUX");
+ out("Primero sal de la página y abre Termux.");
+ out("Inicia Kali con: nethunter");
+ out("Comprueba herramientas:");
+ out("nmap --version");
+ out("python3 --version");
+ out("curl --version");
+ out("git --version");
+ out("Para Juice Shop necesitarás un entorno compatible con Node.js.");
+ out("GitHub Pages no puede controlar Termux ni ejecutar Kali.");
+ complete("kali");
  }
 }
+
+async function hashFile(){
+ const file=document.getElementById("fileInput").files[0];
+ const result=document.getElementById("hashResult");
+ if(!file){result.textContent="Selecciona primero un archivo.";return;}
+ if(!crypto.subtle){result.textContent="Web Crypto no está disponible en este contexto seguro.";return;}
+ try{
+  result.textContent="Calculando SHA-256...";
+  const data=await file.arrayBuffer();
+  const digest=await crypto.subtle.digest("SHA-256",data);
+  const hash=[...new Uint8Array(digest)].map(x=>x.toString(16).padStart(2,"0")).join("");
+  result.textContent="Archivo: "+file.name+"\nTamaño: "+file.size+" bytes\nSHA-256:\n"+hash;
+  complete("forensics");
+ }catch(e){result.textContent="No se pudo analizar el archivo.";}
+}
+
+function analyzeHeaders(){
+ const raw=document.getElementById("headers").value;
+ const result=document.getElementById("headerResult");
+ if(!raw.trim()){result.textContent="Pega cabeceras para analizar.";return;}
+ const names=raw.split(/\r?\n/).map(x=>x.split(":")[0].trim().toLowerCase());
+ const checks=[
+ ["content-security-policy","Content-Security-Policy"],
+ ["strict-transport-security","Strict-Transport-Security"],
+ ["x-content-type-options","X-Content-Type-Options"],
+ ["referrer-policy","Referrer-Policy"],
+ ["x-frame-options","X-Frame-Options"]
+ ];
+ result.textContent=checks.map(([key,label])=>
+  (names.includes(key)?"[PRESENTE] ":"[AUSENTE] ")+label
+ ).join("\n")+"\n\nAnálisis basado únicamente en el texto pegado.";
+ complete("audit");
+}
+
+function analyzeURL(){
+ const raw=document.getElementById("urlInput").value.trim();
+ const result=document.getElementById("urlResult");
+ try{
+  const u=new URL(raw);
+  result.textContent=
+  "Protocolo: "+u.protocol+"\n"+
+  "Host: "+u.hostname+"\n"+
+  "Puerto: "+(u.port||"predeterminado")+"\n"+
+  "Ruta: "+u.pathname+"\n"+
+  "Parámetros: "+(u.search||"ninguno")+"\n"+
+  "Fragmento: "+(u.hash||"ninguno")+"\n"+
+  "Nota: analizar la estructura no demuestra que el sitio sea seguro.";
+  complete("url");
+ }catch(e){result.textContent="URL no válida. Incluye https:// o http://";}
+}
+
+function buildRequest(){
+ const method=document.getElementById("method").value;
+ const endpoint=document.getElementById("endpoint").value.trim();
+ if(!endpoint.startsWith("/")){
+  document.getElementById("requestResult").textContent="La ruta debe comenzar con /";
+  return;
+ }
+ document.getElementById("requestResult").textContent=
+ method+" "+endpoint+" HTTP/1.1\n"+
+ "Host: lab.local\n"+
+ "User-Agent: Alex-Lab/10.0\n"+
+ "Accept: */*\n\n"+
+ "[Vista previa local: no se ha enviado ninguna solicitud]";
+ complete("http");
+}
+
 function run(){
  const raw=input.value.trim();
  if(!raw)return;
  input.value="";
  commands++;
- document.getElementById("commandCount").textContent=commands;
+ document.getElementById("commands").textContent=commands;
  history.push(raw);
  out("kali@alex:~$ "+raw,"system");
  const p=raw.split(/\s+/);
@@ -256,77 +351,43 @@ function run(){
 
  switch(c){
  case "help":
- out("COMANDOS DISPONIBLES:");
- out("modules | status | clear | history | report");
- out("juice | http | sqli | xss | burp | scanner | quiz");
- out("whoami | date | echo");
+ out("COMANDOS:");
+ out("help | modules | status | clear | history | report");
+ out("web | http | network | forensics | audit");
+ out("python | missions | kali | whoami | date | echo");
  break;
-
  case "modules":
- ["juice","http","sqli","xss","burp","scanner"].forEach((x,i)=>out((i+1)+". "+x));
+ ["web","http","network","forensics","audit","python","missions","kali"].forEach(out);
  break;
-
  case "status":
- out("ALEX-LINUX-LAB 9.0: ONLINE");
- out("Módulos: 6");
- out("Prácticas completadas: "+practices);
- out("Comandos ejecutados: "+commands);
- out("Modo: educativo y aislado");
- break;
-
- case "clear":
- terminal.innerHTML="";
- break;
-
- case "history":
- history.forEach((x,i)=>out((i+1)+" "+x));
- break;
-
- case "report":
- title("INFORME DE ACTIVIDAD");
- out("Versión: 9.0");
- out("Módulos: 6");
- out("Prácticas: "+practices);
+ out("ALEX-LINUX-LAB 10.0 ONLINE");
+ out("Módulos: 8");
+ out("Misiones: "+missions);
  out("Comandos: "+commands);
- out("Conexiones externas: ninguna");
+ out("Modo: laboratorio educativo");
  break;
-
- case "juice":module("juice");break;
+ case "clear":terminal.innerHTML="";break;
+ case "history":history.forEach((x,i)=>out((i+1)+" "+x));break;
+ case "report":
+ title("CYBER REPORT");
+ out("Versión: 10.0");
+ out("Misiones: "+missions);
+ out("Comandos: "+commands);
+ out("Funciones de análisis local disponibles.");
+ out("Escaneos externos ejecutados: ninguno.");
+ break;
+ case "web":module("web");break;
  case "http":module("http");break;
- case "sqli":module("sqli");break;
- case "xss":module("xss");break;
- case "burp":module("burp");break;
- case "scanner":module("scanner");break;
-
+ case "network":module("network");break;
+ case "forensics":module("forensics");break;
+ case "audit":module("audit");break;
+ case "python":module("python");break;
+ case "missions":module("missions");break;
+ case "kali":module("kali");break;
  case "whoami":out("kali");break;
  case "date":out(new Date().toString());break;
  case "echo":out(arg);break;
-
- case "quiz":
- title("RETO DE CIBERSEGURIDAD");
- out("Pregunta: ¿Qué ayuda a prevenir SQL Injection?");
- out("Responde: quiz prepared");
- break;
-
- default:
- if(c==="login"){
- if(arg==="alex")out("Usuario de demostración reconocido.","system");
- else if(arg.includes("' OR '1'='1")){
- out("PATRÓN DE INYECCIÓN DETECTADO","warning");
- out("Lección: concatenar entradas SQL puede ser peligroso.");
- out("La autenticación no se ha alterado.");
- }else out("Usuario ficticio no encontrado.");
- }else if(c==="xss"){
- out("Contenido recibido como texto seguro:");
- out(arg,"warning");
- out("No se ejecutó ningún script.");
- }else if(c==="quiz"&&arg==="prepared"){
- out("CORRECTO: utilizar consultas preparadas con parámetros.","system");
- practice();
- }else{
- out("Comando desconocido: "+c,"error");
- out("Escribe help para ver los comandos.");
- }
+ default:out("Comando desconocido. Escribe help.","error");
  }
 }
 input.addEventListener("keydown",e=>{if(e.key==="Enter")run();});
