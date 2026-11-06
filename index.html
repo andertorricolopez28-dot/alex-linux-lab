@@ -3,265 +3,230 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ALEX-LINUX-LAB 16.0</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ALEX-LINUX-LAB 17.0</title>
 <style>
-:root {
-  --green:#00ff88;
-  --bg:#050907;
-  --panel:#0a1510;
-  --border:#16452e;
-  --muted:#83a995;
-}
+:root{--g:#00ff88;--bg:#050907;--p:#0a1510;--b:#16452e}
 *{box-sizing:border-box}
-body{
-  margin:0;background:var(--bg);color:#d9ffe9;
-  font-family:Consolas,Monaco,monospace;
-}
-header{
-  padding:22px 16px;text-align:center;
-  background:linear-gradient(135deg,#06130b,#102b1b);
-  border-bottom:1px solid var(--green);
-}
-h1{color:var(--green);margin:0;font-size:27px}
-header p{color:var(--muted);font-size:12px}
-.status{color:var(--green);font-size:12px;margin-top:12px}
-main{max-width:1050px;margin:auto;padding:15px}
-.panel{
-  background:var(--panel);border:1px solid var(--border);
-  border-radius:10px;padding:15px;margin-bottom:15px;
-  box-shadow:0 0 15px #00ff8810;
-}
-h2{font-size:15px;color:var(--green);margin-top:0}
-.grid{
-  display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));
-  gap:10px;
-}
-button{
-  background:#071b10;color:var(--green);
-  border:1px solid #087b46;border-radius:7px;
-  padding:14px 9px;font-family:inherit;
-  cursor:pointer;font-weight:bold;min-height:62px;
-  transition:.2s;
-}
-button:hover{
-  background:#0b3920;box-shadow:0 0 12px #00ff8866;
-  transform:translateY(-2px);
-}
+body{margin:0;background:var(--bg);color:#d9ffe9;font-family:Consolas,monospace}
+header{text-align:center;padding:23px 12px;background:#0a1b11;border-bottom:1px solid var(--g)}
+h1{color:var(--g);margin:0;font-size:27px}
+header p,.muted{color:#83a995;font-size:12px}
+main{max-width:1050px;margin:auto;padding:14px}
+.panel{background:var(--p);border:1px solid var(--b);padding:15px;border-radius:9px;margin-bottom:14px}
+h2{color:var(--g);font-size:15px;margin-top:0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:9px}
+button{background:#071b10;color:var(--g);border:1px solid #087b46;padding:13px;border-radius:6px;font-family:inherit;font-weight:bold;cursor:pointer;min-height:50px}
+button:hover{background:#104326;box-shadow:0 0 12px #00ff8855}
 button small{display:block;color:#9bbca8;font-weight:normal;margin-top:5px}
-.terminal{
-  background:#020503;border:1px solid #17603b;
-  border-radius:8px;min-height:260px;padding:13px;
-  overflow:auto;
-}
-#output{
-  white-space:pre-wrap;overflow-wrap:anywhere;
-  font-size:13px;line-height:1.6;color:#b8ffd2;
-  min-height:195px;
-}
-.prompt{color:var(--green)}
-.inputrow{display:flex;gap:8px;margin-top:10px}
-input{
-  min-width:0;flex:1;background:#07110b;
-  color:var(--green);border:1px solid #17603b;
-  padding:12px;border-radius:5px;font-family:inherit;
-}
-.run{min-height:auto;padding:10px 17px}
-.muted{color:var(--muted);font-size:12px;line-height:1.6}
-.tag{color:var(--green)}
+input,textarea,select{width:100%;background:#020805;color:var(--g);border:1px solid #17603b;padding:11px;border-radius:5px;font-family:inherit;margin:5px 0}
+textarea{min-height:95px;resize:vertical}
+.output{background:#020503;border:1px solid #17603b;padding:12px;border-radius:6px;white-space:pre-wrap;overflow-wrap:anywhere;min-height:65px;font-size:13px;line-height:1.6}
+.row{display:flex;gap:8px;align-items:center}
+.row>*{min-width:0}
+.row button{flex-shrink:0}
+.tag{color:var(--g)}
 footer{text-align:center;color:#557764;font-size:11px;padding:20px}
-a{color:var(--green)}
 </style>
 </head>
 <body>
 <header>
-  <h1>⚡ ALEX-LINUX-LAB 16.0</h1>
-  <p>ADVANCED CYBERSECURITY OPERATIONS</p>
-  <div class="status">● SYSTEM ONLINE | ALL IN ONE</div>
+<h1>⚡ ALEX-LINUX-LAB 17.0</h1>
+<p>CYBER OPERATIONS // WEB SECURITY CENTER</p>
+<div class="tag">● SYSTEM ONLINE | ALL IN ONE</div>
 </header>
-
 <main>
-  <section class="panel">
-    <h2>▰ CONTROL CENTER</h2>
-    <div class="grid">
-      <button onclick="openLab('https://portswigger.net/web-security')">
-        WEB HACKING<small>Web Security Academy</small>
-      </button>
-      <button onclick="openLab('https://owasp.org/www-project-juice-shop/')">
-        SQL INJECTION<small>OWASP Juice Shop</small>
-      </button>
-      <button onclick="openLab('https://portswigger.net/web-security/cross-site-scripting')">
-        XSS LAB<small>Cross-site scripting</small>
-      </button>
-      <button onclick="openLab('https://nmap.org/book/man.html')">
-        NETWORK TOOLS<small>Nmap documentation</small>
-      </button>
-      <button onclick="openLab('https://www.kali.org/docs/')">
-        KALI LINUX<small>Official Kali guides</small>
-      </button>
-      <button onclick="openLab('https://tryhackme.com/')">
-        HACKING LABS<small>TryHackMe</small>
-      </button>
-      <button onclick="openLab('https://owasp.org/www-project-top-ten/')">
-        OWASP TOP 10<small>Web vulnerabilities</small>
-      </button>
-      <button onclick="openLab('https://github.com/OWASP')">
-        SECURITY TOOLS<small>OWASP projects</small>
-      </button>
-    </div>
-  </section>
 
-  <section class="panel">
-    <h2>▰ LOCAL WEB SECURITY LAB</h2>
-    <div class="grid">
-      <button onclick="sqlDemo()">SQL INJECTION DEMO<small>Consulta vulnerable simulada</small></button>
-      <button onclick="xssDemo()">XSS DEMO<small>Entrada segura de texto</small></button>
-      <button onclick="headerDemo()">SERVER AUDIT<small>Revisar cabeceras de ejemplo</small></button>
-      <button onclick="passwordDemo()">PASSWORD CHECK<small>Evaluación local de contraseña</small></button>
-    </div>
-    <p class="muted">Estas demostraciones funcionan localmente en esta página. No envían datos a servidores externos.</p>
-  </section>
-
-  <section class="panel">
-    <h2>▰ ALEX TERMINAL 16.0</h2>
-    <div class="terminal">
-      <div id="output">ALEX-LINUX-LAB [16.0]
-Inicializando centro de operaciones...
-Sistema listo.
-Escribe <span class="tag">help</span> para ver los comandos.
-
+<section class="panel">
+<h2>▰ OPERATIONS CENTER</h2>
+<div class="grid">
+<button onclick="openTool('https://portswigger.net/web-security')">WEB HACKING<small>Web Security Academy</small></button>
+<button onclick="openTool('https://owasp.org/www-project-juice-shop/')">JUICE SHOP<small>Vulnerable training app</small></button>
+<button onclick="openTool('https://tryhackme.com/')">TRYHACKME<small>Practical cyber labs</small></button>
+<button onclick="openTool('https://www.kali.org/tools/')">KALI TOOLS<small>Official tool catalog</small></button>
+<button onclick="openTool('https://nmap.org/book/man.html')">NMAP<small>Network scanner guide</small></button>
+<button onclick="openTool('https://owasp.org/www-project-top-ten/')">OWASP TOP 10<small>Web risks</small></button>
 </div>
-      <div class="inputrow">
-        <span class="prompt">alex@lab:~$</span>
-        <input id="command" placeholder="Escribe un comando..." autocomplete="off">
-        <button class="run" onclick="runCommand()">EXEC</button>
-      </div>
-    </div>
-    <p class="muted">Terminal educativo. No es una shell real de Linux.</p>
-  </section>
+</section>
 
-  <section class="panel">
-    <h2>▰ QUICK ACCESS</h2>
-    <div class="grid">
-      <button onclick="openLab('https://portswigger.net/web-security/sql-injection')">SQLi GUIDE</button>
-      <button onclick="openLab('https://portswigger.net/web-security/authentication')">AUTH TESTING</button>
-      <button onclick="openLab('https://portswigger.net/web-security/file-path-traversal')">PATH TRAVERSAL</button>
-      <button onclick="openLab('https://owasp.org/www-project-web-security-testing-guide/')">WEB TEST GUIDE</button>
-    </div>
-  </section>
+<section class="panel">
+<h2>▰ WEB URL ANALYZER</h2>
+<p class="muted">Analiza la estructura de una dirección web localmente. No contacta con el servidor.</p>
+<input id="url" placeholder="https://example.com/login">
+<button onclick="analyzeURL()">ANALYZE URL</button>
+<div class="output" id="urlout">Esperando dirección web...</div>
+</section>
 
-  <section class="panel">
-    <h2>▰ SYSTEM INFORMATION</h2>
-    <p class="muted">
-      VERSION: <span class="tag">16.0 ALL IN ONE</span><br>
-      PLATFORM: GITHUB PAGES<br>
-      MODE: EDUCATIONAL / LOCAL SIMULATION<br>
-      NETWORK ATTACKS: DISABLED<br>
-      STATUS: <span class="tag">READY</span>
-    </p>
-  </section>
+<section class="panel">
+<h2>▰ HTTP HEADER INSPECTOR</h2>
+<p class="muted">Pega cabeceras HTTP obtenidas en un laboratorio autorizado.</p>
+<textarea id="headers" placeholder="HTTP/1.1 200 OK&#10;Content-Type: text/html&#10;Server: example"></textarea>
+<button onclick="inspectHeaders()">INSPECT HEADERS</button>
+<div class="output" id="headerout">Esperando cabeceras...</div>
+</section>
+
+<section class="panel">
+<h2>▰ SQL INJECTION TRAINING</h2>
+<p class="muted">Ejemplo educativo: observa por qué concatenar entradas en SQL es peligroso.</p>
+<input id="sqlinput" placeholder="Escribe una entrada de prueba">
+<button onclick="sqlTest()">RUN SQL DEMO</button>
+<div class="output" id="sqlout">Laboratorio SQL preparado.</div>
+</section>
+
+<section class="panel">
+<h2>▰ XSS SAFE LAB</h2>
+<p class="muted">Prueba cómo se muestra una entrada como texto sin ejecutarla como código.</p>
+<input id="xssinput" placeholder="Escribe texto de prueba">
+<button onclick="xssTest()">TEST INPUT</button>
+<div class="output" id="xssout">Esperando entrada...</div>
+</section>
+
+<section class="panel">
+<h2>▰ PASSWORD STRENGTH CHECKER</h2>
+<p class="muted">Usa solamente una contraseña ficticia. El análisis se realiza en tu navegador.</p>
+<input id="passinput" type="password" placeholder="Contraseña de ejemplo">
+<button onclick="checkPass()">CHECK PASSWORD</button>
+<div class="output" id="passout">Esperando prueba...</div>
+</section>
+
+<section class="panel">
+<h2>▰ SECURITY KNOWLEDGE BASE</h2>
+<div class="grid">
+<button onclick="openTool('https://portswigger.net/web-security/sql-injection')">SQL INJECTION GUIDE</button>
+<button onclick="openTool('https://portswigger.net/web-security/cross-site-scripting')">XSS GUIDE</button>
+<button onclick="openTool('https://portswigger.net/web-security/authentication')">AUTHENTICATION</button>
+<button onclick="openTool('https://owasp.org/www-project-web-security-testing-guide/')">TESTING GUIDE</button>
+</div>
+</section>
+
+<section class="panel">
+<h2>▰ ALEX TERMINAL 17.0</h2>
+<div class="output" id="terminal">ALEX-LINUX-LAB [17.0]
+CYBER OPERATIONS READY.
+Escribe help para ver comandos.
+</div>
+<div class="row">
+<input id="cmd" placeholder="alex@lab:~$ comando">
+<button onclick="runCmd()">EXEC</button>
+</div>
+<p class="muted">Terminal educativo simulado; no ejecuta comandos del sistema.</p>
+</section>
+
+<section class="panel">
+<h2>▰ SYSTEM STATUS</h2>
+<div class="output" id="status">VERSION: 17.0
+MODE: LOCAL TRAINING
+WEB ANALYZER: READY
+HEADER INSPECTOR: READY
+SQL TRAINING: READY
+XSS SAFE LAB: READY
+STATUS: ONLINE</div>
+</section>
 </main>
-
-<footer>ALEX-LINUX-LAB 16.0 · ETHICAL SECURITY TRAINING</footer>
+<footer>ALEX-LINUX-LAB 17.0 · ETHICAL CYBERSECURITY</footer>
 
 <script>
-const output=document.getElementById("output");
-const input=document.getElementById("command");
-
-function print(text){
-  output.textContent += "\n"+text;
-  output.scrollTop=output.scrollHeight;
+function openTool(url){
+ const w=window.open(url,"_blank","noopener");
+ if(!w) alert("Permite ventanas emergentes para abrir el laboratorio.");
 }
-function openLab(url){
-  const tab=window.open(url,"_blank","noopener");
-  if(!tab) print("El navegador bloqueó la pestaña. Permite ventanas emergentes para este sitio.");
-  else print("Abriendo laboratorio: "+url);
+function analyzeURL(){
+ const value=document.getElementById("url").value.trim();
+ const out=document.getElementById("urlout");
+ try{
+  const u=new URL(value);
+  if(!["http:","https:"].includes(u.protocol))throw Error("Protocolo no permitido");
+  out.textContent=
+   "ANALYSIS COMPLETE\n"+
+   "HOST: "+u.hostname+"\n"+
+   "PROTOCOL: "+u.protocol+"\n"+
+   "PORT: "+(u.port||"default")+"\n"+
+   "PATH: "+(u.pathname||"/")+"\n"+
+   "QUERY PARAMETERS: "+u.searchParams.size+"\n"+
+   "HTTPS: "+(u.protocol==="https:"?"YES":"NO")+
+   "\n\nNota: análisis local. No se ha contactado con el sitio.";
+ }catch(e){out.textContent="ERROR: dirección no válida. Introduce una URL HTTP o HTTPS completa."}
 }
-function sqlDemo(){
-  print("\n[SQL INJECTION LAB]");
-  print("Ejemplo de consulta insegura:");
-  print("SELECT * FROM users WHERE name = '"+ "entrada_del_usuario" +"';");
-  print("Riesgo: concatenar entradas directamente puede permitir modificar la consulta.");
-  print("Defensa: usar consultas preparadas y parámetros.");
-  print("No se ha conectado a ninguna base de datos.");
+function inspectHeaders(){
+ const raw=document.getElementById("headers").value;
+ const out=document.getElementById("headerout");
+ if(!raw.trim()){out.textContent="Pega primero algunas cabeceras.";return}
+ const checks=[
+ ["strict-transport-security","HSTS"],
+ ["content-security-policy","CSP"],
+ ["x-content-type-options","X-Content-Type-Options"],
+ ["referrer-policy","Referrer-Policy"],
+ ["permissions-policy","Permissions-Policy"]
+ ];
+ let report="HTTP HEADER AUDIT\n";
+ checks.forEach(([key,label])=>{
+  const found=raw.split(/\r?\n/).some(line=>line.toLowerCase().startsWith(key+":"));
+  report+=label+": "+(found?"DETECTED":"NOT FOUND IN PASTED TEXT")+"\n";
+ });
+ report+="\nRevisa las políticas del servidor y adapta las cabeceras a tu aplicación.";
+ out.textContent=report;
 }
-function xssDemo(){
-  const value=prompt("Escribe un texto de prueba para el laboratorio:");
-  if(value===null)return;
-  const box=document.createElement("div");
-  box.textContent=value;
-  box.style.cssText="margin-top:10px;padding:10px;border:1px solid #17603b;color:#00ff88;overflow-wrap:anywhere";
-  output.appendChild(box);
-  print("[XSS LAB] Entrada mostrada como texto, sin ejecutar HTML ni JavaScript.");
+function sqlTest(){
+ const value=document.getElementById("sqlinput").value;
+ const out=document.getElementById("sqlout");
+ if(!value){out.textContent="Introduce una entrada de prueba.";return}
+ const suspicious=/('|--|;|\/\*|\bOR\b|\bUNION\b)/i.test(value);
+ out.textContent=
+ "INPUT: "+value+"\n"+
+ "PATTERN CHECK: "+(suspicious?"PATRÓN SQL SOSPECHOSO":"SIN PATRONES BÁSICOS DETECTADOS")+
+ "\n\nEste detector es educativo y puede dar falsos positivos o negativos."+
+ "\nDEFENSE: usa consultas preparadas y parámetros."+
+ "\nNo se ejecutó SQL ni se contactó con una base de datos.";
 }
-function headerDemo(){
-  print("\n[SERVER AUDIT - DATOS DE EJEMPLO]");
-  const headers={
-    "Content-Security-Policy":"No configurado",
-    "Strict-Transport-Security":"No detectado",
-    "X-Content-Type-Options":"No detectado",
-    "Referrer-Policy":"No configurado"
-  };
-  Object.entries(headers).forEach(([k,v])=>print(k+": "+v));
-  print("Recomendación: revisar y configurar estas cabeceras en el servidor real.");
-  print("Son datos ficticios; no se ha consultado ningún servidor.");
+function xssTest(){
+ const value=document.getElementById("xssinput").value;
+ const out=document.getElementById("xssout");
+ out.textContent="";
+ if(!value){out.textContent="Introduce una entrada.";return}
+ const safe=document.createElement("span");
+ safe.textContent=value;
+ out.append("INPUT DISPLAYED SAFELY: ",safe);
+ out.append(document.createTextNode("\nEl contenido se trató como texto, no como HTML."));
 }
-function passwordDemo(){
-  const value=prompt("Introduce una contraseña de ejemplo (no uses tu contraseña real):");
-  if(value===null)return;
-  let score=0;
-  if(value.length>=12)score++;
-  if(/[A-Z]/.test(value))score++;
-  if(/[a-z]/.test(value))score++;
-  if(/[0-9]/.test(value))score++;
-  if(/[^A-Za-z0-9]/.test(value))score++;
-  const levels=["Muy débil","Débil","Media","Buena","Fuerte","Muy fuerte"];
-  print("\n[PASSWORD CHECK] Resultado: "+levels[score]);
-  print("Criterios cumplidos: "+score+"/5. Evaluación local aproximada.");
+function checkPass(){
+ const p=document.getElementById("passinput").value;
+ const out=document.getElementById("passout");
+ if(!p){out.textContent="Introduce una contraseña ficticia.";return}
+ let n=0;
+ if(p.length>=12)n++;
+ if(/[a-z]/.test(p))n++;
+ if(/[A-Z]/.test(p))n++;
+ if(/[0-9]/.test(p))n++;
+ if(/[^a-zA-Z0-9]/.test(p))n++;
+ const levels=["VERY WEAK","WEAK","MEDIUM","GOOD","STRONG","VERY STRONG"];
+ out.textContent="RESULT: "+levels[n]+"\nCRITERIA: "+n+"/5\nEvaluación aproximada, no garantiza seguridad.";
 }
-function runCommand(){
-  const cmd=input.value.trim();
-  if(!cmd)return;
-  print("\nalex@lab:~$ "+cmd);
-  input.value="";
-  const parts=cmd.split(/\s+/);
-  switch(parts[0].toLowerCase()){
-    case "help":
-      print("COMANDOS DISPONIBLES:");
-      print("help | status | tools | web | sqli | xss | headers | password | clear");
-      break;
-    case "status":
-      print("ALEX-LINUX-LAB 16.0: ONLINE");
-      print("Modo: simulación local educativa.");
-      break;
-    case "tools":
-      print("WEB HACKING, SQL INJECTION, XSS, NMAP DOCS, KALI, TRYHACKME.");
-      print("Escribe web para abrir el laboratorio web.");
-      break;
-    case "web":
-      openLab("https://portswigger.net/web-security");
-      break;
-    case "sqli":
-      sqlDemo();
-      break;
-    case "xss":
-      xssDemo();
-      break;
-    case "headers":
-      headerDemo();
-      break;
-    case "password":
-      passwordDemo();
-      break;
-    case "clear":
-      output.textContent="ALEX TERMINAL 16.0\n";
-      break;
-    default:
-      print("Comando no reconocido. Escribe help.");
-  }
+function terminalPrint(s){
+ const t=document.getElementById("terminal");
+ t.textContent+="\n"+s;
+ t.scrollTop=t.scrollHeight;
 }
-input.addEventListener("keydown",e=>{
-  if(e.key==="Enter")runCommand();
+function runCmd(){
+ const el=document.getElementById("cmd");
+ const c=el.value.trim().toLowerCase();
+ if(!c)return;
+ terminalPrint("alex@lab:~$ "+c);
+ el.value="";
+ const commands={
+ help:"COMMANDS: help, status, tools, web, sql, xss, audit, clear",
+ status:"SYSTEM ONLINE | VERSION 17.0 | LOCAL TRAINING",
+ tools:"PortSwigger, OWASP Juice Shop, TryHackMe, Kali tools, Nmap docs",
+ web:"Abriendo Web Security Academy...",
+ sql:"Usa la sección SQL INJECTION TRAINING.",
+ xss:"Usa la sección XSS SAFE LAB.",
+ audit:"Usa HTTP HEADER INSPECTOR para revisar cabeceras pegadas."
+ };
+ if(c==="clear"){document.getElementById("terminal").textContent="ALEX TERMINAL 17.0";return}
+ if(c==="web"){openTool("https://portswigger.net/web-security");terminalPrint(commands.web);return}
+ terminalPrint(commands[c]||"Comando desconocido. Escribe help.");
+}
+document.getElementById("cmd").addEventListener("keydown",e=>{
+ if(e.key==="Enter")runCmd();
 });
 </script>
 </body>
