@@ -1,46 +1,718 @@
-<div id="launcher" class="section">
-  <button onclick="show('home')">← VOLVER</button>
 
-  <h2>🚀 ALEX APP LAUNCHER 21.0</h2>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#050b08">
+<title>ALEX-LINUX-LAB 21.0</title>
+<style>
+*{box-sizing:border-box}
+:root{--green:#00ff88;--dark:#050b08;--panel:#08140e;--muted:#8affbd}
+body{margin:0;padding:14px;background:var(--dark);color:var(--green);font-family:monospace}
+main{max-width:1050px;margin:auto}
+header{text-align:center;padding:16px 5px}
+h1{font-size:clamp(24px,6vw,38px);text-shadow:0 0 14px var(--green);margin:8px 0}
+h2{font-size:21px}
+.sub,.muted{color:var(--muted)}
+.sub{font-size:12px;letter-spacing:2px}
+.panel,.card{background:var(--panel);border:1px solid var(--green);border-radius:11px;padding:14px;margin:12px 0;box-shadow:0 0 12px #00ff8810}
+.dashboard{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+.card{cursor:pointer;min-height:112px;transition:.2s;margin:0}
+.card:active{background:#0b2b1b;transform:scale(.98)}
+.card strong{display:block;margin:8px 0}
+.card small{color:var(--muted)}
+.ico{font-size:27px}
+button{background:#06351e;color:var(--green);border:1px solid var(--green);border-radius:7px;padding:11px;font-family:monospace;cursor:pointer}
+button:active{background:var(--green);color:#001b0d}
+input,textarea,select{width:100%;min-width:0;background:#020604;color:var(--green);border:1px solid var(--green);border-radius:7px;padding:12px;font-family:monospace;margin:7px 0}
+textarea{min-height:90px;resize:vertical}
+.full{width:100%;margin:7px 0}
+.section{display:none}
+.section.active{display:block}
+#terminal,.output{min-height:180px;max-height:340px;overflow:auto;background:#020604;border:1px solid #145b38;padding:12px;border-radius:7px;white-space:pre-wrap;overflow-wrap:anywhere}
+#terminal{height:340px}
+.line{margin:0 0 7px}
+.inputrow{display:flex;gap:8px;align-items:center}
+.inputrow input{flex:1}
+.quick{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
+.stat{font-size:12px;color:var(--muted);padding:7px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px}
+pre{white-space:pre-wrap;overflow-wrap:anywhere}
+footer{text-align:center;color:var(--muted);font-size:11px;padding:20px}
+.back{margin-bottom:10px}
+a{color:var(--green)}
+hr{border:0;border-top:1px solid #145b38;margin:15px 0}
+</style>
+</head>
+<body>
+<main>
+<header>
+<h1>⚡ ALEX-LINUX-LAB 21.0</h1>
+<div class="sub">LINUX • CYBERSECURITY • ETHICAL HACKING</div>
+<div class="stat" id="clock">SYSTEM ONLINE</div>
+</header>
 
-  <div class="panel">
-    <h3>ABRIR APLICACIÓN</h3>
-    <p class="muted">
-      Escribe el nombre de una aplicación instalada.
-    </p>
-
-    <input id="appName"
-      placeholder="Ejemplo: Roblox, YouTube, Instagram">
-
-    <button class="full" onclick="launchApp()">
-      🚀 EJECUTAR APLICACIÓN
-    </button>
-
-    <h3>APLICACIONES RÁPIDAS</h3>
-
-    <div class="grid">
-      <button onclick="quickApp('Roblox')">ROBLOX</button>
-      <button onclick="quickApp('YouTube')">YOUTUBE</button>
-      <button onclick="quickApp('Instagram')">INSTAGRAM</button>
-      <button onclick="quickApp('WhatsApp')">WHATSAPP</button>
-      <button onclick="quickApp('Chrome')">CHROME</button>
-      <button onclick="quickApp('Termux')">TERMUX</button>
-    </div>
-
-    <pre id="appOutput">APP LAUNCHER READY...</pre>
-  </div>
-
-  <div class="panel">
-    <h3>PAQUETE PERSONALIZADO</h3>
-    <p class="muted">
-      También puedes introducir el identificador Android
-      de una aplicación.
-    </p>
-    <input id="packageName"
-      placeholder="Ejemplo: com.spotify.music">
-
-    <button class="full" onclick="launchPackage()">
-      ABRIR POR PACKAGE ID
-    </button>
-  </div>
+<div id="home" class="section active">
+<div class="panel">
+<strong>◉ SISTEMA OPERATIVO</strong>
+<div class="stat">ALEX CORE 21.0 | VIRTUAL ENVIRONMENT</div>
+<div class="stat">STATUS: <span id="status">ONLINE</span></div>
+<div class="stat">MÓDULOS: 10 | MODO: EDUCATIVO</div>
 </div>
+<h2>▣ CONTROL CENTER</h2>
+<div class="dashboard">
+<div class="card" onclick="show('terminal')"><div class="ico">⌨️</div><strong>LINUX TERMINAL</strong><small>Comandos virtuales</small></div>
+<div class="card" onclick="show('radar')"><div class="ico">📡</div><strong>CYBER RADAR</strong><small>Red de demostración</small></div>
+<div class="card" onclick="show('network')"><div class="ico">🌐</div><strong>NETWORK MAP</strong><small>Mapa de laboratorio</small></div>
+<div class="card" onclick="show('hash')"><div class="ico">🔐</div><strong>HASH LAB</strong><small>SHA-256 real</small></div>
+<div class="card" onclick="show('inspector')"><div class="ico">🔎</div><strong>WEB INSPECTOR</strong><small>Consulta HTTP</small></div>
+<div class="card" onclick="show('sql')"><div class="ico">🗄️</div><strong>SQL LAB</strong><small>Análisis educativo</small></div>
+<div class="card" onclick="show('xss')"><div class="ico">🧪</div><strong>XSS PLAYGROUND</strong><small>Detector de patrones</small></div>
+<div class="card" onclick="show('attack')"><div class="ico">🛡️</div><strong>ATTACK SIMULATOR</strong><small>Escenarios ficticios</small></div>
+<div class="card" onclick="show('launcher')"><div class="ico">🚀</div><strong>APP LAUNCHER</strong><small>Abrir aplicaciones Android</small></div>
+<div class="card" onclick="show('report')"><div class="ico">📄</div><strong>SECURITY REPORT</strong><small>Crear informe</small></div>
+</div>
+</div>
+
+<!-- TERMINAL -->
+<div id="terminal" class="section">
+<button class="back" onclick="show('home')">← VOLVER</button>
+<h2>⌨️ ALEX VIRTUAL TERMINAL</h2>
+<div class="panel">
+<div id="termOutput" class="output"></div>
+<div class="inputrow">
+<input id="command" placeholder="Escribe help..." autocomplete="off">
+<button onclick="runCommand()">RUN</button>
+</div>
+<div class="quick">
+<button onclick="quickCmd('help')">HELP</button>
+<button onclick="quickCmd('ls')">LS</button>
+<button onclick="quickCmd('pwd')">PWD</button>
+<button onclick="quickCmd('whoami')">WHOAMI</button>
+<button onclick="quickCmd('neofetch')">NEOFETCH</button>
+<button onclick="quickCmd('security')">SECURITY</button>
+<button onclick="quickCmd('ports')">PORTS</button>
+<button onclick="quickCmd('clear')">CLEAR</button>
+</div>
+</div>
+<p class="muted">Terminal virtual: los comandos no se ejecutan en Android ni en servidores externos.</p>
+</div>
+
+<!-- RADAR -->
+<div id="radar" class="section">
+<button class="back" onclick="show('home')">← VOLVER</button>
+<h2>📡 CYBER RADAR</h2>
+<div class="panel">
+<p class="muted">Simulación de dispositivos de una red ficticia.</p>
+<button class="full" onclick="scanRadar()">INICIAR ESCANEO VIRTUAL</button>
+<div id="radarOutput" class="output">RADAR STANDBY...</div>
+</div>
+</div>
+
+<!-- NETWORK MAP -->
+<div id="network" class="section">
+<button class="back" onclick="show('home')">← VOLVER</button>
+<h2>🌐 NETWORK MAP</h2>
+<div class="panel">
+<button class="full" onclick="drawNetwork()">GENERAR MAPA</button>
+<div id="networkOutput" class="output">NETWORK MAP READY...</div>
+</div>
+</div>
+
+<!-- HASH -->
+<div id="hash" class="section">
+<button class="back" onclick="show('home')">← VOLVER</button>
+<h2>🔐 SHA-256 HASH LAB</h2>
+<div class="panel">
+<label>Texto para convertir en hash</label>
+<textarea id="hashInput" placeholder="Escribe un texto..."></textarea>
+<button class="full" onclick="makeHash()">GENERAR SHA-256</button>
+<div id="hashOutput" class="output">Esperando texto...</div>
+</div>
+</div>
+
+<!-- WEB INSPECTOR -->
+<div id="inspector" class="section">
+<button class="back" onclick="show('home')">← VOLVER</button>
+<h2>🔎 WEB INSPECTOR</h2>
+<div class="panel">
+<p class="muted">Consulta HTTP básica. Algunos sitios bloquean consultas desde navegadores externos (CORS).</p>
+<input id="webUrl" placeholder="https://example.com">
+<button class="full" onclick="inspectWeb()">ANALIZAR URL</button>
+<div id="webOutput" class="output">WEB INSPECTOR READY...</div>
+</div>
+</div>
+
+<!-- SQL LAB -->
+<div id="sql" class="section">
+<button class="back" onclick="show('home')">← VOLVER</button>
+<h2>🗄️ SQL INJECTION LAB</h2>
+<div class="panel">
+<p class="muted">Analizador de patrones. No se conecta a bases de datos.</p>
+<textarea id="sqlInput" placeholder="Introduce una cadena para analizar..."></textarea>
+<button class="full" onclick="analyzeSQL()">ANALIZAR ENTRADA</button>
+<div id="sqlOutput" class="output">SQL LAB READY...</div>
+</div>
+</div>
+
+<!-- XSS LAB -->
+<div id="xss" class="section">
+<button class="back" onclick="show('home')">← VOLVER</button>
+<h2>🧪 XSS PLAYGROUND</h2>
+<div class="panel">
+<p class="muted">Detecta patrones comunes y muestra el texto escapado de forma segura.</p>
+<textarea id="xssInput" placeholder="Escribe una entrada de prueba..."></textarea>
+<button class="full" onclick="analyzeXSS()">ANALIZAR XSS</button>
+<div id="xssOutput" class="output">XSS LAB READY...</div>
+</div>
+</div>
+
+<!-- ATTACK SIMULATOR -->
+<div id="attack" class="section">
+<button class="back" onclick="show('home')">← VOLVER</button>
+<h2>🛡️ ATTACK SIMULATOR</h2>
+<div class="panel">
+<p class="muted">Escenarios ficticios para comprender conceptos de ciberseguridad.</p>
+<select id="scenario">
+<option value="phishing">Simulación de phishing</option>
+<option value="brute">Intentos de contraseña</option>
+<option value="firewall">Prueba de firewall</option>
+<option value="web">Auditoría web educativa</option>
+</select>
+<button class="full" onclick="runScenario()">INICIAR SIMULACIÓN</button>
+<div id="attackOutput" class="output">SIMULATOR STANDBY...</div>
+</div>
+</div>
+
+<!-- APP LAUNCHER -->
+<div id="launcher" class="section">
+<button class="back" onclick="show('home')">← VOLVER</button>
+<h2>🚀 ALEX APP LAUNCHER 21.0</h2>
+<div class="panel">
+<h3>ABRIR APLICACIÓN</h3>
+<p class="muted">Escribe el nombre de una aplicación compatible con Android.</p>
+<input id="appName" placeholder="Ejemplo: Roblox, YouTube, Instagram">
+<button class="full" onclick="launchApp()">🚀 EJECUTAR APLICACIÓN</button>
+<h3>APLICACIONES RÁPIDAS</h3>
+<div class="grid">
+<button onclick="quickApp('Roblox')">ROBLOX</button>
+<button onclick="quickApp('YouTube')">YOUTUBE</button>
+<button onclick="quickApp('Instagram')">INSTAGRAM</button>
+<button onclick="quickApp('WhatsApp')">WHATSAPP</button>
+<button onclick="quickApp('Chrome')">CHROME</button>
+<button onclick="quickApp('Termux')">TERMUX</button>
+</div>
+<div id="appOutput" class="output">APP LAUNCHER READY...</div>
+</div>
+<div class="panel">
+<h3>PACKAGE ID PERSONALIZADO</h3>
+<p class="muted">Ejemplo: com.spotify.music. Android puede rechazar el intento si la aplicación no permite abrirse mediante este enlace.</p>
+<input id="packageName" placeholder="com.ejemplo.aplicacion">
+<button class="full" onclick="launchPackage()">ABRIR POR PACKAGE ID</button>
+</div>
+</div>
+
+<!-- REPORT -->
+<div id="report" class="section">
+<button class="back" onclick="show('home')">← VOLVER</button>
+<h2>📄 SECURITY REPORT</h2>
+<div class="panel">
+<p class="muted">Genera un informe de las pruebas realizadas en esta sesión.</p>
+<button class="full" onclick="generateReport()">GENERAR INFORME TXT</button>
+<div id="reportOutput" class="output">REPORT SYSTEM READY...</div>
+</div>
+</div>
+
+<footer>
+ALEX-LINUX-LAB 21.0<br>
+EDUCATIONAL CYBERSECURITY ENVIRONMENT
+</footer>
+</main>
+
+<script>
+"use strict";
+
+const $ = id => document.getElementById(id);
+const logs = [];
+const historyCommands = [];
+let currentSection = "home";
+
+function show(id){
+  document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+  if($(id)){
+    $(id).classList.add("active");
+    currentSection=id;
+  }
+}
+function log(message){
+  logs.push(new Date().toLocaleString()+" | "+message);
+}
+function clock(){
+  $("clock").textContent=new Date().toLocaleString()+" | SYSTEM ONLINE";
+}
+setInterval(clock,1000);
+clock();
+
+/* TERMINAL VIRTUAL */
+const terminalFS={
+  "/":{dir:true},
+  "/home":{dir:true},
+  "/home/alex":{dir:true},
+  "/home/alex/Documentos":{dir:true},
+  "/home/alex/Descargas":{dir:true},
+  "/home/alex/Escritorio":{dir:true},
+  "/home/alex/Documentos/nota.txt":{content:"Bienvenido a ALEX-LINUX-LAB 21.0"}
+};
+let cwd="/home/alex";
+let blockedPorts=[];
+let virtualPermissions={};
+
+function termOut(value){
+  const line=document.createElement("div");
+  line.className="line";
+  line.textContent=String(value??"");
+  $("termOutput").appendChild(line);
+  $("termOutput").scrollTop=$("termOutput").scrollHeight;
+}
+function norm(path){
+  if(!path)return cwd;
+  const parts=(path.startsWith("/")?path:cwd+"/"+path).split("/");
+  const result=[];
+  parts.forEach(p=>{
+    if(p==="..")result.pop();
+    else if(p&&p!==".")result.push(p);
+  });
+  return "/"+result.join("/");
+}
+function exists(path){return Object.prototype.hasOwnProperty.call(terminalFS,norm(path));}
+function children(path){
+  return Object.keys(terminalFS).filter(x=>x!==path&&x.substring(0,x.lastIndexOf("/"))===path);
+}
+function quickCmd(cmd){$("command").value=cmd;runCommand();}
+function runCommand(){
+  const raw=$("command").value.trim();
+  $("command").value="";
+  executeCommand(raw);
+}
+$("command").addEventListener("keydown",e=>{if(e.key==="Enter")runCommand();});
+
+async function executeCommand(raw){
+  if(!raw)return;
+  termOut("alex@lab:"+cwd+"$ "+raw);
+  historyCommands.push(raw);
+  log("Terminal: "+raw);
+  const parts=raw.match(/"[^"]*"|\S+/g)||[];
+  const cmd=(parts.shift()||"").toLowerCase();
+  const a=parts.map(x=>x.replace(/^"|"$/g,""));
+  const path=norm(a[0]||"");
+  switch(cmd){
+    case "help":
+    case "man":
+      termOut("COMANDOS DISPONIBLES:");
+      termOut("help, clear, pwd, whoami, id, hostname, uname, date");
+      termOut("ls, cd, mkdir, touch, cat, write, append, rm, rmdir");
+      termOut("cp, mv, chmod, tree, security, ports, nmap");
+      termOut("firewall, hash, logs, history, echo, ps, top, free, df");
+      termOut("ip, ping, calc, seq, neofetch, hack");
+      break;
+    case "clear":$("termOutput").textContent="";break;
+    case "pwd":termOut(cwd);break;
+    case "whoami":termOut("alex");break;
+    case "id":termOut("uid=1000(alex) gid=1000(alex)");break;
+    case "hostname":termOut("alex-linux-lab");break;
+    case "uname":termOut("Linux alex-linux-lab 21.0 virtual aarch64");break;
+    case "date":termOut(new Date().toString());break;
+    case "ls":
+      children(cwd).forEach(x=>termOut(x.slice(x.lastIndexOf("/")+1)+(terminalFS[x].dir?"/":"")));
+      break;
+    case "cd":
+      if(!a[0])cwd="/home/alex";
+      else if(exists(path)&&terminalFS[path].dir)cwd=path;
+      else termOut("cd: directorio no encontrado");
+      break;
+    case "mkdir":
+      if(!a[0])termOut("Uso: mkdir nombre");
+      else if(exists(path))termOut("Ya existe");
+      else{terminalFS[path]={dir:true};termOut("Directorio creado");}
+      break;
+    case "touch":
+      if(!a[0])termOut("Uso: touch archivo");
+      else if(exists(path))termOut("Ya existe");
+      else{terminalFS[path]={content:""};termOut("Archivo creado");}
+      break;
+    case "cat":
+      if(exists(path)&&!terminalFS[path].dir)termOut(terminalFS[path].content);
+      else termOut("Archivo no encontrado");
+      break;
+    case "write":
+      if(!a[0]||!exists(path)||terminalFS[path].dir)termOut("Uso: write archivo texto");
+      else{terminalFS[path].content=a.slice(1).join(" ");termOut("Contenido guardado");}
+      break;
+    case "append":
+      if(!a[0]||!exists(path)||terminalFS[path].dir)termOut("Uso: append archivo texto");
+      else{terminalFS[path].content+="\n"+a.slice(1).join(" ");termOut("Contenido añadido");}
+      break;
+    case "rm":
+      if(exists(path)&&!terminalFS[path].dir){delete terminalFS[path];termOut("Archivo eliminado");}
+      else termOut("Archivo no encontrado");
+      break;
+    case "rmdir":
+      if(exists(path)&&terminalFS[path].dir&&!children(path).length){delete terminalFS[path];termOut("Directorio eliminado");}
+      else termOut("Directorio inexistente o no vacío");
+      break;
+    case "tree":
+      Object.keys(terminalFS).forEach(x=>termOut(x));
+      break;
+    case "cp":{
+      const dest=norm(a[1]);
+      if(exists(path)&&!terminalFS[path].dir&&a[1]&&!exists(dest)){terminalFS[dest]={...terminalFS[path]};termOut("Archivo copiado");}
+      else termOut("Uso: cp origen destino");
+      break;
+    }
+    case "mv":{
+      const dest=norm(a[1]);
+      if(exists(path)&&a[1]&&!exists(dest)){terminalFS[dest]=terminalFS[path];delete terminalFS[path];termOut("Elemento movido");}
+      else termOut("No se pudo mover");
+      break;
+    }
+    case "chmod":
+      if(!a[0]||!a[1]||!exists(norm(a[1])))termOut("Uso: chmod 755 archivo");
+      else{virtualPermissions[norm(a[1])]=a[0];termOut("Permisos virtuales actualizados");}
+      break;
+    case "security":{
+      const risky=Object.keys(virtualPermissions).filter(x=>virtualPermissions[x]==="777");
+      termOut("AUDITORÍA VIRTUAL DE PERMISOS");
+      termOut("Archivos con permisos 777: "+risky.length);
+      risky.forEach(x=>termOut("[!] "+x));
+      termOut(risky.length?"Revisar permisos.":"No se detectaron permisos 777.");
+      break;
+    }
+    case "ports":
+    case "nmap":
+      termOut("ESCANEO FICTICIO DE lab.local");
+      [21,22,23,80,443,3306].forEach(p=>termOut(p+"/tcp "+(blockedPorts.includes(p)?"filtered":[21,22,80,443].includes(p)?"open":"closed")));
+      termOut("No se realizaron conexiones de red.");
+      break;
+    case "firewall":
+      if(a[0]==="status")termOut("Puertos bloqueados: "+(blockedPorts.join(", ")||"ninguno"));
+      else if(a[0]==="block"&&Number(a[1])>0){
+        if(!blockedPorts.includes(Number(a[1])))blockedPorts.push(Number(a[1]));
+        termOut("Puerto bloqueado en simulación");
+      }else if(a[0]==="allow"){
+        blockedPorts=blockedPorts.filter(x=>x!==Number(a[1]));
+        termOut("Regla retirada");
+      }else termOut("Uso: firewall status | block 22 | allow 22");
+      break;
+    case "hash":{
+      const value=a.join(" ");
+      if(!value){termOut("Uso: hash texto");break;}
+      try{
+        const digest=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(value));
+        termOut(Array.from(new Uint8Array(digest)).map(x=>x.toString(16).padStart(2,"0")).join(""));
+      }catch(e){termOut("Hash no disponible en este navegador");}
+      break;
+    }
+    case "logs":logs.length?logs.forEach(termOut):termOut("No hay registros");break;
+    case "history":historyCommands.forEach((x,i)=>termOut((i+1)+" "+x));break;
+    case "echo":termOut(a.join(" "));break;
+    case "ps":termOut("PID 1 SYSTEM\nPID 2 ALEX-SHELL\nPID 3 LAB-SERVICE");break;
+    case "top":termOut("CPU: 4% | RAM: 128 MB | Procesos: 3");break;
+    case "free":termOut("RAM virtual: 512 MB | Disponible: 384 MB");break;
+    case "df":termOut("Disco virtual: 2 GB | Usado: 300 MB");break;
+    case "ip":
+      if(a[0]==="addr")termOut("lo: 127.0.0.1\nlab0: 192.0.2.10 (simulada)");
+      else if(a[0]==="route")termOut("Ruta virtual de laboratorio");
+      else termOut("Uso: ip addr | ip route");
+      break;
+    case "ping":termOut("PING simulado: localhost responde en 1 ms");break;
+    case "calc":{
+      const expr=a.join("");
+      if(!expr||!/^[0-9+\-*/().% ]+$/.test(expr)){termOut("Expresión no válida");break;}
+      try{
+        const result=Function('"use strict";return ('+expr+')')();
+        termOut(Number.isFinite(result)?result:"Resultado no válido");
+      }catch(e){termOut("Error de cálculo");}
+      break;
+    }
+    case "seq":{
+      const n=Number(a[0]);
+      if(!Number.isInteger(n)||n<1||n>100){termOut("Uso: seq 1-100");break;}
+      for(let i=1;i<=n;i++)termOut(i);
+      break;
+    }
+    case "neofetch":
+      termOut("       .--.       ALEX LINUX LAB");
+      termOut("      |o_o |      OS: Virtual Linux");
+      termOut("      |:_/ |      Kernel: 21.0");
+      termOut("     //   \\\\     Shell: ALEX-SHELL");
+      termOut("    (|     | )    User: alex");
+      termOut("     `.___.`      Mode: Ethical Lab");
+      break;
+    case "hack":
+      termOut("=== ALEX ETHICAL HACKING ===");
+      termOut("[+] Objetivo ficticio: lab.local");
+      termOut("[+] Revisando servicios de demostración...");
+      [21,22,80,443].forEach(p=>termOut("Puerto "+p+": "+(blockedPorts.includes(p)?"BLOQUEADO":"ABIERTO (SIMULADO)")));
+      termOut("[+] Misión virtual terminada. Sin conexiones externas.");
+      break;
+    default:termOut("Comando desconocido: "+cmd+". Escribe help.");
+  }
+}
+termOut("ALEX-LINUX-LAB 21.0 iniciado.");
+termOut("Laboratorio virtual preparado.");
+termOut("Escribe help para ver los comandos.");
+
+/* RADAR */
+function scanRadar(){
+  const devices=[
+    ["192.168.1.1","ROUTER DEMO","GATEWAY"],
+    ["192.168.1.10","DEVICE DEMO 01","CLIENT"],
+    ["192.168.1.15","DEVICE DEMO 02","CLIENT"],
+    ["192.168.1.20","SERVER DEMO","SERVER"]
+  ];
+  $("radarOutput").textContent="INICIANDO RADAR...\n";
+  devices.forEach(d=>$("radarOutput").textContent+=
+    "[+] "+d[0]+" | "+d[1]+" | "+d[2]+"\n");
+  $("radarOutput").textContent+="\nESCANEO DE DEMOSTRACIÓN COMPLETADO.\nNo se consultó tu red real.";
+  log("Radar de demostración ejecutado");
+}
+
+
+/* NETWORK MAP */
+function drawNetwork(){
+  $("networkOutput").textContent=
+`             [ INTERNET DEMO ]
+                     |
+               [ ROUTER DEMO ]
+                /     |     \
+               /      |      \
+          [PC DEMO] [PHONE] [SERVER]
+              |       |       |
+          CLIENT 01 CLIENT 02 SERVICE
+
+MAPA VIRTUAL GENERADO
+Los dispositivos son ficticios.`;
+  log("Mapa de red virtual generado");
+}
+
+/* HASH LAB */
+async function makeHash(){
+  const value=$("hashInput").value;
+  if(!value){$("hashOutput").textContent="Introduce un texto primero.";return;}
+  try{
+    const digest=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(value));
+    const hash=Array.from(new Uint8Array(digest)).map(x=>x.toString(16).padStart(2,"0")).join("");
+    $("hashOutput").textContent="ALGORITMO: SHA-256\n\n"+hash;
+    log("Hash SHA-256 calculado");
+  }catch(e){$("hashOutput").textContent="No se pudo calcular. Comprueba que uses HTTPS.";}
+}
+
+/* WEB INSPECTOR */
+async function inspectWeb(){
+  let url=$("webUrl").value.trim();
+  if(!url){$("webOutput").textContent="Introduce una URL.";return;}
+  try{
+    const parsed=new URL(url);
+    if(!["http:","https:"].includes(parsed.protocol))throw new Error("Solo se permiten direcciones HTTP o HTTPS.");
+    $("webOutput").textContent="Consultando "+parsed.href+" ...\n";
+    const response=await fetch(parsed.href,{method:"GET"});
+    $("webOutput").textContent=
+      "URL: "+parsed.href+
+      "\nESTADO HTTP: "+response.status+
+      "\nOK: "+response.ok+
+      "\nTIPO: "+(response.headers.get("content-type")||"No disponible")+
+      "\n\nLa lectura depende de los permisos CORS del sitio.";
+    log("Web Inspector: "+parsed.hostname);
+  }catch(e){
+    $("webOutput").textContent="No se pudo completar la consulta.\n"+e.message+
+      "\n\nPuede deberse a CORS, conexión o bloqueo del servidor.";
+  }
+}
+
+/* SQL PATTERN LAB */
+function analyzeSQL(){
+  const value=$("sqlInput").value;
+  if(!value){$("sqlOutput").textContent="Introduce una cadena.";return;}
+  const patterns=[
+    {name:"Comillas SQL",re:/['"]/},
+    {name:"Operador OR",re:/\bor\b/i},
+    {name:"UNION SELECT",re:/union\s+select/i},
+    {name:"Comentario SQL",re:/--|\/\*|\*\/|#/},
+    {name:"Condición tautológica",re:/\b1\s*=\s*1\b/}
+  ];
+  const found=patterns.filter(p=>p.re.test(value));
+  $("sqlOutput").textContent=
+    "ANÁLISIS DE ENTRADA\n"+
+    "Longitud: "+value.length+" caracteres\n"+
+    "Patrones detectados: "+found.length+"\n\n"+
+    (found.length?found.map(x=>"[!] "+x.name).join("\n"):"No se detectaron patrones conocidos.")+
+    "\n\nEsto es un análisis educativo, no una prueba contra una base de datos.";
+  log("SQL Lab analizó una entrada");
+}
+
+/* XSS LAB */
+function escapeHTML(value){
+  return value.replace(/[&<>"']/g,c=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  })[c]);
+}
+function analyzeXSS(){
+  const value=$("xssInput").value;
+  if(!value){$("xssOutput").textContent="Introduce una entrada.";return;}
+  const patterns=[
+    /<script\b/i, /javascript\s*:/i, /\bonerror\s*=/i,
+    /\bonload\s*=/i, /<iframe\b/i, /<svg\b/i
+  ];
+  const count=patterns.filter(p=>p.test(value)).length;
+  $("xssOutput").textContent=
+    "ANÁLISIS XSS\n"+
+    "Patrones sospechosos: "+count+"\n"+
+    (count?"Se encontraron patrones que requieren revisión.":"No se detectaron patrones conocidos.")+
+    "\n\nVISTA ESCAPADA:\n"+escapeHTML(value)+
+    "\n\nLa entrada se muestra como texto seguro; no se ejecuta.";
+  log("XSS Lab analizó una entrada");
+}
+
+/* ATTACK SIMULATOR */
+function runScenario(){
+  const type=$("scenario").value;
+  const messages={
+    phishing:[
+      "ESCENARIO: PHISHING",
+      "[1] Se presenta un correo ficticio.",
+      "[2] Se identifican enlaces sospechosos.",
+      "[3] Se revisa el remitente.",
+      "[4] Resultado: verificar antes de hacer clic."
+    ],
+    brute:[
+      "ESCENARIO: CONTRASEÑAS",
+      "[1] Se simulan intentos ficticios.",
+      "[2] Se detecta repetición de intentos.",
+      "[3] Se recomienda MFA y límite de intentos.",
+      "No se probaron contraseñas reales."
+    ],
+    firewall:[
+      "ESCENARIO: FIREWALL",
+      "[1] Revisión de reglas ficticias.",
+      "[2] Comprobación de puertos de demostración.",
+      "[3] Recomendación: bloquear servicios innecesarios."
+    ],
+    web:[
+      "ESCENARIO: AUDITORÍA WEB",
+      "[1] Revisar HTTPS.",
+      "[2] Revisar cabeceras de seguridad.",
+      "[3] Validar entradas.",
+      "[4] Resultado: completar pruebas en un laboratorio autorizado."
+    ]
+  };
+  $("attackOutput").textContent=messages[type].join("\n");
+  log("Simulación ejecutada: "+type);
+}
+
+/* ANDROID APP LAUNCHER */
+const appDatabase={
+  "roblox":{
+    package:"com.roblox.client",
+    url:"https://www.roblox.com/"
+  },
+  "youtube":{
+    package:"com.google.android.youtube",
+    url:"https://www.youtube.com/"
+  },
+  "instagram":{
+    package:"com.instagram.android",
+    url:"https://www.instagram.com/"
+  },
+  "whatsapp":{
+    package:"com.whatsapp",
+    url:"https://www.whatsapp.com/"
+  },
+  "chrome":{
+    package:"com.android.chrome",
+    url:"https://www.google.com/"
+  },
+  "termux":{
+    package:"com.termux",
+    url:"https://termux.dev/"
+  }
+};
+function quickApp(name){
+  $("appName").value=name;
+  launchApp();
+}
+function launchApp(){
+  const original=$("appName").value.trim();
+  const name=original.toLowerCase();
+  const output=$("appOutput");
+  if(!name){output.textContent="ERROR: ESCRIBE UNA APLICACIÓN.";return;}
+  const app=appDatabase[name];
+  if(!app){
+    output.textContent=
+      "APLICACIÓN NO REGISTRADA.\n"+
+      "Prueba con el Package ID en el campo inferior.\n\n"+
+      "IMPORTANTE: una página web no puede descubrir todas las aplicaciones instaladas.";
+    return;
+  }
+  output.textContent=
+    "ALEX APP LAUNCHER 21.0\n"+
+    "Aplicación: "+original+"\n"+
+    "Package: "+app.package+"\n"+
+    "Intentando abrir en Android...";
+  log("APP LAUNCHER: "+name);
+  const intent="intent://"+app.url.replace(/^https?:\/\//,"")+
+    "#Intent;scheme=https;package="+app.package+
+    ";S.browser_fallback_url="+encodeURIComponent(app.url)+";end";
+  window.location.href=intent;
+}
+function launchPackage(){
+  const pkg=$("packageName").value.trim();
+  const output=$("appOutput");
+  if(!/^[a-zA-Z0-9_]+(\.[a-zA-Z0-9_]+)+$/.test(pkg)){
+    output.textContent="ERROR: PACKAGE ID NO VÁLIDO.";
+    return;
+  }
+  output.textContent="Intentando abrir aplicación: "+pkg;
+  log("APP LAUNCHER package: "+pkg);
+  const intent="intent:#Intent;action=android.intent.action.MAIN;"+
+    "category=android.intent.category.LAUNCHER;package="+pkg+";end";
+  window.location.href=intent;
+}
+
+/* SECURITY REPORT */
+function generateReport(){
+  const content=[
+    "ALEX-LINUX-LAB 21.0",
+    "INFORME DE SEGURIDAD EDUCATIVO",
+    "Fecha: "+new Date().toLocaleString(),
+    "",
+    "Módulos disponibles:",
+    "- Linux Virtual Terminal",
+    "- Cyber Radar (simulado)",
+    "- Network Map (simulado)",
+    "- SHA-256 Hash Lab",
+    "- Web Inspector",
+    "- SQL Pattern Lab",
+    "- XSS Playground",
+    "- Attack Simulator (simulado)",
+    "- Android App Launcher",
+    "",
+    "REGISTRO DE ACTIVIDAD:",
+    ...(logs.length?logs:["Sin actividad registrada."]),
+    "",
+    "NOTA: Las simulaciones no representan ataques reales.",
+    "No se realizaron escaneos de redes ni accesos no autorizados."
+  ].join("\n");
+  const blob=new Blob([content],{type:"text/plain;charset=utf-8"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;
+  a.download="ALEX-LINUX-LAB-21-REPORT.txt";
+  a.click();
+  URL.revokeObjectURL(url);
+  $("reportOutput").textContent="INFORME GENERADO.\nALEX-LINUX-LAB-21-REPORT.txt";
+  log("Informe de seguridad generado");
+}
+</script>
+</body>
+</html>
