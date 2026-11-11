@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#050907">
-<title>ALEX-LINUX-LAB 25.0</title>
+<title>ALEX-LINUX-LAB 26.0</title>
 <style>
 :root {
   --bg:#050907;
@@ -56,7 +56,7 @@ main{padding:14px;max-width:1100px;margin:auto}
 }
 .metric strong{display:block;color:var(--green);font-size:20px}
 .metric span{font-size:11px;color:var(--muted)}
-input,textarea{
+input,textarea,select{
  width:100%;padding:12px;background:#020503;
  color:var(--green);border:1px solid var(--border);
  border-radius:5px;font-family:monospace;margin:6px 0;
@@ -64,16 +64,17 @@ input,textarea{
 textarea{min-height:90px;resize:vertical}
 #terminal{
  background:#020503;border:1px solid var(--border);
- border-radius:6px;padding:12px;height:230px;
+ border-radius:6px;padding:12px;height:260px;
  overflow:auto;color:var(--green);font-size:12px;
  white-space:pre-wrap;
 }
 .terminal-row{display:flex;gap:6px}
 .terminal-row input{flex:1;min-width:0}
-.output{color:#b5e8c8;font-size:12px;white-space:pre-wrap}
+.output{color:#b5e8c8;font-size:12px;white-space:pre-wrap;overflow-wrap:anywhere}
 .tag{color:var(--green)}
 .hidden{display:none}
 footer{text-align:center;color:var(--muted);padding:25px;font-size:11px}
+button:disabled{opacity:.5;cursor:not-allowed}
 @media(min-width:650px){
  .grid{grid-template-columns:repeat(4,1fr)}
 }
@@ -82,7 +83,7 @@ footer{text-align:center;color:var(--muted);padding:25px;font-size:11px}
 <body>
 
 <header>
-<h1> ALEX-LINUX-LAB 25.0 </h1>
+<h1>ALEX-LINUX-LAB 26.0</h1>
 <p>ADVANCED CYBER OPERATIONS CENTER</p>
 <div class="status">● SYSTEM ONLINE | LOCAL DASHBOARD</div>
 </header>
@@ -92,6 +93,8 @@ footer{text-align:center;color:var(--muted);padding:25px;font-size:11px}
 <button onclick="showPage('terminalPage')">TERMINAL</button>
 <button onclick="showPage('network')">NETWORK</button>
 <button onclick="showPage('web')">WEB SCANNER</button>
+<button onclick="showPage('ports')">PORT LAB</button>
+<button onclick="showPage('files')">FILE SYSTEM</button>
 <button onclick="showPage('hash')">FORENSICS</button>
 <button onclick="showPage('logs')">EVENT LOG</button>
 </nav>
@@ -106,16 +109,20 @@ footer{text-align:center;color:var(--muted);padding:25px;font-size:11px}
 <div class="metric"><strong id="clock">--:--:--</strong><span>HORA LOCAL</span></div>
 <div class="metric"><strong>ONLINE</strong><span>INTERFAZ</span></div>
 <div class="metric"><strong id="events">0</strong><span>EVENTOS</span></div>
-<div class="metric"><strong>25.0</strong><span>VERSION</span></div>
+<div class="metric"><strong>26.0</strong><span>VERSION</span></div>
 </div>
 </div>
+
 <div class="panel">
 <h2>OPERACIONES</h2>
 <button onclick="showPage('terminalPage')">ABRIR TERMINAL</button>
 <button onclick="showPage('network')">ANALIZAR RED</button>
 <button onclick="showPage('web')">INSPECCIONAR WEB</button>
+<button onclick="showPage('ports')">PORT LAB</button>
+<button onclick="showPage('files')">ARCHIVOS</button>
 <button onclick="showPage('hash')">ANALIZAR HASH</button>
 </div>
+
 <div class="panel">
 <h2>ACTIVIDAD RECIENTE</h2>
 <div id="recent" class="output">Sistema iniciado correctamente.</div>
@@ -125,11 +132,11 @@ footer{text-align:center;color:var(--muted);padding:25px;font-size:11px}
 <section id="terminalPage" class="hidden">
 <div class="panel">
 <h2>LINUX TERMINAL</h2>
-<div id="terminal">ALEX-LINUX-LAB 25.0
+<div id="terminal">ALEX-LINUX-LAB 26.0
 Terminal educativa iniciada.
 Escribe help para ver comandos.</div>
 <div class="terminal-row">
-<input id="command" placeholder="alex@lab:~$">
+<input id="command" placeholder="alex@lab:~$" autocomplete="off">
 <button onclick="runCommand()">EXEC</button>
 </div>
 </div>
@@ -138,7 +145,7 @@ Escribe help para ver comandos.</div>
 <section id="network" class="hidden">
 <div class="panel">
 <h2>NETWORK INTELLIGENCE</h2>
-<p>Consulta información que el navegador permite conocer sobre tu conexión.</p>
+<p>Información disponible en el navegador.</p>
 <button onclick="networkScan()">INICIAR ANÁLISIS</button>
 <div id="networkOutput" class="output"></div>
 </div>
@@ -147,11 +154,33 @@ Escribe help para ver comandos.</div>
 <section id="web" class="hidden">
 <div class="panel">
 <h2>WEB SECURITY INSPECTOR</h2>
-<p>Inspecciona sitios propios o laboratorios autorizados.</p>
+<p>Inspección HTTP de sitios propios o autorizados.</p>
 <input id="webUrl" placeholder="https://example.com">
 <button onclick="inspectWeb()">INSPECCIONAR</button>
 <div id="webOutput" class="output"></div>
-<p>Nota: las restricciones CORS del navegador pueden impedir leer información de otros dominios.</p>
+</div>
+</section>
+
+<section id="ports" class="hidden">
+<div class="panel">
+<h2>PORT SCANNER LAB</h2>
+<p>Simulador educativo de puertos. No envía tráfico a sistemas externos.</p>
+<input id="portHost" value="127.0.0.1" placeholder="127.0.0.1">
+<button onclick="scanPorts()">ESCANEAR LABORATORIO</button>
+<div id="portOutput" class="output"></div>
+</div>
+</section>
+
+<section id="files" class="hidden">
+<div class="panel">
+<h2>VIRTUAL FILE SYSTEM</h2>
+<p>Explorador de archivos simulado.</p>
+<div id="fileOutput" class="output"></div>
+<input id="fileName" placeholder="Nombre del archivo">
+<textarea id="fileContent" placeholder="Contenido del archivo"></textarea>
+<button onclick="createFile()">CREAR ARCHIVO</button>
+<button onclick="listFiles()">LISTAR ARCHIVOS</button>
+<button onclick="deleteFile()">ELIMINAR ARCHIVO</button>
 </div>
 </section>
 
@@ -176,13 +205,17 @@ Escribe help para ver comandos.</div>
 </main>
 
 <footer>
-ALEX-LINUX-LAB 25.0 | CYBER SECURITY EDUCATION
+ALEX-LINUX-LAB 26.0 | CYBER SECURITY EDUCATION
 </footer>
 
 <script>
 const $ = id => document.getElementById(id);
 let eventCount=0;
 let logs=[];
+let currentPath="/home/alex";
+let virtualFiles={
+ "/home/alex/readme.txt":"Bienvenido a ALEX-LINUX-LAB 26.0"
+};
 
 function log(message){
  const time=new Date().toLocaleTimeString();
@@ -197,6 +230,7 @@ function showPage(id){
  document.querySelectorAll("main section").forEach(s=>s.classList.add("hidden"));
  $(id).classList.remove("hidden");
  log("Módulo abierto: "+id);
+ if(id==="files")listFiles();
 }
 
 function updateClock(){
@@ -219,19 +253,50 @@ function runCommand(){
  input.value="";
  const args=cmd.split(/\s+/);
  const c=args[0].toLowerCase();
+ const rest=args.slice(1).join(" ");
 
  const commands={
  help:()=>terminalWrite(
- "COMANDOS:\nhelp\nclear\nwhoami\nuname\n date\npwd\nip-info\nscan-demo\nabout"
+ "COMANDOS DISPONIBLES:\n"+
+ "help - ayuda\nclear - limpiar\nwhoami - usuario\n"+
+ "uname - sistema\ndate - fecha\npwd - directorio\n"+
+ "ls - listar archivos\ncd - directorio virtual\n"+
+ "cat nombre - leer archivo\nmkdir nombre - crear directorio simulado\n"+
+ "ip-info - información de red\nscan-demo - laboratorio de puertos\n"+
+ "about - información del proyecto"
  ),
  whoami:()=>terminalWrite("alex"),
- uname:()=>terminalWrite("ALEX-LINUX-LAB 25.0 | Browser environment"),
+ uname:()=>terminalWrite("ALEX-LINUX-LAB 26.0 | Browser environment"),
  date:()=>terminalWrite(new Date().toString()),
- pwd:()=>terminalWrite("/home/alex"),
- "ip-info":()=>terminalWrite("Consulta NETWORK INTELLIGENCE para datos del navegador."),
- "scan-demo":()=>terminalWrite("Simulación educativa. No se ejecutaron ataques."),
- about:()=>terminalWrite("ALEX-LINUX-LAB 25.0"),
- clear:()=>{$("terminal").textContent="Terminal limpia.";}
+ pwd:()=>terminalWrite(currentPath),
+ "ip-info":()=>terminalWrite("Consulta NETWORK INTELLIGENCE para información disponible."),
+ "scan-demo":()=>terminalWrite("Simulación educativa. Abre PORT LAB para iniciar."),
+ about:()=>terminalWrite("ALEX-LINUX-LAB 26.0 | Cyber Security Education"),
+ clear:()=>{$("terminal").textContent="Terminal limpia.";},
+ ls:()=>terminalWrite(
+ Object.keys(virtualFiles)
+ .filter(f=>f.startsWith(currentPath+"/"))
+ .map(f=>f.substring(currentPath.length+1))
+ .join("\n")||"Directorio vacío."
+ ),
+ cd:()=>{
+ if(!rest||rest==="/home/alex"){
+ currentPath="/home/alex";
+ }else if(rest===".."){
+ currentPath="/home";
+ }else{
+ terminalWrite("Directorio no encontrado en este laboratorio.");
+ return;
+ }
+ terminalWrite(currentPath);
+ },
+ cat:()=>{
+ const path=currentPath+"/"+rest;
+ terminalWrite(virtualFiles[path]??"Archivo no encontrado.");
+ },
+ mkdir:()=>{
+ terminalWrite(rest?"Directorio virtual creado: "+rest:"Indica un nombre.");
+ }
  };
 
  if(commands[c])commands[c]();
@@ -248,7 +313,7 @@ function networkScan(){
  result+="Online: "+navigator.onLine+"\n";
  result+="Idioma: "+navigator.language+"\n";
  result+="Plataforma: "+navigator.platform+"\n";
- result+="Núcleos disponibles: "+(navigator.hardwareConcurrency||"No disponible")+"\n";
+ result+="Núcleos: "+(navigator.hardwareConcurrency||"No disponible")+"\n";
  result+="Pantalla: "+screen.width+" x "+screen.height+"\n";
  result+="Zona horaria: "+Intl.DateTimeFormat().resolvedOptions().timeZone+"\n";
  result+="Conexión: "+(navigator.connection?.effectiveType||"No expuesta")+"\n";
@@ -264,12 +329,13 @@ async function inspectWeb(){
  try{
   url=new URL(value);
   if(!["http:","https:"].includes(url.protocol))throw Error();
+  if(url.username||url.password)throw Error();
  }catch{
   out.textContent="Introduce una URL HTTP o HTTPS válida.";
   return;
  }
  if(url.protocol!=="https:" && location.protocol==="https:"){
-  out.textContent="Se bloqueó la solicitud HTTP desde una página HTTPS. Utiliza HTTPS.";
+  out.textContent="Se bloqueó HTTP desde una página HTTPS. Utiliza HTTPS.";
   return;
  }
  out.textContent="Inspeccionando "+url.href+" ...";
@@ -279,7 +345,7 @@ async function inspectWeb(){
   "RESPUESTA HTTP: "+response.status+"\n"+
   "URL FINAL: "+response.url+"\n"+
   "CONTENT-TYPE: "+(response.headers.get("content-type")||"No expuesto")+"\n"+
-  "RESULTADO: El navegador permitió leer la respuesta.\n"+
+  "RESULTADO: Respuesta accesible.\n"+
   "Nota: no equivale a una auditoría completa.";
   log("Inspección web completada: "+url.hostname);
  }catch(error){
@@ -291,14 +357,76 @@ async function inspectWeb(){
  }
 }
 
+function scanPorts(){
+ const host=$("portHost").value.trim();
+ const out=$("portOutput");
+ if(!/^(localhost|127\.0\.0\.1|lab\.local)$/i.test(host)){
+  out.textContent="Este laboratorio solo permite el objetivo simulado localhost, 127.0.0.1 o lab.local.";
+  return;
+ }
+ const ports=[
+ {port:21,name:"FTP",state:"CERRADO"},
+ {port:22,name:"SSH",state:"ABIERTO (SIMULADO)"},
+ {port:80,name:"HTTP",state:"ABIERTO (SIMULADO)"},
+ {port:443,name:"HTTPS",state:"ABIERTO (SIMULADO)"},
+ {port:3306,name:"MYSQL",state:"CERRADO"},
+ {port:8080,name:"HTTP-ALT",state:"CERRADO"}
+ ];
+ out.textContent="PORT SCANNER LAB\nObjetivo: "+host+
+ "\nModo: DEMOSTRACIÓN LOCAL\n\n"+
+ ports.map(p=>p.port+"/tcp "+p.name+" "+p.state).join("\n")+
+ "\n\nLos resultados son simulados, no son un escaneo real.";
+ log("Simulación de puertos ejecutada en "+host);
+}
+
+function listFiles(){
+ $("fileOutput").textContent="ARCHIVOS VIRTUALES\n"+
+ Object.keys(virtualFiles).map(path=>path+"\n"+virtualFiles[path]).join("\n\n");
+}
+
+function createFile(){
+ const name=$("fileName").value.trim();
+ const content=$("fileContent").value;
+ if(!/^[a-zA-Z0-9_.-]+$/.test(name)){
+  $("fileOutput").textContent="Nombre inválido. Utiliza letras, números, punto, guion o guion bajo.";
+  return;
+ }
+ const path=currentPath+"/"+name;
+ virtualFiles[path]=content;
+ $("fileOutput").textContent="Archivo creado: "+path;
+ log("Archivo virtual creado: "+name);
+ listFiles();
+}
+
+function deleteFile(){
+ const name=$("fileName").value.trim();
+ const path=currentPath+"/"+name;
+ if(!virtualFiles[path]){
+  $("fileOutput").textContent="Archivo no encontrado.";
+  return;
+ }
+ delete virtualFiles[path];
+ $("fileOutput").textContent="Archivo eliminado: "+path;
+ log("Archivo virtual eliminado: "+name);
+ listFiles();
+}
+
 async function calculateHash(){
  const value=$("hashInput").value;
- const data=new TextEncoder().encode(value);
- const hash=await crypto.subtle.digest("SHA-256",data);
- const result=Array.from(new Uint8Array(hash))
- .map(b=>b.toString(16).padStart(2,"0")).join("");
- $("hashOutput").textContent=result;
- log("Hash SHA-256 calculado.");
+ if(!crypto.subtle){
+  $("hashOutput").textContent="SHA-256 requiere un contexto seguro HTTPS.";
+  return;
+ }
+ try{
+  const data=new TextEncoder().encode(value);
+  const hash=await crypto.subtle.digest("SHA-256",data);
+  const result=Array.from(new Uint8Array(hash))
+   .map(b=>b.toString(16).padStart(2,"0")).join("");
+  $("hashOutput").textContent="SHA-256:\n"+result;
+  log("Hash SHA-256 calculado.");
+ }catch(e){
+  $("hashOutput").textContent="No se pudo calcular el hash.";
+ }
 }
 
 function clearLogs(){
@@ -309,7 +437,7 @@ function clearLogs(){
  $("logOutput").textContent="";
 }
 
-log("ALEX-LINUX-LAB 25.0 iniciado.");
+log("ALEX-LINUX-LAB 26.0 iniciado.");
 </script>
 </body>
 </html>
