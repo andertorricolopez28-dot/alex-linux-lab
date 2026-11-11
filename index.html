@@ -5,9 +5,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#050907">
-<title>ALEX-LINUX-LAB 26.0</title>
+<title>ALEX-LINUX-LAB 27.0</title>
+
 <style>
-:root {
+:root{
   --bg:#050907;
   --panel:#0b1510;
   --green:#00ff88;
@@ -15,429 +16,986 @@
   --text:#d7ffe8;
   --muted:#80a892;
   --border:#16452e;
+  --red:#ff5252;
+  --yellow:#ffd166;
 }
 *{box-sizing:border-box}
 body{
- margin:0;background:var(--bg);color:var(--text);
- font-family:monospace;
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:monospace;
 }
 header{
- padding:22px 16px;text-align:center;
- border-bottom:1px solid var(--border);
- background:linear-gradient(180deg,#10251a,#050907);
+  padding:22px 15px;
+  text-align:center;
+  background:linear-gradient(180deg,#10251a,#050907);
+  border-bottom:1px solid var(--border);
 }
-h1{color:var(--green);font-size:25px;margin:0}
-header p{color:var(--muted);font-size:12px}
+header h1{
+  color:var(--green);
+  margin:0;
+  font-size:25px;
+  letter-spacing:2px;
+}
+header p{color:var(--muted);font-size:11px}
 .status{color:var(--green);font-size:12px}
 nav{
- display:flex;gap:8px;overflow-x:auto;
- padding:12px;background:#080e0a;
- border-bottom:1px solid var(--border);
+  display:flex;
+  overflow-x:auto;
+  gap:7px;
+  padding:12px;
+  border-bottom:1px solid var(--border);
+  scrollbar-width:thin;
 }
 button{
- background:#10251a;color:var(--green);
- border:1px solid var(--border);
- padding:11px 14px;border-radius:6px;
- font-family:monospace;cursor:pointer;
+  background:#10251a;
+  color:var(--green);
+  border:1px solid var(--border);
+  border-radius:6px;
+  padding:10px 13px;
+  font-family:monospace;
+  cursor:pointer;
 }
 button:hover{background:#16452e}
-main{padding:14px;max-width:1100px;margin:auto}
+nav button{white-space:nowrap}
+main{max-width:1100px;margin:auto;padding:15px}
 .panel{
- background:var(--panel);border:1px solid var(--border);
- border-radius:9px;padding:15px;margin-bottom:14px;
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:9px;
+  padding:16px;
+  margin-bottom:15px;
 }
-.panel h2{font-size:15px;color:var(--green);margin-top:0}
+h2{color:var(--green);font-size:17px}
+h3{color:var(--green);font-size:14px}
+.muted{color:var(--muted);font-size:12px;line-height:1.6}
 .grid{
- display:grid;grid-template-columns:repeat(2,1fr);gap:10px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(135px,1fr));
+  gap:10px;
 }
 .metric{
- padding:14px;background:#07110b;
- border:1px solid var(--border);border-radius:7px;
+  background:#07100b;
+  border:1px solid var(--border);
+  padding:14px;
+  border-radius:7px;
 }
-.metric strong{display:block;color:var(--green);font-size:20px}
-.metric span{font-size:11px;color:var(--muted)}
+.metric strong{
+  display:block;
+  color:var(--green);
+  font-size:20px;
+  margin-top:8px;
+}
 input,textarea,select{
- width:100%;padding:12px;background:#020503;
- color:var(--green);border:1px solid var(--border);
- border-radius:5px;font-family:monospace;margin:6px 0;
+  width:100%;
+  background:#030805;
+  color:var(--green);
+  border:1px solid var(--border);
+  border-radius:6px;
+  padding:12px;
+  margin:7px 0;
+  font-family:monospace;
+  outline:none;
 }
-textarea{min-height:90px;resize:vertical}
-#terminal{
- background:#020503;border:1px solid var(--border);
- border-radius:6px;padding:12px;height:260px;
- overflow:auto;color:var(--green);font-size:12px;
- white-space:pre-wrap;
+input:focus,textarea:focus{border-color:var(--green)}
+.terminal{
+  background:#020503;
+  color:#00ff88;
+  border:1px solid var(--border);
+  border-radius:7px;
+  padding:13px;
+  min-height:230px;
+  max-height:350px;
+  overflow:auto;
+  white-space:pre-wrap;
+  line-height:1.5;
+  font-size:12px;
 }
-.terminal-row{display:flex;gap:6px}
+.terminal-row{display:flex;gap:7px}
 .terminal-row input{flex:1;min-width:0}
-.output{color:#b5e8c8;font-size:12px;white-space:pre-wrap;overflow-wrap:anywhere}
-.tag{color:var(--green)}
+.output{
+  background:#030805;
+  border:1px solid var(--border);
+  border-radius:6px;
+  padding:12px;
+  margin-top:10px;
+  color:var(--text);
+  font-size:12px;
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+  line-height:1.6;
+  min-height:35px;
+}
 .hidden{display:none}
-footer{text-align:center;color:var(--muted);padding:25px;font-size:11px}
-button:disabled{opacity:.5;cursor:not-allowed}
-@media(min-width:650px){
- .grid{grid-template-columns:repeat(4,1fr)}
+.good{color:var(--green)}
+.bad{color:var(--red)}
+.warn{color:var(--yellow)}
+.tool-button{margin:4px 3px 4px 0}
+footer{
+  text-align:center;
+  color:var(--muted);
+  padding:25px;
+  font-size:11px;
+}
+hr{border:0;border-top:1px solid var(--border);margin:15px 0}
+.tag{
+  display:inline-block;
+  color:var(--green);
+  border:1px solid var(--border);
+  padding:4px 7px;
+  border-radius:4px;
+  font-size:10px;
+  margin:3px;
+}
+.page{display:none}
+.page.active{display:block}
+@media(max-width:650px){
+  header h1{font-size:20px}
+  main{padding:10px}
+  .panel{padding:12px}
 }
 </style>
 </head>
+
 <body>
 
 <header>
-<h1>ALEX-LINUX-LAB 26.0</h1>
-<p>ADVANCED CYBER OPERATIONS CENTER</p>
-<div class="status">● SYSTEM ONLINE | LOCAL DASHBOARD</div>
+  <h1>ALEX-LINUX-LAB 27.0</h1>
+  <p>ADVANCED CYBER OPERATIONS CENTER</p>
+  <div class="status">● SYSTEM ONLINE | ETHICAL LAB MODE</div>
 </header>
 
 <nav>
-<button onclick="showPage('home')">COMMAND CENTER</button>
-<button onclick="showPage('terminalPage')">TERMINAL</button>
-<button onclick="showPage('network')">NETWORK</button>
-<button onclick="showPage('web')">WEB SCANNER</button>
-<button onclick="showPage('ports')">PORT LAB</button>
-<button onclick="showPage('files')">FILE SYSTEM</button>
-<button onclick="showPage('hash')">FORENSICS</button>
-<button onclick="showPage('logs')">EVENT LOG</button>
+  <button onclick="showPage('home')">HOME</button>
+  <button onclick="showPage('terminalPage')">TERMINAL</button>
+  <button onclick="showPage('network')">NETWORK</button>
+  <button onclick="showPage('recon')">RECON DNS</button>
+  <button onclick="showPage('web')">WEB AUDIT</button>
+  <button onclick="showPage('ports')">PORT LAB</button>
+  <button onclick="showPage('vuln')">VULN LAB</button>
+  <button onclick="showPage('filesystem')">FILES</button>
+  <button onclick="showPage('permissions')">PERMISSIONS</button>
+  <button onclick="showPage('forensics')">FORENSICS</button>
+  <button onclick="showPage('system')">SYSTEM</button>
+  <button onclick="showPage('logs')">LOGS</button>
 </nav>
 
 <main>
 
-<section id="home">
-<div class="panel">
-<h2>CYBER COMMAND CENTER</h2>
-<p>Centro de operaciones de seguridad informática.</p>
-<div class="grid">
-<div class="metric"><strong id="clock">--:--:--</strong><span>HORA LOCAL</span></div>
-<div class="metric"><strong>ONLINE</strong><span>INTERFAZ</span></div>
-<div class="metric"><strong id="events">0</strong><span>EVENTOS</span></div>
-<div class="metric"><strong>26.0</strong><span>VERSION</span></div>
-</div>
-</div>
+<!-- HOME -->
+<section id="home" class="page active">
+  <div class="panel">
+    <h2>COMMAND CENTER</h2>
+    <p class="muted">Bienvenido a ALEX-LINUX-LAB 27.0. Tu entorno de aprendizaje de Linux y ciberseguridad.</p>
+    <div class="grid">
+      <div class="metric">ESTADO<strong>ONLINE</strong></div>
+      <div class="metric">VERSIÓN<strong>27.0</strong></div>
+      <div class="metric">EVENTOS<strong id="eventCount">0</strong></div>
+      <div class="metric">HORA<strong id="clock">--:--</strong></div>
+    </div>
+  </div>
 
-<div class="panel">
-<h2>OPERACIONES</h2>
-<button onclick="showPage('terminalPage')">ABRIR TERMINAL</button>
-<button onclick="showPage('network')">ANALIZAR RED</button>
-<button onclick="showPage('web')">INSPECCIONAR WEB</button>
-<button onclick="showPage('ports')">PORT LAB</button>
-<button onclick="showPage('files')">ARCHIVOS</button>
-<button onclick="showPage('hash')">ANALIZAR HASH</button>
-</div>
+  <div class="panel">
+    <h2>OPERACIONES</h2>
+    <button class="tool-button" onclick="showPage('terminalPage')">Abrir terminal</button>
+    <button class="tool-button" onclick="showPage('recon')">Reconocimiento DNS</button>
+    <button class="tool-button" onclick="showPage('vuln')">Laboratorio de vulnerabilidades</button>
+    <button class="tool-button" onclick="showPage('forensics')">Análisis forense</button>
+  </div>
 
-<div class="panel">
-<h2>ACTIVIDAD RECIENTE</h2>
-<div id="recent" class="output">Sistema iniciado correctamente.</div>
-</div>
+  <div class="panel">
+    <h2>ACTIVIDAD RECIENTE</h2>
+    <div id="recentActivity" class="output">Sistema iniciado correctamente.</div>
+  </div>
+
+  <div class="panel">
+    <h2>REGLAS DEL LABORATORIO</h2>
+    <p class="muted">
+      Aprende, analiza y practica únicamente en tus propios sistemas,
+      máquinas virtuales o entornos autorizados. Las herramientas de esta
+      página no realizan intrusiones ni ataques reales.
+    </p>
+  </div>
 </section>
 
-<section id="terminalPage" class="hidden">
-<div class="panel">
-<h2>LINUX TERMINAL</h2>
-<div id="terminal">ALEX-LINUX-LAB 26.0
-Terminal educativa iniciada.
-Escribe help para ver comandos.</div>
-<div class="terminal-row">
-<input id="command" placeholder="alex@lab:~$" autocomplete="off">
-<button onclick="runCommand()">EXEC</button>
-</div>
-</div>
+<!-- TERMINAL -->
+<section id="terminalPage" class="page">
+  <div class="panel">
+    <h2>LINUX VIRTUAL TERMINAL</h2>
+    <p class="muted">Terminal educativa. Ejecuta comandos sobre un sistema de archivos simulado.</p>
+    <div id="terminal" class="terminal">ALEX-LINUX-LAB 27.0
+Linux Virtual Environment
+Escribe "help" para ver los comandos.
+
+alex@lab:~$</div>
+    <div class="terminal-row">
+      <input id="command" placeholder="Escribe un comando..." autocomplete="off">
+      <button onclick="runCommand()">RUN</button>
+    </div>
+  </div>
+  <div class="panel">
+    <h3>COMANDOS DISPONIBLES</h3>
+    <p class="muted">
+      help · whoami · uname · date · pwd · ls · cd · mkdir · touch ·
+      cat · echo · rm · chmod · ip-info · ps · free · history · clear
+    </p>
+  </div>
 </section>
 
-<section id="network" class="hidden">
-<div class="panel">
-<h2>NETWORK INTELLIGENCE</h2>
-<p>Información disponible en el navegador.</p>
-<button onclick="networkScan()">INICIAR ANÁLISIS</button>
-<div id="networkOutput" class="output"></div>
-</div>
+<!-- NETWORK -->
+<section id="network" class="page">
+  <div class="panel">
+    <h2>NETWORK INTELLIGENCE</h2>
+    <p class="muted">Información de red que el navegador permite consultar.</p>
+    <button onclick="networkScan()">ANALIZAR CONEXIÓN</button>
+    <div id="networkOutput" class="output">Esperando análisis...</div>
+  </div>
 </section>
 
-<section id="web" class="hidden">
-<div class="panel">
-<h2>WEB SECURITY INSPECTOR</h2>
-<p>Inspección HTTP de sitios propios o autorizados.</p>
-<input id="webUrl" placeholder="https://example.com">
-<button onclick="inspectWeb()">INSPECCIONAR</button>
-<div id="webOutput" class="output"></div>
-</div>
+<!-- RECON -->
+<section id="recon" class="page">
+  <div class="panel">
+    <h2>RECONNAISSANCE / DNS</h2>
+    <p class="muted">Consulta registros DNS públicos de un dominio. No realiza escaneo de puertos ni intenta acceder al servidor.</p>
+    <input id="dnsDomain" placeholder="Ejemplo: example.com">
+    <select id="dnsType">
+      <option value="A">A - Dirección IPv4</option>
+      <option value="AAAA">AAAA - Dirección IPv6</option>
+      <option value="MX">MX - Servidores de correo</option>
+      <option value="NS">NS - Servidores DNS</option>
+      <option value="TXT">TXT - Registros de texto</option>
+    </select>
+    <button onclick="dnsLookup()">CONSULTAR DNS</button>
+    <div id="dnsOutput" class="output">Sin consultas.</div>
+  </div>
 </section>
 
-<section id="ports" class="hidden">
-<div class="panel">
-<h2>PORT SCANNER LAB</h2>
-<p>Simulador educativo de puertos. No envía tráfico a sistemas externos.</p>
-<input id="portHost" value="127.0.0.1" placeholder="127.0.0.1">
-<button onclick="scanPorts()">ESCANEAR LABORATORIO</button>
-<div id="portOutput" class="output"></div>
-</div>
+<!-- WEB AUDIT -->
+<section id="web" class="page">
+  <div class="panel">
+    <h2>WEB SECURITY AUDIT</h2>
+    <p class="muted">Comprueba si el navegador puede acceder a una página y revisa algunas cabeceras de seguridad visibles.</p>
+    <input id="webUrl" placeholder="https://example.com">
+    <button onclick="inspectWeb()">ANALIZAR PÁGINA</button>
+    <div id="webOutput" class="output">Esperando URL...</div>
+  </div>
+  <div class="panel">
+    <h3>LIMITACIONES</h3>
+    <p class="muted">El navegador puede bloquear la consulta por CORS. Una cabecera que no se pueda leer no significa necesariamente que el sitio sea vulnerable.</p>
+  </div>
 </section>
 
-<section id="files" class="hidden">
-<div class="panel">
-<h2>VIRTUAL FILE SYSTEM</h2>
-<p>Explorador de archivos simulado.</p>
-<div id="fileOutput" class="output"></div>
-<input id="fileName" placeholder="Nombre del archivo">
-<textarea id="fileContent" placeholder="Contenido del archivo"></textarea>
-<button onclick="createFile()">CREAR ARCHIVO</button>
-<button onclick="listFiles()">LISTAR ARCHIVOS</button>
-<button onclick="deleteFile()">ELIMINAR ARCHIVO</button>
-</div>
+<!-- PORT LAB -->
+<section id="ports" class="page">
+  <div class="panel">
+    <h2>PORT SCANNER LAB</h2>
+    <p class="muted">Simulador educativo de puertos. Los resultados son ficticios y no se envían conexiones a ningún equipo.</p>
+    <input id="portTarget" value="localhost" placeholder="Objetivo del laboratorio">
+    <button onclick="portLab()">INICIAR SIMULACIÓN</button>
+    <div id="portOutput" class="output">Laboratorio preparado.</div>
+  </div>
 </section>
 
-<section id="hash" class="hidden">
-<div class="panel">
-<h2>DIGITAL FORENSICS</h2>
-<p>Calculadora SHA-256 de texto.</p>
-<textarea id="hashInput" placeholder="Introduce texto para calcular SHA-256"></textarea>
-<button onclick="calculateHash()">CALCULAR SHA-256</button>
-<div id="hashOutput" class="output"></div>
-</div>
+<!-- VULNERABILITY LAB -->
+<section id="vuln" class="page">
+  <div class="panel">
+    <h2>VULNERABILITY TRAINING LAB</h2>
+    <p class="muted">Aprende a identificar problemas comunes mediante ejemplos locales y seguros.</p>
+
+    <h3>1. XSS - ENTRADA DE TEXTO</h3>
+    <p class="muted">Introduce texto de prueba. El laboratorio lo mostrará como texto plano, sin ejecutarlo como código.</p>
+    <input id="xssInput" placeholder="Escribe texto para probar">
+    <button onclick="xssLab()">PROBAR ENTRADA</button>
+    <div id="xssOutput" class="output">Resultado seguro...</div>
+
+    <hr>
+
+    <h3>2. SQL INJECTION - CONCEPTO</h3>
+    <p class="muted">Ejemplo de una consulta insegura frente a una consulta parametrizada.</p>
+    <button onclick="sqlLab()">VER COMPARACIÓN</button>
+    <div id="sqlOutput" class="output">Pulsa para aprender.</div>
+
+    <hr>
+
+    <h3>3. SECURITY CHECKLIST</h3>
+    <button onclick="checklistLab()">VER RECOMENDACIONES</button>
+    <div id="checkOutput" class="output">Lista de seguridad pendiente.</div>
+  </div>
 </section>
 
-<section id="logs" class="hidden">
-<div class="panel">
-<h2>EVENT LOG</h2>
-<button onclick="clearLogs()">LIMPIAR REGISTRO</button>
-<div id="logOutput" class="output"></div>
-</div>
+<!-- FILE SYSTEM -->
+<section id="filesystem" class="page">
+  <div class="panel">
+    <h2>VIRTUAL FILE SYSTEM</h2>
+    <p class="muted">Explora y administra archivos ficticios del laboratorio.</p>
+    <button onclick="listFiles()">LISTAR ARCHIVOS</button>
+    <button onclick="createDemoFile()">CREAR ARCHIVO DEMO</button>
+    <button onclick="resetFS()">REINICIAR SISTEMA</button>
+    <div id="fsOutput" class="output">/home/alex</div>
+  </div>
+</section>
+
+<!-- PERMISSIONS -->
+<section id="permissions" class="page">
+  <div class="panel">
+    <h2>LINUX PERMISSIONS LAB</h2>
+    <p class="muted">Practica permisos chmod sobre archivos virtuales.</p>
+    <input id="permFile" value="/home/alex/demo.txt" placeholder="Ruta del archivo">
+    <select id="permMode">
+      <option value="644">644 - Propietario escribe y lee</option>
+      <option value="755">755 - Propietario ejecuta</option>
+      <option value="600">600 - Solo propietario</option>
+      <option value="700">700 - Privado ejecutable</option>
+      <option value="444">444 - Solo lectura</option>
+    </select>
+    <button onclick="changePermission()">APLICAR CHMOD</button>
+    <div id="permOutput" class="output">Permisos virtuales.</div>
+  </div>
+</section>
+
+<!-- FORENSICS -->
+<section id="forensics" class="page">
+  <div class="panel">
+    <h2>DIGITAL FORENSICS</h2>
+    <p class="muted">Calcula la huella SHA-256 de un archivo seleccionado. El archivo se procesa localmente en el navegador y no se sube a un servidor.</p>
+    <input id="fileInput" type="file">
+    <button onclick="analyzeFile()">CALCULAR SHA-256</button>
+    <div id="forensicOutput" class="output">Esperando archivo...</div>
+  </div>
+
+  <div class="panel">
+    <h3>HASH TEXT ANALYZER</h3>
+    <textarea id="hashInput" rows="3" placeholder="Escribe texto para calcular su SHA-256"></textarea>
+    <button onclick="calculateHash()">CALCULAR HASH</button>
+    <div id="hashOutput" class="output">Sin resultado.</div>
+  </div>
+</section>
+
+<!-- SYSTEM -->
+<section id="system" class="page">
+  <div class="panel">
+    <h2>SYSTEM MONITOR</h2>
+    <p class="muted">Datos que el navegador expone. No representa un monitor completo del sistema Android.</p>
+    <button onclick="systemMonitor()">ACTUALIZAR MONITOR</button>
+    <div id="systemOutput" class="output">Esperando lectura...</div>
+  </div>
+  <div class="panel">
+    <h3>PROCESS VIEWER</h3>
+    <p class="muted">Procesos ficticios para practicar comandos Linux. El navegador no puede enumerar los procesos reales del teléfono.</p>
+    <button onclick="showProcesses()">MOSTRAR PROCESOS DEMO</button>
+    <div id="processOutput" class="output">Sin datos.</div>
+  </div>
+</section>
+
+<!-- LOGS -->
+<section id="logs" class="page">
+  <div class="panel">
+    <h2>EVENT LOG</h2>
+    <button onclick="showLogs()">ACTUALIZAR LOGS</button>
+    <button onclick="clearLogs()">BORRAR LOGS</button>
+    <div id="logOutput" class="output">Sin eventos.</div>
+  </div>
 </section>
 
 </main>
 
 <footer>
-ALEX-LINUX-LAB 26.0 | CYBER SECURITY EDUCATION
+ALEX-LINUX-LAB 27.0<br>
+ETHICAL CYBERSECURITY TRAINING ENVIRONMENT
 </footer>
 
 <script>
+"use strict";
+
 const $ = id => document.getElementById(id);
-let eventCount=0;
-let logs=[];
-let currentPath="/home/alex";
-let virtualFiles={
- "/home/alex/readme.txt":"Bienvenido a ALEX-LINUX-LAB 26.0"
+
+let eventCount = 0;
+let logs = [];
+let historyCommands = [];
+let currentPath = "/home/alex";
+
+const virtualFS = {
+  "/": {dir:true, perms:"755"},
+  "/home": {dir:true, perms:"755"},
+  "/home/alex": {dir:true, perms:"755"},
+  "/home/alex/readme.txt": {
+    dir:false,
+    content:"Bienvenido a ALEX-LINUX-LAB 27.0",
+    perms:"644"
+  },
+  "/home/alex/demo.txt": {
+    dir:false,
+    content:"Archivo de demostración",
+    perms:"644"
+  }
 };
 
 function log(message){
- const time=new Date().toLocaleTimeString();
- logs.unshift(`[${time}] ${message}`);
- eventCount++;
- $("events").textContent=eventCount;
- $("recent").textContent=logs.slice(0,5).join("\n");
- $("logOutput").textContent=logs.join("\n");
+  const time = new Date().toLocaleTimeString();
+  logs.unshift(`[${time}] ${message}`);
+  if(logs.length > 100) logs.pop();
+  eventCount++;
+  $("eventCount").textContent = eventCount;
+  $("recentActivity").textContent = logs.slice(0,5).join("\n") || "Sin actividad";
 }
 
 function showPage(id){
- document.querySelectorAll("main section").forEach(s=>s.classList.add("hidden"));
- $(id).classList.remove("hidden");
- log("Módulo abierto: "+id);
- if(id==="files")listFiles();
+  document.querySelectorAll(".page").forEach(page=>{
+    page.classList.remove("active");
+  });
+  const page = $(id);
+  if(page) page.classList.add("active");
+  log("Sección abierta: " + id);
 }
 
 function updateClock(){
- $("clock").textContent=new Date().toLocaleTimeString();
+  $("clock").textContent = new Date().toLocaleTimeString();
 }
 setInterval(updateClock,1000);
 updateClock();
 
 function terminalWrite(text){
- const t=$("terminal");
- t.textContent+="\n"+text;
- t.scrollTop=t.scrollHeight;
+  $("terminal").textContent += "\n" + text;
+  $("terminal").scrollTop = $("terminal").scrollHeight;
+}
+
+function normalizePath(path){
+  if(!path) return currentPath;
+  let full = path.startsWith("/")
+    ? path
+    : currentPath + "/" + path;
+
+  const parts = [];
+  full.split("/").forEach(part=>{
+    if(!part || part === ".") return;
+    if(part === "..") parts.pop();
+    else parts.push(part);
+  });
+  return "/" + parts.join("/");
+}
+
+function parentPath(path){
+  if(path === "/") return "/";
+  const parts = path.split("/");
+  parts.pop();
+  return parts.join("/") || "/";
+}
+
+function childEntries(path){
+  return Object.keys(virtualFS).filter(key=>{
+    if(key === path) return false;
+    return parentPath(key) === path;
+  });
 }
 
 function runCommand(){
- const input=$("command");
- const cmd=input.value.trim();
- if(!cmd)return;
- terminalWrite("alex@lab:~$ "+cmd);
- input.value="";
- const args=cmd.split(/\s+/);
- const c=args[0].toLowerCase();
- const rest=args.slice(1).join(" ");
+  const input = $("command");
+  const raw = input.value.trim();
+  if(!raw) return;
 
- const commands={
- help:()=>terminalWrite(
- "COMANDOS DISPONIBLES:\n"+
- "help - ayuda\nclear - limpiar\nwhoami - usuario\n"+
- "uname - sistema\ndate - fecha\npwd - directorio\n"+
- "ls - listar archivos\ncd - directorio virtual\n"+
- "cat nombre - leer archivo\nmkdir nombre - crear directorio simulado\n"+
- "ip-info - información de red\nscan-demo - laboratorio de puertos\n"+
- "about - información del proyecto"
- ),
- whoami:()=>terminalWrite("alex"),
- uname:()=>terminalWrite("ALEX-LINUX-LAB 26.0 | Browser environment"),
- date:()=>terminalWrite(new Date().toString()),
- pwd:()=>terminalWrite(currentPath),
- "ip-info":()=>terminalWrite("Consulta NETWORK INTELLIGENCE para información disponible."),
- "scan-demo":()=>terminalWrite("Simulación educativa. Abre PORT LAB para iniciar."),
- about:()=>terminalWrite("ALEX-LINUX-LAB 26.0 | Cyber Security Education"),
- clear:()=>{$("terminal").textContent="Terminal limpia.";},
- ls:()=>terminalWrite(
- Object.keys(virtualFiles)
- .filter(f=>f.startsWith(currentPath+"/"))
- .map(f=>f.substring(currentPath.length+1))
- .join("\n")||"Directorio vacío."
- ),
- cd:()=>{
- if(!rest||rest==="/home/alex"){
- currentPath="/home/alex";
- }else if(rest===".."){
- currentPath="/home";
- }else{
- terminalWrite("Directorio no encontrado en este laboratorio.");
- return;
- }
- terminalWrite(currentPath);
- },
- cat:()=>{
- const path=currentPath+"/"+rest;
- terminalWrite(virtualFiles[path]??"Archivo no encontrado.");
- },
- mkdir:()=>{
- terminalWrite(rest?"Directorio virtual creado: "+rest:"Indica un nombre.");
- }
- };
+  historyCommands.push(raw);
+  terminalWrite("\nalex@lab:" + currentPath + "$ " + raw);
+  input.value = "";
 
- if(commands[c])commands[c]();
- else terminalWrite("Comando no reconocido. Escribe help.");
- log("Terminal: "+c);
+  const parts = raw.match(/"[^"]*"|'[^']*'|\S+/g) || [];
+  const cmd = parts.shift().toLowerCase();
+  const args = parts.map(x=>x.replace(/^["']|["']$/g,""));
+  const arg = args.join(" ");
+
+  let result = "";
+
+  switch(cmd){
+    case "help":
+      result =
+`Comandos disponibles:
+help       - Ayuda
+whoami     - Usuario actual
+uname      - Sistema virtual
+date       - Fecha y hora
+pwd        - Directorio actual
+ls         - Listar archivos
+cd         - Cambiar directorio
+mkdir      - Crear directorio
+touch      - Crear archivo
+cat        - Leer archivo
+echo       - Mostrar texto
+rm         - Eliminar archivo virtual
+chmod      - Cambiar permisos
+ip-info    - Información de conexión
+ps         - Procesos simulados
+free       - Memoria expuesta por navegador
+history    - Historial de comandos
+clear      - Limpiar terminal`;
+      break;
+
+    case "whoami":
+      result = "alex";
+      break;
+
+    case "uname":
+      result = "Linux alex-lab 6.0.0-virtual aarch64 GNU/Linux";
+      break;
+
+    case "date":
+      result = new Date().toString();
+      break;
+
+    case "pwd":
+      result = currentPath;
+      break;
+
+    case "ls":
+      result = childEntries(currentPath).map(path=>{
+        const item = virtualFS[path];
+        return (item.dir ? "d" : "-") + item.perms + " " + path.split("/").pop();
+      }).join("\n") || "Directorio vacío";
+      break;
+
+    case "cd":{
+      const destination = normalizePath(arg || "/home/alex");
+      if(virtualFS[destination]?.dir){
+        currentPath = destination;
+        result = "Directorio cambiado: " + currentPath;
+      }else{
+        result = "cd: directorio no encontrado";
+      }
+      break;
+    }
+
+    case "mkdir":{
+      if(!arg){result="Uso: mkdir nombre";break;}
+      const path = normalizePath(arg);
+      if(virtualFS[path]) result="El archivo ya existe.";
+      else{
+        virtualFS[path] = {dir:true,perms:"755"};
+        result="Directorio creado: " + path;
+      }
+      break;
+    }
+
+    case "touch":{
+      if(!arg){result="Uso: touch archivo";break;}
+      const path = normalizePath(arg);
+      if(virtualFS[path]) result="El archivo ya existe.";
+      else{
+        virtualFS[path] = {dir:false,content:"",perms:"644"};
+        result="Archivo creado: " + path;
+      }
+      break;
+    }
+
+    case "cat":{
+      const path = normalizePath(arg);
+      if(!arg) result="Uso: cat archivo";
+      else if(!virtualFS[path]) result="Archivo no encontrado.";
+      else if(virtualFS[path].dir) result="Es un directorio.";
+      else result=virtualFS[path].content;
+      break;
+    }
+
+    case "echo":
+      result=arg;
+      break;
+
+    case "rm":{
+      const path = normalizePath(arg);
+      if(!arg) result="Uso: rm archivo";
+      else if(!virtualFS[path]) result="Archivo no encontrado.";
+      else if(virtualFS[path].dir) result="Usa el laboratorio de directorios para administrarlo.";
+      else{
+        delete virtualFS[path];
+        result="Archivo eliminado: " + path;
+      }
+      break;
+    }
+
+    case "chmod":{
+      const mode = args[0];
+      const path = normalizePath(args[1] || "");
+      if(!/^[0-7]{3,4}$/.test(mode || "")) result="Uso: chmod 644 archivo";
+      else if(!virtualFS[path]) result="Archivo no encontrado.";
+      else{
+        virtualFS[path].perms = mode.slice(-3);
+        result="Permisos actualizados: " + mode + " " + path;
+      }
+      break;
+    }
+
+    case "ip-info":
+      result="Conexión: " + (navigator.onLine ? "ONLINE" : "OFFLINE") +
+        "\nPlataforma: " + navigator.platform +
+        "\nNota: el navegador no expone necesariamente la IP local.";
+      break;
+
+    case "ps":
+      result="PID  COMMAND\n100  alex-terminal\n101  browser-engine\n102  virtual-lab";
+      break;
+
+    case "free":
+      result="Memoria: " +
+        (navigator.deviceMemory ? navigator.deviceMemory + " GB estimados" : "No disponible") +
+        "\nDato limitado por el navegador.";
+      break;
+
+    case "history":
+      result=historyCommands.map((x,i)=>(i+1)+"  "+x).join("\n");
+      break;
+
+    case "clear":
+      $("terminal").textContent="ALEX-LINUX-LAB 27.0\nTerminal limpia.";
+      log("Terminal limpiada");
+      return;
+
+    default:
+      result="Comando no reconocido: " + cmd + "\nEscribe help.";
+  }
+
+  terminalWrite(result);
+  log("Terminal: " + raw);
 }
 
 $("command").addEventListener("keydown",e=>{
- if(e.key==="Enter")runCommand();
+  if(e.key === "Enter") runCommand();
 });
 
 function networkScan(){
- let result="NETWORK INTELLIGENCE\n";
- result+="Online: "+navigator.onLine+"\n";
- result+="Idioma: "+navigator.language+"\n";
- result+="Plataforma: "+navigator.platform+"\n";
- result+="Núcleos: "+(navigator.hardwareConcurrency||"No disponible")+"\n";
- result+="Pantalla: "+screen.width+" x "+screen.height+"\n";
- result+="Zona horaria: "+Intl.DateTimeFormat().resolvedOptions().timeZone+"\n";
- result+="Conexión: "+(navigator.connection?.effectiveType||"No expuesta")+"\n";
- result+="IP local: No accesible directamente desde el navegador.\n";
- $("networkOutput").textContent=result;
- log("Análisis local del navegador completado.");
+  const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+  const data = [
+    "ESTADO: " + (navigator.onLine ? "ONLINE" : "OFFLINE"),
+    "PLATAFORMA: " + navigator.platform,
+    "IDIOMA: " + navigator.language,
+    "NÚCLEOS EXPUESTOS: " + (navigator.hardwareConcurrency || "No disponible"),
+    "MEMORIA ESTIMADA: " + (navigator.deviceMemory || "No disponible") + " GB",
+    "PANTALLA: " + screen.width + " x " + screen.height,
+    "ZONA HORARIA: " + Intl.DateTimeFormat().resolvedOptions().timeZone,
+    "CONEXIÓN: " + (connection?.effectiveType || "No disponible"),
+    "VELOCIDAD ESTIMADA: " + (connection?.downlink || "No disponible"),
+    "",
+    "La IP local no está disponible directamente en este navegador."
+  ];
+  
+  $("networkOutput").textContent=data.join("\n");
+  log("Análisis de conexión realizado");
+}
+
+async function dnsLookup(){
+  const domain = $("dnsDomain").value.trim();
+  const type = $("dnsType").value;
+  const output = $("dnsOutput");
+
+  if(!/^(?=.{1,253}$)([a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)(\.([a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?))*$/.test(domain)){
+    output.textContent="Introduce un dominio válido, sin protocolo ni rutas.";
+    return;
+  }
+
+  output.textContent="Consultando DNS público...";
+  try{
+    const url="https://dns.google/resolve?name="+encodeURIComponent(domain)+"&type="+type;
+    const response=await fetch(url,{headers:{Accept:"application/dns-json"}});
+    if(!response.ok) throw new Error("Respuesta HTTP "+response.status);
+    const data=await response.json();
+
+    let lines=[
+      "DOMINIO: "+domain,
+      "TIPO: "+type,
+      "STATUS DNS: "+data.Status,
+      ""
+    ];
+
+    if(data.Answer?.length){
+      data.Answer.forEach(record=>{
+        lines.push("TTL: "+record.TTL);
+        lines.push("DATA: "+record.data);
+        lines.push("");
+      });
+    }else{
+      lines.push("No se encontraron respuestas para esta consulta.");
+    }
+
+    output.textContent=lines.join("\n");
+    log("Consulta DNS: "+domain+" ("+type+")");
+  }catch(error){
+    output.textContent="No se pudo completar la consulta DNS.\n"+error.message+
+      "\nComprueba tu conexión o las restricciones del navegador.";
+  }
 }
 
 async function inspectWeb(){
- const value=$("webUrl").value.trim();
- const out=$("webOutput");
- let url;
- try{
-  url=new URL(value);
-  if(!["http:","https:"].includes(url.protocol))throw Error();
-  if(url.username||url.password)throw Error();
- }catch{
-  out.textContent="Introduce una URL HTTP o HTTPS válida.";
-  return;
- }
- if(url.protocol!=="https:" && location.protocol==="https:"){
-  out.textContent="Se bloqueó HTTP desde una página HTTPS. Utiliza HTTPS.";
-  return;
- }
- out.textContent="Inspeccionando "+url.href+" ...";
- try{
-  const response=await fetch(url.href,{method:"GET",mode:"cors"});
-  out.textContent=
-  "RESPUESTA HTTP: "+response.status+"\n"+
-  "URL FINAL: "+response.url+"\n"+
-  "CONTENT-TYPE: "+(response.headers.get("content-type")||"No expuesto")+"\n"+
-  "RESULTADO: Respuesta accesible.\n"+
-  "Nota: no equivale a una auditoría completa.";
-  log("Inspección web completada: "+url.hostname);
- }catch(error){
-  out.textContent=
-  "No se pudo leer la respuesta.\n"+
-  "Posible restricción CORS, conexión o política del servidor.\n"+
-  "No significa que el sitio sea vulnerable.";
-  log("Inspección web limitada por el navegador.");
- }
+  let url=$("webUrl").value.trim();
+  const output=$("webOutput");
+
+  if(!/^https?:\/\//i.test(url)) url="https://"+url;
+
+  let parsed;
+  try{
+    parsed=new URL(url);
+  }catch(e){
+    output.textContent="URL no válida.";
+    return;
+  }
+
+  if(!["http:","https:"].includes(parsed.protocol)){
+    output.textContent="Protocolo no permitido.";
+    return;
+  }
+
+  if(parsed.protocol!=="https:"){
+    output.textContent="Se recomienda utilizar HTTPS. Esta auditoría solo consulta páginas HTTPS.";
+    return;
+  }
+
+  output.textContent="Consultando página...";
+  try{
+    const response=await fetch(parsed.href,{method:"GET",mode:"cors"});
+    const headers=[
+      "URL FINAL: "+response.url,
+      "ESTADO HTTP: "+response.status,
+      "CONTENT-TYPE: "+(response.headers.get("content-type")||"No visible"),
+      "STRICT-TRANSPORT-SECURITY: "+(response.headers.get("strict-transport-security")||"No visible"),
+      "CONTENT-SECURITY-POLICY: "+(response.headers.get("content-security-policy")||"No visible"),
+      "X-CONTENT-TYPE-OPTIONS: "+(response.headers.get("x-content-type-options")||"No visible"),
+      "X-FRAME-OPTIONS: "+(response.headers.get("x-frame-options")||"No visible"),
+      "",
+      "Nota: CORS puede impedir leer la respuesta o algunas cabeceras."
+    ];
+    output.textContent=headers.join("\n");
+    log("Auditoría web consultada: "+parsed.hostname);
+  }catch(error){
+    output.textContent="El navegador bloqueó la consulta o el servidor no permite CORS.\n"+
+      "Esto no demuestra que la página sea vulnerable.\n"+error.message;
+    log("Auditoría web limitada por el navegador");
+  }
 }
 
-function scanPorts(){
- const host=$("portHost").value.trim();
- const out=$("portOutput");
- if(!/^(localhost|127\.0\.0\.1|lab\.local)$/i.test(host)){
-  out.textContent="Este laboratorio solo permite el objetivo simulado localhost, 127.0.0.1 o lab.local.";
-  return;
- }
- const ports=[
- {port:21,name:"FTP",state:"CERRADO"},
- {port:22,name:"SSH",state:"ABIERTO (SIMULADO)"},
- {port:80,name:"HTTP",state:"ABIERTO (SIMULADO)"},
- {port:443,name:"HTTPS",state:"ABIERTO (SIMULADO)"},
- {port:3306,name:"MYSQL",state:"CERRADO"},
- {port:8080,name:"HTTP-ALT",state:"CERRADO"}
- ];
- out.textContent="PORT SCANNER LAB\nObjetivo: "+host+
- "\nModo: DEMOSTRACIÓN LOCAL\n\n"+
- ports.map(p=>p.port+"/tcp "+p.name+" "+p.state).join("\n")+
- "\n\nLos resultados son simulados, no son un escaneo real.";
- log("Simulación de puertos ejecutada en "+host);
+function portLab(){
+  const target=$("portTarget").value.trim();
+  const output=$("portOutput");
+
+  if(!target){
+    output.textContent="Escribe un nombre para el laboratorio.";
+    return;
+  }
+
+  const demoPorts=[
+    {port:21,name:"FTP",state:"CERRADO"},
+    {port:22,name:"SSH",state:"SIMULADO"},
+    {port:80,name:"HTTP",state:"SIMULADO"},
+    {port:443,name:"HTTPS",state:"SIMULADO"},
+    {port:3306,name:"MYSQL",state:"CERRADO"},
+    {port:8080,name:"HTTP-ALT",state:"SIMULADO"}
+  ];
+
+  output.textContent=
+    "PORT LAB 27.0\n"+
+    "OBJETIVO DE PRUEBA: "+target+
+    "\n\n"+demoPorts.map(p=>
+      p.port+"/tcp  "+p.name+"  "+p.state
+    ).join("\n")+
+    "\n\nRESULTADOS FICTICIOS. No se enviaron paquetes.";
+  log("Simulación de puertos ejecutada");
+}
+
+function xssLab(){
+  const input=$("xssInput").value;
+  const output=$("xssOutput");
+  output.textContent="Entrada recibida de forma segura:\n"+input+
+    "\n\nProtección aplicada: textContent. El contenido no se ejecuta como HTML o JavaScript.";
+  log("Prueba local de entrada XSS");
+}
+
+function sqlLab(){
+  $("sqlOutput").textContent=
+`EJEMPLO INSEGURO (conceptual):
+SELECT * FROM users WHERE name = 'ENTRADA';
+
+RIESGO:
+Concatenar datos del usuario puede alterar la consulta.
+
+ENFOQUE SEGURO:
+SELECT * FROM users WHERE name = ?
+
+La consulta parametrizada separa el código SQL de los datos.
+Usa siempre consultas preparadas y validación del lado del servidor.`;
+  log("Lección SQL Injection abierta");
+}
+
+function checklistLab(){
+  $("checkOutput").textContent=
+`CHECKLIST DE SEGURIDAD
+
+[ ] Usar HTTPS.
+[ ] Mantener software actualizado.
+[ ] Validar entradas del usuario.
+[ ] Utilizar consultas parametrizadas.
+[ ] Configurar autenticación segura.
+[ ] Aplicar permisos mínimos.
+[ ] Guardar copias de seguridad.
+[ ] Revisar registros de actividad.
+[ ] Proteger secretos y contraseñas.
+[ ] Configurar cabeceras de seguridad.`;
 }
 
 function listFiles(){
- $("fileOutput").textContent="ARCHIVOS VIRTUALES\n"+
- Object.keys(virtualFiles).map(path=>path+"\n"+virtualFiles[path]).join("\n\n");
+  $("fsOutput").textContent=Object.keys(virtualFS).sort().map(path=>{
+    const item=virtualFS[path];
+    return (item.dir?"[DIR] ":"[FILE] ")+path+" ("+item.perms+")";
+  }).join("\n");
+  log("Sistema de archivos listado");
 }
 
-function createFile(){
- const name=$("fileName").value.trim();
- const content=$("fileContent").value;
- if(!/^[a-zA-Z0-9_.-]+$/.test(name)){
-  $("fileOutput").textContent="Nombre inválido. Utiliza letras, números, punto, guion o guion bajo.";
-  return;
- }
- const path=currentPath+"/"+name;
- virtualFiles[path]=content;
- $("fileOutput").textContent="Archivo creado: "+path;
- log("Archivo virtual creado: "+name);
- listFiles();
+function createDemoFile(){
+  const path="/home/alex/lab_"+Date.now()+".txt";
+  virtualFS[path]={
+    dir:false,
+    content:"Archivo creado desde ALEX-LINUX-LAB 27.0",
+    perms:"644"
+  };
+  listFiles();
+  log("Archivo virtual creado");
 }
 
-function deleteFile(){
- const name=$("fileName").value.trim();
- const path=currentPath+"/"+name;
- if(!virtualFiles[path]){
-  $("fileOutput").textContent="Archivo no encontrado.";
-  return;
- }
- delete virtualFiles[path];
- $("fileOutput").textContent="Archivo eliminado: "+path;
- log("Archivo virtual eliminado: "+name);
- listFiles();
+function resetFS(){
+  Object.keys(virtualFS).forEach(key=>delete virtualFS[key]);
+  Object.assign(virtualFS,{
+    "/":{dir:true,perms:"755"},
+    "/home":{dir:true,perms:"755"},
+    "/home/alex":{dir:true,perms:"755"},
+    "/home/alex/readme.txt":{
+      dir:false,content:"Bienvenido a ALEX-LINUX-LAB 27.0",perms:"644"
+    },
+    "/home/alex/demo.txt":{
+      dir:false,content:"Archivo de demostración",perms:"644"
+    }
+  });
+  currentPath="/home/alex";
+  listFiles();
+  log("Sistema de archivos reiniciado");
+}
+
+function changePermission(){
+  const path=normalizePath($("permFile").value.trim());
+  const mode=$("permMode").value;
+
+  if(!virtualFS[path] || virtualFS[path].dir){
+    $("permOutput").textContent="No se encontró un archivo virtual con esa ruta.";
+    return;
+  }
+
+  virtualFS[path].perms=mode;
+  $("permOutput").textContent=
+    "CHMOD aplicado correctamente.\n"+
+    "Archivo: "+path+"\n"+
+    "Permisos: "+mode+"\n"+
+    "Representación: "+permissionString(mode);
+  log("Permisos virtuales modificados: "+path);
+}
+
+function permissionString(mode){
+  const symbols=["---","--x","-w-","-wx","r--","r-x","rw-","rwx"];
+  return mode.split("").map(n=>symbols[Number(n)]).join("");
 }
 
 async function calculateHash(){
- const value=$("hashInput").value;
- if(!crypto.subtle){
-  $("hashOutput").textContent="SHA-256 requiere un contexto seguro HTTPS.";
-  return;
- }
- try{
-  const data=new TextEncoder().encode(value);
-  const hash=await crypto.subtle.digest("SHA-256",data);
-  const result=Array.from(new Uint8Array(hash))
-   .map(b=>b.toString(16).padStart(2,"0")).join("");
-  $("hashOutput").textContent="SHA-256:\n"+result;
-  log("Hash SHA-256 calculado.");
- }catch(e){
-  $("hashOutput").textContent="No se pudo calcular el hash.";
- }
+  const value=$("hashInput").value;
+  if(!value){
+    $("hashOutput").textContent="Escribe un texto primero.";
+    return;
+  }
+  try{
+    const bytes=new TextEncoder().encode(value);
+    const digest=await crypto.subtle.digest("SHA-256",bytes);
+    const hash=Array.from(new Uint8Array(digest))
+      .map(b=>b.toString(16).padStart(2,"0")).join("");
+    $("hashOutput").textContent="SHA-256:\n"+hash;
+    log("Hash SHA-256 calculado");
+  }catch(error){
+    $("hashOutput").textContent="No se pudo calcular el hash. Usa una conexión segura.";
+  }
+}
+
+async function analyzeFile(){
+  const file=$("fileInput").files[0];
+  const output=$("forensicOutput");
+
+  if(!file){
+    output.textContent="Selecciona un archivo.";
+    return;
+  }
+
+  output.textContent="Analizando archivo local...";
+  try{
+    const buffer=await file.arrayBuffer();
+    const digest=await crypto.subtle.digest("SHA-256",buffer);
+    const hash=Array.from(new Uint8Array(digest))
+      .map(b=>b.toString(16).padStart(2,"0")).join("");
+
+    output.textContent=
+      "NOMBRE: "+file.name+
+      "\nTAMAÑO: "+file.size+" bytes"+
+      "\nTIPO: "+(file.type||"Desconocido")+
+      "\nMODIFICADO: "+new Date(file.lastModified).toLocaleString()+
+      "\n\nSHA-256:\n"+hash+
+      "\n\nProcesamiento local completado. No se subió el archivo.";
+    log("Huella digital calculada: "+file.name);
+  }catch(error){
+    output.textContent="Error al analizar archivo: "+error.message;
+  }
+}
+
+function systemMonitor(){
+  const memory=navigator.deviceMemory
+    ? navigator.deviceMemory+" GB estimados"
+    : "No disponible";
+
+  const cores=navigator.hardwareConcurrency || "No disponible";
+  const connection=navigator.connection?.effectiveType || "No disponible";
+
+  let performanceMemory="No expuesta por el navegador";
+  if(performance.memory){
+    performanceMemory=
+      Math.round(performance.memory.usedJSHeapSize/1048576)+" MB de memoria JS usada";
+  }
+
+  $("systemOutput").textContent=
+    "ESTADO: "+(navigator.onLine?"ONLINE":"OFFLINE")+
+    "\nNÚCLEOS LÓGICOS EXPUESTOS: "+cores+
+    "\nMEMORIA DEL DISPOSITIVO ESTIMADA: "+memory+
+    "\nMEMORIA JS: "+performanceMemory+
+    "\nCONEXIÓN: "+connection+
+    "\nUSER AGENT: "+navigator.userAgent+
+    "\n\nEstos datos no representan el uso completo de CPU o RAM de Android.";
+  log("Monitor del navegador actualizado");
+}
+
+function showProcesses(){
+  $("processOutput").textContent=
+`PID   USER   PROCESS
+100   alex   terminal-lab
+101   alex   network-module
+102   alex   browser-engine
+103   alex   forensic-tool
+104   alex   virtual-filesystem
+
+PROCESOS DE DEMOSTRACIÓN.
+No son procesos reales de Android.`;
+  log("Procesos simulados mostrados");
+}
+
+function showLogs(){
+  $("logOutput").textContent=logs.join("\n")||"Sin eventos registrados.";
 }
 
 function clearLogs(){
- logs=[];
- eventCount=0;
- $("events").textContent="0";
- $("recent").textContent="Registro limpio.";
- $("logOutput").textContent="";
+  logs=[];
+  eventCount=0;
+  $("eventCount").textContent="0";
+  $("logOutput").textContent="Registros borrados.";
+  $("recentActivity").textContent="Sin actividad.";
 }
 
-log("ALEX-LINUX-LAB 26.0 iniciado.");
+log("ALEX-LINUX-LAB 27.0 iniciado");
 </script>
+
 </body>
 </html>
