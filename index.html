@@ -4,39 +4,119 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#050907">
+<meta name="theme-color" content="#020704">
 <title>ALEX-LINUX-LAB 27.0</title>
 
 <style>
 :root{
-  --bg:#050907;
-  --panel:#0b1510;
+  --bg:#020704;
+  --panel:rgba(3,15,8,.88);
   --green:#00ff88;
   --green2:#00b96b;
   --text:#d7ffe8;
   --muted:#80a892;
-  --border:#16452e;
+  --border:#087c43;
   --red:#ff5252;
   --yellow:#ffd166;
 }
 *{box-sizing:border-box}
+html{scroll-behavior:smooth}
 body{
   margin:0;
   background:var(--bg);
   color:var(--text);
   font-family:monospace;
+  min-height:100vh;
+  overflow-x:hidden;
 }
+#matrix{
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100%;
+  z-index:-3;
+  opacity:.32;
+  pointer-events:none;
+}
+.anonymous-bg{
+  position:fixed;
+  inset:0;
+  z-index:-2;
+  pointer-events:none;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  opacity:.38;
+}
+.hood{
+  position:absolute;
+  width:min(560px,95vw);
+  height:650px;
+  top:65px;
+  background:radial-gradient(ellipse at 50% 35%,#183d29 0%,#07190e 48%,#010402 75%);
+  clip-path:polygon(50% 0,88% 18%,100% 60%,90% 100%,10% 100%,0 60%,12% 18%);
+  filter:drop-shadow(0 0 35px #00ff66);
+}
+.mask{
+  position:absolute;
+  top:115px;
+  left:50%;
+  transform:translateX(-50%);
+  width:220px;
+  height:300px;
+  border-radius:48% 48% 44% 44%;
+  background:linear-gradient(100deg,#9ab9a2,#e4eee5 35%,#829d89 70%,#d5e4d8);
+  box-shadow:0 0 45px #00ff6655,inset 0 -20px 35px #102719;
+  clip-path:polygon(8% 0,92% 0,100% 75%,50% 100%,0 75%);
+}
+.mask:before{
+  content:"";
+  position:absolute;
+  left:25px;
+  right:25px;
+  top:105px;
+  height:35px;
+  background:linear-gradient(transparent 15%,#06130b 35%,#06130b 65%,transparent 85%);
+  clip-path:polygon(0 0,45% 30%,50% 100%,55% 30%,100% 0,78% 100%,50% 70%,22% 100%);
+}
+.mask:after{
+  content:"";
+  position:absolute;
+  left:50%;
+  bottom:55px;
+  transform:translateX(-50%);
+  width:110px;
+  height:75px;
+  border-bottom:9px solid #142319;
+  border-radius:0 0 50% 50%;
+  box-shadow:0 17px 0 -5px #142319;
+}
+.eye{
+  position:absolute;
+  top:118px;
+  width:48px;
+  height:15px;
+  background:#07140b;
+  border-radius:50%;
+  z-index:2;
+}
+.eye.left{left:35px;transform:rotate(12deg)}
+.eye.right{right:35px;transform:rotate(-12deg)}
 header{
-  padding:22px 15px;
+  position:relative;
+  padding:28px 15px;
   text-align:center;
-  background:linear-gradient(180deg,#10251a,#050907);
+  background:linear-gradient(180deg,rgba(0,20,9,.92),rgba(0,5,2,.65));
   border-bottom:1px solid var(--border);
+  box-shadow:0 0 25px #00ff3322;
 }
 header h1{
   color:var(--green);
   margin:0;
   font-size:25px;
   letter-spacing:2px;
+  text-shadow:0 0 12px #00ff88;
 }
 header p{color:var(--muted);font-size:11px}
 .status{color:var(--green);font-size:12px}
@@ -46,28 +126,41 @@ nav{
   gap:7px;
   padding:12px;
   border-bottom:1px solid var(--border);
+  background:rgba(0,8,3,.91);
   scrollbar-width:thin;
+  position:relative;
 }
 button{
-  background:#10251a;
+  background:rgba(7,30,16,.92);
   color:var(--green);
   border:1px solid var(--border);
   border-radius:6px;
   padding:10px 13px;
   font-family:monospace;
   cursor:pointer;
+  transition:.2s;
 }
-button:hover{background:#16452e}
+button:hover{
+  background:#07532c;
+  box-shadow:0 0 12px #00ff8877;
+}
 nav button{white-space:nowrap}
-main{max-width:1100px;margin:auto;padding:15px}
+main{
+  max-width:1100px;
+  margin:auto;
+  padding:15px;
+  position:relative;
+}
 .panel{
   background:var(--panel);
   border:1px solid var(--border);
   border-radius:9px;
   padding:16px;
   margin-bottom:15px;
+  box-shadow:0 0 15px #00ff8810,inset 0 0 20px #00ff8808;
+  backdrop-filter:blur(5px);
 }
-h2{color:var(--green);font-size:17px}
+h2{color:var(--green);font-size:17px;text-shadow:0 0 8px #00ff6644}
 h3{color:var(--green);font-size:14px}
 .muted{color:var(--muted);font-size:12px;line-height:1.6}
 .grid{
@@ -76,7 +169,7 @@ h3{color:var(--green);font-size:14px}
   gap:10px;
 }
 .metric{
-  background:#07100b;
+  background:rgba(1,12,5,.9);
   border:1px solid var(--border);
   padding:14px;
   border-radius:7px;
@@ -86,10 +179,11 @@ h3{color:var(--green);font-size:14px}
   color:var(--green);
   font-size:20px;
   margin-top:8px;
+  text-shadow:0 0 8px #00ff8866;
 }
 input,textarea,select{
   width:100%;
-  background:#030805;
+  background:rgba(0,7,3,.96);
   color:var(--green);
   border:1px solid var(--border);
   border-radius:6px;
@@ -98,9 +192,9 @@ input,textarea,select{
   font-family:monospace;
   outline:none;
 }
-input:focus,textarea:focus{border-color:var(--green)}
+input:focus,textarea:focus{border-color:var(--green);box-shadow:0 0 9px #00ff8844}
 .terminal{
-  background:#020503;
+  background:rgba(0,4,2,.97);
   color:#00ff88;
   border:1px solid var(--border);
   border-radius:7px;
@@ -111,11 +205,12 @@ input:focus,textarea:focus{border-color:var(--green)}
   white-space:pre-wrap;
   line-height:1.5;
   font-size:12px;
+  box-shadow:inset 0 0 20px #00ff880b;
 }
 .terminal-row{display:flex;gap:7px}
 .terminal-row input{flex:1;min-width:0}
 .output{
-  background:#030805;
+  background:rgba(0,6,3,.95);
   border:1px solid var(--border);
   border-radius:6px;
   padding:12px;
@@ -137,6 +232,8 @@ footer{
   color:var(--muted);
   padding:25px;
   font-size:11px;
+  background:rgba(0,5,2,.9);
+  border-top:1px solid var(--border);
 }
 hr{border:0;border-top:1px solid var(--border);margin:15px 0}
 .tag{
@@ -149,16 +246,34 @@ hr{border:0;border-top:1px solid var(--border);margin:15px 0}
   margin:3px;
 }
 .page{display:none}
-.page.active{display:block}
+.page.active{display:block;animation:appear .25s ease}
+@keyframes appear{
+  from{opacity:0;transform:translateY(5px)}
+  to{opacity:1;transform:translateY(0)}
+}
 @media(max-width:650px){
   header h1{font-size:20px}
   main{padding:10px}
   .panel{padding:12px}
+  .hood{transform:scale(.75);transform-origin:top center}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*:before,*:after{animation:none!important;transition:none!important}
 }
 </style>
 </head>
 
 <body>
+
+<canvas id="matrix"></canvas>
+<div class="anonymous-bg" aria-hidden="true">
+  <div class="hood">
+    <div class="mask">
+      <span class="eye left"></span>
+      <span class="eye right"></span>
+    </div>
+  </div>
+</div>
 
 <header>
   <h1>ALEX-LINUX-LAB 27.0</h1>
@@ -183,7 +298,6 @@ hr{border:0;border-top:1px solid var(--border);margin:15px 0}
 
 <main>
 
-<!-- HOME -->
 <section id="home" class="page active">
   <div class="panel">
     <h2>COMMAND CENTER</h2>
@@ -211,15 +325,10 @@ hr{border:0;border-top:1px solid var(--border);margin:15px 0}
 
   <div class="panel">
     <h2>REGLAS DEL LABORATORIO</h2>
-    <p class="muted">
-      Aprende, analiza y practica únicamente en tus propios sistemas,
-      máquinas virtuales o entornos autorizados. Las herramientas de esta
-      página no realizan intrusiones ni ataques reales.
-    </p>
+    <p class="muted">Aprende, analiza y practica únicamente en tus propios sistemas, máquinas virtuales o entornos autorizados. Las herramientas de esta página no realizan intrusiones ni ataques reales.</p>
   </div>
 </section>
 
-<!-- TERMINAL -->
 <section id="terminalPage" class="page">
   <div class="panel">
     <h2>LINUX VIRTUAL TERMINAL</h2>
@@ -236,14 +345,10 @@ alex@lab:~$</div>
   </div>
   <div class="panel">
     <h3>COMANDOS DISPONIBLES</h3>
-    <p class="muted">
-      help · whoami · uname · date · pwd · ls · cd · mkdir · touch ·
-      cat · echo · rm · chmod · ip-info · ps · free · history · clear
-    </p>
+    <p class="muted">help · whoami · uname · date · pwd · ls · cd · mkdir · touch · cat · echo · rm · chmod · ip-info · ps · free · history · clear</p>
   </div>
 </section>
 
-<!-- NETWORK -->
 <section id="network" class="page">
   <div class="panel">
     <h2>NETWORK INTELLIGENCE</h2>
@@ -253,7 +358,6 @@ alex@lab:~$</div>
   </div>
 </section>
 
-<!-- RECON -->
 <section id="recon" class="page">
   <div class="panel">
     <h2>RECONNAISSANCE / DNS</h2>
@@ -271,7 +375,6 @@ alex@lab:~$</div>
   </div>
 </section>
 
-<!-- WEB AUDIT -->
 <section id="web" class="page">
   <div class="panel">
     <h2>WEB SECURITY AUDIT</h2>
@@ -286,7 +389,6 @@ alex@lab:~$</div>
   </div>
 </section>
 
-<!-- PORT LAB -->
 <section id="ports" class="page">
   <div class="panel">
     <h2>PORT SCANNER LAB</h2>
@@ -297,34 +399,30 @@ alex@lab:~$</div>
   </div>
 </section>
 
-<!-- VULNERABILITY LAB -->
 <section id="vuln" class="page">
   <div class="panel">
     <h2>VULNERABILITY TRAINING LAB</h2>
     <p class="muted">Aprende a identificar problemas comunes mediante ejemplos locales y seguros.</p>
 
     <h3>1. XSS - ENTRADA DE TEXTO</h3>
-    <p class="muted">Introduce texto de prueba. El laboratorio lo mostrará como texto plano, sin ejecutarlo como código.</p>
+    <p class="muted">El laboratorio mostrará el texto plano, sin ejecutarlo como código.</p>
     <input id="xssInput" placeholder="Escribe texto para probar">
     <button onclick="xssLab()">PROBAR ENTRADA</button>
     <div id="xssOutput" class="output">Resultado seguro...</div>
 
     <hr>
-
     <h3>2. SQL INJECTION - CONCEPTO</h3>
     <p class="muted">Ejemplo de una consulta insegura frente a una consulta parametrizada.</p>
     <button onclick="sqlLab()">VER COMPARACIÓN</button>
     <div id="sqlOutput" class="output">Pulsa para aprender.</div>
 
     <hr>
-
     <h3>3. SECURITY CHECKLIST</h3>
     <button onclick="checklistLab()">VER RECOMENDACIONES</button>
     <div id="checkOutput" class="output">Lista de seguridad pendiente.</div>
   </div>
 </section>
 
-<!-- FILE SYSTEM -->
 <section id="filesystem" class="page">
   <div class="panel">
     <h2>VIRTUAL FILE SYSTEM</h2>
@@ -336,7 +434,6 @@ alex@lab:~$</div>
   </div>
 </section>
 
-<!-- PERMISSIONS -->
 <section id="permissions" class="page">
   <div class="panel">
     <h2>LINUX PERMISSIONS LAB</h2>
@@ -354,7 +451,6 @@ alex@lab:~$</div>
   </div>
 </section>
 
-<!-- FORENSICS -->
 <section id="forensics" class="page">
   <div class="panel">
     <h2>DIGITAL FORENSICS</h2>
@@ -363,7 +459,6 @@ alex@lab:~$</div>
     <button onclick="analyzeFile()">CALCULAR SHA-256</button>
     <div id="forensicOutput" class="output">Esperando archivo...</div>
   </div>
-
   <div class="panel">
     <h3>HASH TEXT ANALYZER</h3>
     <textarea id="hashInput" rows="3" placeholder="Escribe texto para calcular su SHA-256"></textarea>
@@ -372,7 +467,6 @@ alex@lab:~$</div>
   </div>
 </section>
 
-<!-- SYSTEM -->
 <section id="system" class="page">
   <div class="panel">
     <h2>SYSTEM MONITOR</h2>
@@ -388,7 +482,6 @@ alex@lab:~$</div>
   </div>
 </section>
 
-<!-- LOGS -->
 <section id="logs" class="page">
   <div class="panel">
     <h2>EVENT LOG</h2>
@@ -416,18 +509,14 @@ let historyCommands = [];
 let currentPath = "/home/alex";
 
 const virtualFS = {
-  "/": {dir:true, perms:"755"},
-  "/home": {dir:true, perms:"755"},
-  "/home/alex": {dir:true, perms:"755"},
-  "/home/alex/readme.txt": {
-    dir:false,
-    content:"Bienvenido a ALEX-LINUX-LAB 27.0",
-    perms:"644"
+  "/":{dir:true,perms:"755"},
+  "/home":{dir:true,perms:"755"},
+  "/home/alex":{dir:true,perms:"755"},
+  "/home/alex/readme.txt":{
+    dir:false,content:"Bienvenido a ALEX-LINUX-LAB 27.0",perms:"644"
   },
-  "/home/alex/demo.txt": {
-    dir:false,
-    content:"Archivo de demostración",
-    perms:"644"
+  "/home/alex/demo.txt":{
+    dir:false,content:"Archivo de demostración",perms:"644"
   }
 };
 
@@ -462,10 +551,7 @@ function terminalWrite(text){
 
 function normalizePath(path){
   if(!path) return currentPath;
-  let full = path.startsWith("/")
-    ? path
-    : currentPath + "/" + path;
-
+  let full = path.startsWith("/") ? path : currentPath + "/" + path;
   const parts = [];
   full.split("/").forEach(part=>{
     if(!part || part === ".") return;
@@ -484,8 +570,7 @@ function parentPath(path){
 
 function childEntries(path){
   return Object.keys(virtualFS).filter(key=>{
-    if(key === path) return false;
-    return parentPath(key) === path;
+    return key !== path && parentPath(key) === path;
   });
 }
 
@@ -499,16 +584,14 @@ function runCommand(){
   input.value = "";
 
   const parts = raw.match(/"[^"]*"|'[^']*'|\S+/g) || [];
-  const cmd = parts.shift().toLowerCase();
+  const cmd = (parts.shift() || "").toLowerCase();
   const args = parts.map(x=>x.replace(/^["']|["']$/g,""));
   const arg = args.join(" ");
-
   let result = "";
 
   switch(cmd){
     case "help":
-      result =
-`Comandos disponibles:
+      result = `Comandos disponibles:
 help       - Ayuda
 whoami     - Usuario actual
 uname      - Sistema virtual
@@ -529,21 +612,10 @@ history    - Historial de comandos
 clear      - Limpiar terminal`;
       break;
 
-    case "whoami":
-      result = "alex";
-      break;
-
-    case "uname":
-      result = "Linux alex-lab 6.0.0-virtual aarch64 GNU/Linux";
-      break;
-
-    case "date":
-      result = new Date().toString();
-      break;
-
-    case "pwd":
-      result = currentPath;
-      break;
+    case "whoami": result = "alex"; break;
+    case "uname": result = "Linux alex-lab 6.0.0-virtual aarch64 GNU/Linux"; break;
+    case "date": result = new Date().toString(); break;
+    case "pwd": result = currentPath; break;
 
     case "ls":
       result = childEntries(currentPath).map(path=>{
@@ -557,9 +629,7 @@ clear      - Limpiar terminal`;
       if(virtualFS[destination]?.dir){
         currentPath = destination;
         result = "Directorio cambiado: " + currentPath;
-      }else{
-        result = "cd: directorio no encontrado";
-      }
+      }else result = "cd: directorio no encontrado";
       break;
     }
 
@@ -567,8 +637,9 @@ clear      - Limpiar terminal`;
       if(!arg){result="Uso: mkdir nombre";break;}
       const path = normalizePath(arg);
       if(virtualFS[path]) result="El archivo ya existe.";
+      else if(!virtualFS[parentPath(path)]?.dir) result="El directorio padre no existe.";
       else{
-        virtualFS[path] = {dir:true,perms:"755"};
+        virtualFS[path]={dir:true,perms:"755"};
         result="Directorio creado: " + path;
       }
       break;
@@ -578,89 +649,89 @@ clear      - Limpiar terminal`;
       if(!arg){result="Uso: touch archivo";break;}
       const path = normalizePath(arg);
       if(virtualFS[path]) result="El archivo ya existe.";
+      else if(!virtualFS[parentPath(path)]?.dir) result="El directorio padre no existe.";
       else{
-        virtualFS[path] = {dir:false,content:"",perms:"644"};
+        virtualFS[path]={dir:false,content:"",perms:"644"};
         result="Archivo creado: " + path;
       }
       break;
     }
 
     case "cat":{
-      const path = normalizePath(arg);
-      if(!arg) result="Uso: cat archivo";
-      else if(!virtualFS[path]) result="Archivo no encontrado.";
-      else if(virtualFS[path].dir) result="Es un directorio.";
-      else result=virtualFS[path].content;
-      break;
-    }
 
     case "echo":
-      result=arg;
+      result = arg;
       break;
 
-    case "rm":{
+    case "rm": {
       const path = normalizePath(arg);
-      if(!arg) result="Uso: rm archivo";
-      else if(!virtualFS[path]) result="Archivo no encontrado.";
-      else if(virtualFS[path].dir) result="Usa el laboratorio de directorios para administrarlo.";
-      else{
+      if (!arg) result = "Uso: rm archivo";
+      else if (!virtualFS[path]) result = "Archivo no encontrado.";
+      else if (virtualFS[path].dir) result = "No se pueden eliminar directorios desde este comando.";
+      else {
         delete virtualFS[path];
-        result="Archivo eliminado: " + path;
+        result = "Archivo eliminado: " + path;
       }
       break;
     }
 
-    case "chmod":{
+    case "chmod": {
       const mode = args[0];
       const path = normalizePath(args[1] || "");
-      if(!/^[0-7]{3,4}$/.test(mode || "")) result="Uso: chmod 644 archivo";
-      else if(!virtualFS[path]) result="Archivo no encontrado.";
-      else{
+      if (!/^[0-7]{3,4}$/.test(mode || "")) {
+        result = "Uso: chmod 644 archivo";
+      } else if (!virtualFS[path]) {
+        result = "Archivo no encontrado.";
+      } else {
         virtualFS[path].perms = mode.slice(-3);
-        result="Permisos actualizados: " + mode + " " + path;
+        result = "Permisos actualizados: " + mode + " " + path;
       }
       break;
     }
 
     case "ip-info":
-      result="Conexión: " + (navigator.onLine ? "ONLINE" : "OFFLINE") +
+      result = "Conexión: " + (navigator.onLine ? "ONLINE" : "OFFLINE") +
         "\nPlataforma: " + navigator.platform +
         "\nNota: el navegador no expone necesariamente la IP local.";
       break;
 
     case "ps":
-      result="PID  COMMAND\n100  alex-terminal\n101  browser-engine\n102  virtual-lab";
+      result = "PID  COMMAND\n100  alex-terminal\n101  browser-engine\n102  virtual-lab";
       break;
 
     case "free":
-      result="Memoria: " +
+      result = "Memoria: " +
         (navigator.deviceMemory ? navigator.deviceMemory + " GB estimados" : "No disponible") +
         "\nDato limitado por el navegador.";
       break;
 
     case "history":
-      result=historyCommands.map((x,i)=>(i+1)+"  "+x).join("\n");
+      result = historyCommands.map((x, i) => (i + 1) + "  " + x).join("\n");
       break;
 
     case "clear":
-      $("terminal").textContent="ALEX-LINUX-LAB 27.0\nTerminal limpia.";
+      $("terminal").textContent = "ALEX-LINUX-LAB 27.0\nTerminal limpia.";
       log("Terminal limpiada");
       return;
 
     default:
-      result="Comando no reconocido: " + cmd + "\nEscribe help.";
+      result = "Comando no reconocido: " + cmd + "\nEscribe help.";
   }
 
   terminalWrite(result);
   log("Terminal: " + raw);
 }
 
-$("command").addEventListener("keydown",e=>{
-  if(e.key === "Enter") runCommand();
+$("command").addEventListener("keydown", e => {
+  if (e.key === "Enter") runCommand();
 });
 
-function networkScan(){
-  const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+/* NETWORK */
+function networkScan() {
+  const connection = navigator.connection ||
+    navigator.mozConnection ||
+    navigator.webkitConnection;
+
   const data = [
     "ESTADO: " + (navigator.onLine ? "ONLINE" : "OFFLINE"),
     "PLATAFORMA: " + navigator.platform,
@@ -674,328 +745,380 @@ function networkScan(){
     "",
     "La IP local no está disponible directamente en este navegador."
   ];
-  
-  $("networkOutput").textContent=data.join("\n");
+
+  $("networkOutput").textContent = data.join("\n");
   log("Análisis de conexión realizado");
 }
 
-async function dnsLookup(){
+/* DNS LOOKUP */
+async function dnsLookup() {
   const domain = $("dnsDomain").value.trim();
   const type = $("dnsType").value;
-  const output = $("dnsOutput");
 
-  if(!/^(?=.{1,253}$)([a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)(\.([a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?))*$/.test(domain)){
-    output.textContent="Introduce un dominio válido, sin protocolo ni rutas.";
+  if (!domain) {
+    $("dnsOutput").textContent = "Introduce un dominio.";
     return;
   }
 
-  output.textContent="Consultando DNS público...";
-  try{
-    const url="https://dns.google/resolve?name="+encodeURIComponent(domain)+"&type="+type;
-    const response=await fetch(url,{headers:{Accept:"application/dns-json"}});
-    if(!response.ok) throw new Error("Respuesta HTTP "+response.status);
-    const data=await response.json();
+  if (!/^[a-z0-9.-]+\.[a-z]{2,}$/i.test(domain)) {
+    $("dnsOutput").textContent = "Dominio no válido.";
+    return;
+  }
 
-    let lines=[
-      "DOMINIO: "+domain,
-      "TIPO: "+type,
-      "STATUS DNS: "+data.Status,
-      ""
-    ];
+  $("dnsOutput").textContent = "Consultando registros DNS...";
 
-    if(data.Answer?.length){
-      data.Answer.forEach(record=>{
-        lines.push("TTL: "+record.TTL);
-        lines.push("DATA: "+record.data);
-        lines.push("");
-      });
-    }else{
-      lines.push("No se encontraron respuestas para esta consulta.");
+  try {
+    const url = "https://dns.google/resolve?name=" +
+      encodeURIComponent(domain) + "&type=" + encodeURIComponent(type);
+
+    const response = await fetch(url);
+    if (!response.ok) throw new Error("Error de consulta");
+
+    const data = await response.json();
+
+    if (!data.Answer || !data.Answer.length) {
+      $("dnsOutput").textContent = "No se encontraron registros de tipo " + type;
+    } else {
+      $("dnsOutput").textContent =
+        "DOMINIO: " + domain +
+        "\nTIPO: " + type +
+        "\n\n" +
+        data.Answer.map(item => item.data).join("\n");
     }
 
-    output.textContent=lines.join("\n");
-    log("Consulta DNS: "+domain+" ("+type+")");
-  }catch(error){
-    output.textContent="No se pudo completar la consulta DNS.\n"+error.message+
-      "\nComprueba tu conexión o las restricciones del navegador.";
+    log("Consulta DNS: " + domain);
+  } catch (error) {
+    $("dnsOutput").textContent =
+      "No se pudo completar la consulta DNS.\n" +
+      "Comprueba tu conexión e inténtalo nuevamente.";
   }
 }
 
-async function inspectWeb(){
-  let url=$("webUrl").value.trim();
-  const output=$("webOutput");
+/* WEB AUDIT */
+async function inspectWeb() {
+  let url = $("webUrl").value.trim();
 
-  if(!/^https?:\/\//i.test(url)) url="https://"+url;
-
-  let parsed;
-  try{
-    parsed=new URL(url);
-  }catch(e){
-    output.textContent="URL no válida.";
+  if (!url) {
+    $("webOutput").textContent = "Introduce una dirección web.";
     return;
   }
 
-  if(!["http:","https:"].includes(parsed.protocol)){
-    output.textContent="Protocolo no permitido.";
-    return;
+  if (!/^https?:\/\//i.test(url)) {
+    url = "https://" + url;
   }
 
-  if(parsed.protocol!=="https:"){
-    output.textContent="Se recomienda utilizar HTTPS. Esta auditoría solo consulta páginas HTTPS.";
-    return;
-  }
+  try {
+    const parsed = new URL(url);
 
-  output.textContent="Consultando página...";
-  try{
-    const response=await fetch(parsed.href,{method:"GET",mode:"cors"});
-    const headers=[
-      "URL FINAL: "+response.url,
-      "ESTADO HTTP: "+response.status,
-      "CONTENT-TYPE: "+(response.headers.get("content-type")||"No visible"),
-      "STRICT-TRANSPORT-SECURITY: "+(response.headers.get("strict-transport-security")||"No visible"),
-      "CONTENT-SECURITY-POLICY: "+(response.headers.get("content-security-policy")||"No visible"),
-      "X-CONTENT-TYPE-OPTIONS: "+(response.headers.get("x-content-type-options")||"No visible"),
-      "X-FRAME-OPTIONS: "+(response.headers.get("x-frame-options")||"No visible"),
-      "",
-      "Nota: CORS puede impedir leer la respuesta o algunas cabeceras."
+    if (!["http:", "https:"].includes(parsed.protocol)) {
+      throw new Error("Protocolo no permitido");
+    }
+
+    $("webOutput").textContent = "Intentando consultar " + parsed.hostname + "...";
+
+    const response = await fetch(parsed.href, {
+      method: "HEAD",
+      mode: "cors"
+    });
+
+    const headers = [
+      "content-security-policy",
+      "strict-transport-security",
+      "x-content-type-options",
+      "x-frame-options",
+      "referrer-policy"
     ];
-    output.textContent=headers.join("\n");
-    log("Auditoría web consultada: "+parsed.hostname);
-  }catch(error){
-    output.textContent="El navegador bloqueó la consulta o el servidor no permite CORS.\n"+
-      "Esto no demuestra que la página sea vulnerable.\n"+error.message;
-    log("Auditoría web limitada por el navegador");
+
+    let result = "DOMINIO: " + parsed.hostname + "\n";
+    result += "ESTADO HTTP: " + response.status + "\n\n";
+    result += "CABECERAS VISIBLES:\n";
+
+    headers.forEach(name => {
+      result += name + ": " +
+        (response.headers.get(name) || "No visible") + "\n";
+    });
+
+    $("webOutput").textContent = result;
+    log("Auditoría web consultada: " + parsed.hostname);
+
+  } catch (error) {
+    $("webOutput").textContent =
+      "No fue posible leer la página.\n" +
+      "Puede deberse a restricciones CORS del servidor.\n" +
+      "Esto no demuestra que la página sea vulnerable.";
   }
 }
 
-function portLab(){
-  const target=$("portTarget").value.trim();
-  const output=$("portOutput");
+/* PORT LAB */
+function portLab() {
+  const target = $("portTarget").value.trim() || "localhost";
 
-  if(!target){
-    output.textContent="Escribe un nombre para el laboratorio.";
-    return;
-  }
-
-  const demoPorts=[
-    {port:21,name:"FTP",state:"CERRADO"},
-    {port:22,name:"SSH",state:"SIMULADO"},
-    {port:80,name:"HTTP",state:"SIMULADO"},
-    {port:443,name:"HTTPS",state:"SIMULADO"},
-    {port:3306,name:"MYSQL",state:"CERRADO"},
-    {port:8080,name:"HTTP-ALT",state:"SIMULADO"}
+  const ports = [
+    { port: 21, service: "FTP", state: "CERRADO (DEMO)" },
+    { port: 22, service: "SSH", state: "ABIERTO (DEMO)" },
+    { port: 80, service: "HTTP", state: "ABIERTO (DEMO)" },
+    { port: 443, service: "HTTPS", state: "ABIERTO (DEMO)" },
+    { port: 3306, service: "MYSQL", state: "CERRADO (DEMO)" },
+    { port: 8080, service: "HTTP ALT", state: "CERRADO (DEMO)" }
   ];
 
-  output.textContent=
-    "PORT LAB 27.0\n"+
-    "OBJETIVO DE PRUEBA: "+target+
-    "\n\n"+demoPorts.map(p=>
-      p.port+"/tcp  "+p.name+"  "+p.state
-    ).join("\n")+
-    "\n\nRESULTADOS FICTICIOS. No se enviaron paquetes.";
+  $("portOutput").textContent =
+    "OBJETIVO DE SIMULACIÓN: " + target +
+    "\n\n" +
+    ports.map(p =>
+      "PORT " + p.port + " | " + p.service + " | " + p.state
+    ).join("\n") +
+    "\n\nSIMULACIÓN EDUCATIVA: no se enviaron conexiones reales.";
+
   log("Simulación de puertos ejecutada");
 }
 
-function xssLab(){
-  const input=$("xssInput").value;
-  const output=$("xssOutput");
-  output.textContent="Entrada recibida de forma segura:\n"+input+
-    "\n\nProtección aplicada: textContent. El contenido no se ejecuta como HTML o JavaScript.";
+/* XSS LAB */
+function xssLab() {
+  const value = $("xssInput").value;
+
+  const output = $("xssOutput");
+  output.textContent =
+    "ENTRADA RECIBIDA:\n" +
+    value +
+    "\n\nRESULTADO:\n" +
+    "El contenido se mostró como texto plano. No se ejecutó código HTML o JavaScript.";
+
   log("Prueba local de entrada XSS");
 }
 
-function sqlLab(){
-  $("sqlOutput").textContent=
-`EJEMPLO INSEGURO (conceptual):
-SELECT * FROM users WHERE name = 'ENTRADA';
+/* SQL LAB */
+function sqlLab() {
+  $("sqlOutput").textContent =
+`EJEMPLO INSEGURO:
+
+SELECT * FROM users
+WHERE name = 'ENTRADA_DEL_USUARIO';
 
 RIESGO:
-Concatenar datos del usuario puede alterar la consulta.
+Si se concatena directamente la entrada,
+puede alterarse la consulta SQL.
 
-ENFOQUE SEGURO:
-SELECT * FROM users WHERE name = ?
+FORMA RECOMENDADA:
 
-La consulta parametrizada separa el código SQL de los datos.
-Usa siempre consultas preparadas y validación del lado del servidor.`;
-  log("Lección SQL Injection abierta");
+SELECT * FROM users
+WHERE name = ?;
+
+Usa consultas parametrizadas,
+validación de entradas y permisos mínimos.`;
+
+  log("Comparación SQL mostrada");
 }
 
-function checklistLab(){
-  $("checkOutput").textContent=
-`CHECKLIST DE SEGURIDAD
+/* SECURITY CHECKLIST */
+function checklistLab() {
+  $("checkOutput").textContent =
+`LISTA DE SEGURIDAD:
 
-[ ] Usar HTTPS.
-[ ] Mantener software actualizado.
-[ ] Validar entradas del usuario.
-[ ] Utilizar consultas parametrizadas.
-[ ] Configurar autenticación segura.
-[ ] Aplicar permisos mínimos.
-[ ] Guardar copias de seguridad.
-[ ] Revisar registros de actividad.
-[ ] Proteger secretos y contraseñas.
-[ ] Configurar cabeceras de seguridad.`;
+[OK] Usar contraseñas únicas.
+[OK] Activar autenticación multifactor.
+[OK] Mantener software actualizado.
+[OK] Validar entradas del usuario.
+[OK] Usar consultas parametrizadas.
+[OK] Configurar HTTPS.
+[OK] Realizar copias de seguridad.
+[OK] Revisar permisos de archivos.
+[OK] Proteger claves y tokens.
+[OK] Registrar eventos importantes.`;
+
+  log("Checklist de seguridad consultado");
 }
 
-function listFiles(){
-  $("fsOutput").textContent=Object.keys(virtualFS).sort().map(path=>{
-    const item=virtualFS[path];
-    return (item.dir?"[DIR] ":"[FILE] ")+path+" ("+item.perms+")";
-  }).join("\n");
+/* VIRTUAL FILE SYSTEM */
+function listFiles() {
+  const entries = Object.keys(virtualFS).map(path => {
+    const item = virtualFS[path];
+    return (item.dir ? "[DIR] " : "[FILE] ") +
+      path + " | permisos: " + item.perms;
+  });
+
+  $("fsOutput").textContent = entries.join("\n");
   log("Sistema de archivos listado");
 }
 
-function createDemoFile(){
-  const path="/home/alex/lab_"+Date.now()+".txt";
-  virtualFS[path]={
-    dir:false,
-    content:"Archivo creado desde ALEX-LINUX-LAB 27.0",
-    perms:"644"
+function createDemoFile() {
+  let number = 1;
+  let path = "/home/alex/demo-" + number + ".txt";
+
+  while (virtualFS[path]) {
+    number++;
+    path = "/home/alex/demo-" + number + ".txt";
+  }
+
+  virtualFS[path] = {
+    dir: false,
+    content: "Archivo creado desde ALEX-LINUX-LAB",
+    perms: "644"
   };
-  listFiles();
+
+  $("fsOutput").textContent = "Archivo creado:\n" + path;
   log("Archivo virtual creado");
 }
 
-function resetFS(){
-  Object.keys(virtualFS).forEach(key=>delete virtualFS[key]);
-  Object.assign(virtualFS,{
-    "/":{dir:true,perms:"755"},
-    "/home":{dir:true,perms:"755"},
-    "/home/alex":{dir:true,perms:"755"},
-    "/home/alex/readme.txt":{
-      dir:false,content:"Bienvenido a ALEX-LINUX-LAB 27.0",perms:"644"
-    },
-    "/home/alex/demo.txt":{
-      dir:false,content:"Archivo de demostración",perms:"644"
+function resetFS() {
+  Object.keys(virtualFS).forEach(path => {
+    if (path !== "/" && path !== "/home" && path !== "/home/alex") {
+      delete virtualFS[path];
     }
   });
-  currentPath="/home/alex";
-  listFiles();
+
+  virtualFS["/home/alex/readme.txt"] = {
+    dir: false,
+    content: "Bienvenido a ALEX-LINUX-LAB 27.0",
+    perms: "644"
+  };
+
+  virtualFS["/home/alex/demo.txt"] = {
+    dir: false,
+    content: "Archivo de demostración",
+    perms: "644"
+  };
+
+  currentPath = "/home/alex";
+  $("fsOutput").textContent = "Sistema de archivos reiniciado.";
   log("Sistema de archivos reiniciado");
 }
 
-function changePermission(){
-  const path=normalizePath($("permFile").value.trim());
-  const mode=$("permMode").value;
+/* PERMISSIONS */
+function changePermission() {
+  const path = normalizePath($("permFile").value.trim());
+  const mode = $("permMode").value;
 
-  if(!virtualFS[path] || virtualFS[path].dir){
-    $("permOutput").textContent="No se encontró un archivo virtual con esa ruta.";
+  if (!virtualFS[path]) {
+    $("permOutput").textContent = "No existe ese archivo en el sistema virtual.";
     return;
   }
 
-  virtualFS[path].perms=mode;
-  $("permOutput").textContent=
-    "CHMOD aplicado correctamente.\n"+
-    "Archivo: "+path+"\n"+
-    "Permisos: "+mode+"\n"+
-    "Representación: "+permissionString(mode);
-  log("Permisos virtuales modificados: "+path);
+  virtualFS[path].perms = mode;
+
+  $("permOutput").textContent =
+    "CHMOD APLICADO\n" +
+    "Archivo: " + path +
+    "\nPermisos: " + mode;
+
+  log("Permisos virtuales cambiados: " + path);
 }
 
-function permissionString(mode){
-  const symbols=["---","--x","-w-","-wx","r--","r-x","rw-","rwx"];
-  return mode.split("").map(n=>symbols[Number(n)]).join("");
-}
+/* FORENSICS */
+async function analyzeFile() {
+  const file = $("fileInput").files[0];
 
-async function calculateHash(){
-  const value=$("hashInput").value;
-  if(!value){
-    $("hashOutput").textContent="Escribe un texto primero.";
-    return;
-  }
-  try{
-    const bytes=new TextEncoder().encode(value);
-    const digest=await crypto.subtle.digest("SHA-256",bytes);
-    const hash=Array.from(new Uint8Array(digest))
-      .map(b=>b.toString(16).padStart(2,"0")).join("");
-    $("hashOutput").textContent="SHA-256:\n"+hash;
-    log("Hash SHA-256 calculado");
-  }catch(error){
-    $("hashOutput").textContent="No se pudo calcular el hash. Usa una conexión segura.";
-  }
-}
-
-async function analyzeFile(){
-  const file=$("fileInput").files[0];
-  const output=$("forensicOutput");
-
-  if(!file){
-    output.textContent="Selecciona un archivo.";
+  if (!file) {
+    $("forensicOutput").textContent = "Selecciona un archivo primero.";
     return;
   }
 
-  output.textContent="Analizando archivo local...";
-  try{
-    const buffer=await file.arrayBuffer();
-    const digest=await crypto.subtle.digest("SHA-256",buffer);
-    const hash=Array.from(new Uint8Array(digest))
-      .map(b=>b.toString(16).padStart(2,"0")).join("");
+  $("forensicOutput").textContent = "Calculando SHA-256...";
 
-    output.textContent=
-      "NOMBRE: "+file.name+
-      "\nTAMAÑO: "+file.size+" bytes"+
-      "\nTIPO: "+(file.type||"Desconocido")+
-      "\nMODIFICADO: "+new Date(file.lastModified).toLocaleString()+
-      "\n\nSHA-256:\n"+hash+
-      "\n\nProcesamiento local completado. No se subió el archivo.";
-    log("Huella digital calculada: "+file.name);
-  }catch(error){
-    output.textContent="Error al analizar archivo: "+error.message;
+  try {
+    const buffer = await file.arrayBuffer();
+    const hash = await crypto.subtle.digest("SHA-256", buffer);
+
+    const hex = Array.from(new Uint8Array(hash))
+      .map(byte => byte.toString(16).padStart(2, "0"))
+      .join("");
+
+    $("forensicOutput").textContent =
+      "ARCHIVO: " + file.name +
+      "\nTAMAÑO: " + file.size + " bytes" +
+      "\nTIPO: " + (file.type || "Desconocido") +
+      "\n\nSHA-256:\n" + hex;
+
+    log("Hash de archivo calculado");
+
+  } catch (error) {
+    $("forensicOutput").textContent =
+      "No se pudo calcular el hash en este navegador.";
   }
 }
 
-function systemMonitor(){
-  const memory=navigator.deviceMemory
-    ? navigator.deviceMemory+" GB estimados"
-    : "No disponible";
+async function calculateHash() {
+  const value = $("hashInput").value;
 
-  const cores=navigator.hardwareConcurrency || "No disponible";
-  const connection=navigator.connection?.effectiveType || "No disponible";
-
-  let performanceMemory="No expuesta por el navegador";
-  if(performance.memory){
-    performanceMemory=
-      Math.round(performance.memory.usedJSHeapSize/1048576)+" MB de memoria JS usada";
+  if (!value) {
+    $("hashOutput").textContent = "Escribe un texto primero.";
+    return;
   }
 
-  $("systemOutput").textContent=
-    "ESTADO: "+(navigator.onLine?"ONLINE":"OFFLINE")+
-    "\nNÚCLEOS LÓGICOS EXPUESTOS: "+cores+
-    "\nMEMORIA DEL DISPOSITIVO ESTIMADA: "+memory+
-    "\nMEMORIA JS: "+performanceMemory+
-    "\nCONEXIÓN: "+connection+
-    "\nUSER AGENT: "+navigator.userAgent+
-    "\n\nEstos datos no representan el uso completo de CPU o RAM de Android.";
+  try {
+    const data = new TextEncoder().encode(value);
+    const hash = await crypto.subtle.digest("SHA-256", data);
+
+    const hex = Array.from(new Uint8Array(hash))
+      .map(byte => byte.toString(16).padStart(2, "0"))
+      .join("");
+
+    $("hashOutput").textContent = "SHA-256:\n" + hex;
+    log("Hash de texto calculado");
+
+  } catch (error) {
+    $("hashOutput").textContent =
+      "No se pudo calcular el hash.";
+  }
+}
+
+/* SYSTEM MONITOR */
+function systemMonitor() {
+  const connection = navigator.connection ||
+    navigator.mozConnection ||
+    navigator.webkitConnection;
+
+  $("systemOutput").textContent =
+    "ESTADO: " + (navigator.onLine ? "ONLINE" : "OFFLINE") +
+    "\nPLATAFORMA: " + navigator.platform +
+    "\nIDIOMA: " + navigator.language +
+    "\nNÚCLEOS EXPUESTOS: " + (navigator.hardwareConcurrency || "N/D") +
+    "\nMEMORIA ESTIMADA: " + (navigator.deviceMemory || "N/D") +
+    "\nCONEXIÓN: " + (connection?.effectiveType || "N/D") +
+    "\nPANTALLA: " + screen.width + " x " + screen.height +
+    "\nHORA: " + new Date().toLocaleString() +
+    "\n\nDatos limitados por el navegador.";
+
   log("Monitor del navegador actualizado");
 }
 
-function showProcesses(){
-  $("processOutput").textContent=
+function showProcesses() {
+  $("processOutput").textContent =
 `PID   USER   PROCESS
-100   alex   terminal-lab
-101   alex   network-module
-102   alex   browser-engine
-103   alex   forensic-tool
-104   alex   virtual-filesystem
+100   alex   alex-terminal
+101   alex   browser-engine
+102   alex   virtual-lab
+103   root   system-demo
 
-PROCESOS DE DEMOSTRACIÓN.
+PROCESOS SIMULADOS.
 No son procesos reales de Android.`;
-  log("Procesos simulados mostrados");
+
+  log("Procesos virtuales mostrados");
 }
 
-function showLogs(){
-  $("logOutput").textContent=logs.join("\n")||"Sin eventos registrados.";
+/* LOGS */
+function showLogs() {
+  $("logOutput").textContent =
+    logs.length ? logs.join("\n") : "Sin eventos.";
+
+  log("Registro de eventos consultado");
 }
 
-function clearLogs(){
-  logs=[];
-  eventCount=0;
-  $("eventCount").textContent="0";
-  $("logOutput").textContent="Registros borrados.";
-  $("recentActivity").textContent="Sin actividad.";
+function clearLogs() {
+  logs = [];
+  $("logOutput").textContent = "Registros borrados.";
+  $("recentActivity").textContent = "Sin actividad reciente.";
+  log("Registros reiniciados");
 }
 
+/* STARTUP */
 log("ALEX-LINUX-LAB 27.0 iniciado");
+updateClock();
 </script>
 
 </body>
 </html>
+
+   
+
+    
