@@ -1,3 +1,4 @@
+HTML
 
 <!DOCTYPE html>
 <html lang="es">
@@ -658,467 +659,423 @@ clear      - Limpiar terminal`;
     }
 
     case "cat":{
-
-    case "echo":
-      result = arg;
-      break;
-
-    case "rm": {
       const path = normalizePath(arg);
-      if (!arg) result = "Uso: rm archivo";
-      else if (!virtualFS[path]) result = "Archivo no encontrado.";
-      else if (virtualFS[path].dir) result = "No se pueden eliminar directorios desde este comando.";
-      else {
-        delete virtualFS[path];
-        result = "Archivo eliminado: " + path;
-      }
+      if(!arg) result="Uso: cat archivo";
+      else if(!virtualFS[path]) result="Archivo no encontrado.";
+      else if(virtualFS[path].dir) result="Es un directorio.";
+      else result=virtualFS[path].content;
       break;
     }
 
-    case "chmod": {
-      const mode = args[0];
-      const path = normalizePath(args[1] || "");
-      if (!/^[0-7]{3,4}$/.test(mode || "")) {
-        result = "Uso: chmod 644 archivo";
-      } else if (!virtualFS[path]) {
-        result = "Archivo no encontrado.";
-      } else {
-        virtualFS[path].perms = mode.slice(-3);
-        result = "Permisos actualizados: " + mode + " " + path;
-      }
-      break;
-    }
-
-    case "ip-info":
-      result = "Conexión: " + (navigator.onLine ? "ONLINE" : "OFFLINE") +
-        "\nPlataforma: " + navigator.platform +
-        "\nNota: el navegador no expone necesariamente la IP local.";
-      break;
-
-    case "ps":
-      result = "PID  COMMAND\n100  alex-terminal\n101  browser-engine\n102  virtual-lab";
-      break;
-
-    case "free":
-      result = "Memoria: " +
-        (navigator.deviceMemory ? navigator.deviceMemory + " GB estimados" : "No disponible") +
-        "\nDato limitado por el navegador.";
-      break;
-
-    case "history":
-      result = historyCommands.map((x, i) => (i + 1) + "  " + x).join("\n");
-      break;
-
-    case "clear":
-      $("terminal").textContent = "ALEX-LINUX-LAB 27.0\nTerminal limpia.";
-      log("Terminal limpiada");
-      return;
-
-    default:
-      result = "Comando no reconocido: " + cmd + "\nEscribe help.";
-  }
-
-  terminalWrite(result);
-  log("Terminal: " + raw);
+    
+case "echo": {
+  result = arg || "";
+  break;
 }
 
-$("command").addEventListener("keydown", e => {
-  if (e.key === "Enter") runCommand();
-});
+case "rm": {
+  const path = normalizePath(arg);
+  if(!arg) result = "Uso: rm archivo";
+  else if(!virtualFS[path]) result = "Archivo no encontrado.";
+  else if(virtualFS[path].dir) result = "No se puede eliminar un directorio con rm.";
+  else {
+    delete virtualFS[path];
+    result = "Archivo eliminado: " + path;
+  }
+  break;
+}
 
-/* NETWORK */
+case "chmod": {
+  const args = arg.split(" ");
+  if(args.length < 2) result = "Uso: chmod 755 archivo";
+  else {
+    const mode = args[0];
+    const path = normalizePath(args.slice(1).join(" "));
+    if(!virtualFS[path]) result = "Archivo no encontrado.";
+    else {
+      virtualFS[path].permissions = mode;
+      result = "Permisos actualizados: " + mode + " " + path;
+    }
+  }
+  break;
+}
+
+case "ip-info":
+  result = "INTERFAZ DE RED SIMULADA\nEstado: activa\nModo: laboratorio\nIP local: 192.168.1.100\nGateway: 192.168.1.1\nDNS: 8.8.8.8";
+  break;
+
+case "ps":
+  result = "PID     PROCESO\n101     alex-terminal\n102     network-monitor\n103     dns-service\n104     security-lab";
+  break;
+
+case "free":
+  result = "Memoria del laboratorio (simulada)\nTotal: 4096 MB\nUsada: 1536 MB\nLibre: 2560 MB";
+  break;
+
+case "history":
+  result = commandHistory.length
+    ? commandHistory.join("\n")
+    : "No hay comandos registrados.";
+  break;
+
+case "clear":
+  terminalOutput.innerHTML = "";
+  result = "";
+  break;
+
+default:
+  result = "Comando no reconocido: " + cmd + "\nEscribe help para ver los comandos.";
+}
+
+if(result !== "") {
+  termOut(result);
+}
+
+log("Comando ejecutado: " + command);
+}
+
+const terminalInput = document.getElementById("terminalInput");
+
+if(terminalInput) {
+  terminalInput.addEventListener("keydown", function(e) {
+    if(e.key === "Enter") {
+      const command = this.value.trim();
+      if(command) {
+        commandHistory.push(command);
+        termOut("$ " + command);
+        runCommand(command);
+      }
+      this.value = "";
+    }
+  });
+}
+
+// NETWORK SCAN
 function networkScan() {
-  const connection = navigator.connection ||
-    navigator.mozConnection ||
-    navigator.webkitConnection;
+  const output = document.getElementById("networkOutput");
+  if(!output) return;
 
   const data = [
-    "ESTADO: " + (navigator.onLine ? "ONLINE" : "OFFLINE"),
-    "PLATAFORMA: " + navigator.platform,
-    "IDIOMA: " + navigator.language,
-    "NÚCLEOS EXPUESTOS: " + (navigator.hardwareConcurrency || "No disponible"),
-    "MEMORIA ESTIMADA: " + (navigator.deviceMemory || "No disponible") + " GB",
-    "PANTALLA: " + screen.width + " x " + screen.height,
-    "ZONA HORARIA: " + Intl.DateTimeFormat().resolvedOptions().timeZone,
-    "CONEXIÓN: " + (connection?.effectiveType || "No disponible"),
-    "VELOCIDAD ESTIMADA: " + (connection?.downlink || "No disponible"),
-    "",
-    "La IP local no está disponible directamente en este navegador."
+    "ANÁLISIS DE CONEXIÓN",
+    "------------------------------",
+    "Estado: conexión disponible",
+    "Navegador: " + navigator.userAgent,
+    "Idioma: " + navigator.language,
+    "Plataforma: " + navigator.platform,
+    "Conexión: " + (navigator.onLine ? "En línea" : "Sin conexión"),
+    "Tipo de análisis: información pública del navegador",
+    "------------------------------",
+    "No se escanean dispositivos externos."
   ];
 
-  $("networkOutput").textContent = data.join("\n");
+  output.textContent = data.join("\n");
   log("Análisis de conexión realizado");
 }
 
-/* DNS LOOKUP */
+// DNS LOOKUP
 async function dnsLookup() {
-  const domain = $("dnsDomain").value.trim();
-  const type = $("dnsType").value;
+  const domain = document.getElementById("dnsInput")?.value.trim();
+  const output = document.getElementById("dnsOutput");
 
-  if (!domain) {
-    $("dnsOutput").textContent = "Introduce un dominio.";
+  if(!domain || !output) {
+    if(output) output.textContent = "Introduce un dominio.";
     return;
   }
 
-  if (!/^[a-z0-9.-]+\.[a-z]{2,}$/i.test(domain)) {
-    $("dnsOutput").textContent = "Dominio no válido.";
-    return;
-  }
-
-  $("dnsOutput").textContent = "Consultando registros DNS...";
+  output.textContent = "Consultando DNS...";
 
   try {
-    const url = "https://dns.google/resolve?name=" +
-      encodeURIComponent(domain) + "&type=" + encodeURIComponent(type);
-
-    const response = await fetch(url);
-    if (!response.ok) throw new Error("Error de consulta");
+    const response = await fetch(
+      "https://dns.google/resolve?name=" +
+      encodeURIComponent(domain) + "&type=A"
+    );
 
     const data = await response.json();
 
-    if (!data.Answer || !data.Answer.length) {
-      $("dnsOutput").textContent = "No se encontraron registros de tipo " + type;
+    if(data.Answer) {
+      output.textContent = data.Answer.map(item =>
+        "Nombre: " + item.name +
+        "\nTipo: " + item.type +
+        "\nResultado: " + item.data
+      ).join("\n\n");
     } else {
-      $("dnsOutput").textContent =
-        "DOMINIO: " + domain +
-        "\nTIPO: " + type +
-        "\n\n" +
-        data.Answer.map(item => item.data).join("\n");
+      output.textContent = "No se encontraron registros A.";
     }
 
-    log("Consulta DNS: " + domain);
-  } catch (error) {
-    $("dnsOutput").textContent =
-      "No se pudo completar la consulta DNS.\n" +
-      "Comprueba tu conexión e inténtalo nuevamente.";
+    log("Consulta DNS realizada: " + domain);
+  } catch(error) {
+    output.textContent = "Error en consulta DNS. Comprueba tu conexión.";
   }
 }
 
-/* WEB AUDIT */
+// WEB AUDIT
 async function inspectWeb() {
-  let url = $("webUrl").value.trim();
+  const url = document.getElementById("webInput")?.value.trim();
+  const output = document.getElementById("webOutput");
 
-  if (!url) {
-    $("webOutput").textContent = "Introduce una dirección web.";
+  if(!url || !output) {
+    if(output) output.textContent = "Introduce una URL.";
     return;
   }
 
-  if (!/^https?:\/\//i.test(url)) {
-    url = "https://" + url;
+  let target = url;
+  if(!/^https?:\/\//i.test(target)) {
+    target = "https://" + target;
   }
 
+  output.textContent = "Analizando disponibilidad...";
+
   try {
-    const parsed = new URL(url);
-
-    if (!["http:", "https:"].includes(parsed.protocol)) {
-      throw new Error("Protocolo no permitido");
-    }
-
-    $("webOutput").textContent = "Intentando consultar " + parsed.hostname + "...";
-
-    const response = await fetch(parsed.href, {
+    const response = await fetch(target, {
       method: "HEAD",
       mode: "cors"
     });
 
-    const headers = [
-      "content-security-policy",
-      "strict-transport-security",
-      "x-content-type-options",
-      "x-frame-options",
-      "referrer-policy"
-    ];
-
-    let result = "DOMINIO: " + parsed.hostname + "\n";
-    result += "ESTADO HTTP: " + response.status + "\n\n";
-    result += "CABECERAS VISIBLES:\n";
-
-    headers.forEach(name => {
-      result += name + ": " +
-        (response.headers.get(name) || "No visible") + "\n";
-    });
-
-    $("webOutput").textContent = result;
-    log("Auditoría web consultada: " + parsed.hostname);
-
-  } catch (error) {
-    $("webOutput").textContent =
-      "No fue posible leer la página.\n" +
-      "Puede deberse a restricciones CORS del servidor.\n" +
-      "Esto no demuestra que la página sea vulnerable.";
+    output.textContent =
+      "URL: " + target +
+      "\nEstado HTTP: " + response.status +
+      "\nDisponible: " + response.ok;
+  } catch(error) {
+    output.textContent =
+      "No fue posible completar la consulta.\n" +
+      "El servidor puede bloquear solicitudes externas mediante CORS.";
   }
+
+  log("Revisión web solicitada");
 }
 
-/* PORT LAB */
+// PORT LAB - SIMULADOR
 function portLab() {
-  const target = $("portTarget").value.trim() || "localhost";
+  const output = document.getElementById("portOutput");
+  if(!output) return;
 
-  const ports = [
-    { port: 21, service: "FTP", state: "CERRADO (DEMO)" },
-    { port: 22, service: "SSH", state: "ABIERTO (DEMO)" },
-    { port: 80, service: "HTTP", state: "ABIERTO (DEMO)" },
-    { port: 443, service: "HTTPS", state: "ABIERTO (DEMO)" },
-    { port: 3306, service: "MYSQL", state: "CERRADO (DEMO)" },
-    { port: 8080, service: "HTTP ALT", state: "CERRADO (DEMO)" }
-  ];
-
-  $("portOutput").textContent =
-    "OBJETIVO DE SIMULACIÓN: " + target +
-    "\n\n" +
-    ports.map(p =>
-      "PORT " + p.port + " | " + p.service + " | " + p.state
-    ).join("\n") +
-    "\n\nSIMULACIÓN EDUCATIVA: no se enviaron conexiones reales.";
+  output.textContent =
+    "PORT LAB - SIMULADOR\n" +
+    "-------------------------\n" +
+    "22   SSH       Ejemplo\n" +
+    "53   DNS       Ejemplo\n" +
+    "80   HTTP      Ejemplo\n" +
+    "443  HTTPS     Ejemplo\n" +
+    "8080 HTTP-ALT  Ejemplo\n" +
+    "-------------------------\n" +
+    "Estos resultados son ficticios. No se escanean puertos reales.";
 
   log("Simulación de puertos ejecutada");
 }
 
-/* XSS LAB */
+// XSS LAB
 function xssLab() {
-  const value = $("xssInput").value;
+  const input = document.getElementById("xssInput")?.value || "";
+  const output = document.getElementById("xssOutput");
 
-  const output = $("xssOutput");
+  if(!output) return;
+
   output.textContent =
-    "ENTRADA RECIBIDA:\n" +
-    value +
-    "\n\nRESULTADO:\n" +
-    "El contenido se mostró como texto plano. No se ejecutó código HTML o JavaScript.";
+    "XSS LAB - ANÁLISIS SEGURO\n" +
+    "Entrada recibida:\n" + input +
+    "\n\nLa entrada se muestra como texto plano. No se ejecuta código.";
 
-  log("Prueba local de entrada XSS");
+  log("Prueba XSS educativa realizada");
 }
 
-/* SQL LAB */
+// SQL LAB
 function sqlLab() {
-  $("sqlOutput").textContent =
-`EJEMPLO INSEGURO:
+  const input = document.getElementById("sqlInput")?.value || "";
+  const output = document.getElementById("sqlOutput");
 
-SELECT * FROM users
-WHERE name = 'ENTRADA_DEL_USUARIO';
+  if(!output) return;
 
-RIESGO:
-Si se concatena directamente la entrada,
-puede alterarse la consulta SQL.
+  output.textContent =
+    "SQL LAB - MODO EDUCATIVO\n" +
+    "Entrada:\n" + input +
+    "\n\nRecomendación: utilizar consultas parametrizadas y validar entradas.";
 
-FORMA RECOMENDADA:
-
-SELECT * FROM users
-WHERE name = ?;
-
-Usa consultas parametrizadas,
-validación de entradas y permisos mínimos.`;
-
-  log("Comparación SQL mostrada");
+  log("Análisis SQL educativo realizado");
 }
 
-/* SECURITY CHECKLIST */
+// CHECKLIST DE SEGURIDAD
 function checklistLab() {
-  $("checkOutput").textContent =
-`LISTA DE SEGURIDAD:
+  const output = document.getElementById("checklistOutput");
+  if(!output) return;
 
-[OK] Usar contraseñas únicas.
-[OK] Activar autenticación multifactor.
-[OK] Mantener software actualizado.
-[OK] Validar entradas del usuario.
-[OK] Usar consultas parametrizadas.
-[OK] Configurar HTTPS.
-[OK] Realizar copias de seguridad.
-[OK] Revisar permisos de archivos.
-[OK] Proteger claves y tokens.
-[OK] Registrar eventos importantes.`;
+  output.textContent =
+    "CHECKLIST DE SEGURIDAD\n" +
+    "[✓] Usar contraseñas únicas\n" +
+    "[✓] Activar autenticación en dos pasos\n" +
+    "[✓] Mantener aplicaciones actualizadas\n" +
+    "[✓] Evitar enlaces sospechosos\n" +
+    "[✓] Revisar permisos de aplicaciones\n" +
+    "[✓] Utilizar conexiones seguras";
 
   log("Checklist de seguridad consultado");
 }
 
-/* VIRTUAL FILE SYSTEM */
+// FILES
 function listFiles() {
-  const entries = Object.keys(virtualFS).map(path => {
-    const item = virtualFS[path];
-    return (item.dir ? "[DIR] " : "[FILE] ") +
-      path + " | permisos: " + item.perms;
-  });
+  const output = document.getElementById("filesOutput");
+  if(!output) return;
 
-  $("fsOutput").textContent = entries.join("\n");
-  log("Sistema de archivos listado");
+  output.textContent = Object.keys(virtualFS).join("\n") ||
+    "No hay archivos.";
 }
 
 function createDemoFile() {
-  let number = 1;
-  let path = "/home/alex/demo-" + number + ".txt";
+  const name = "demo.txt";
 
-  while (virtualFS[path]) {
-    number++;
-    path = "/home/alex/demo-" + number + ".txt";
-  }
-
-  virtualFS[path] = {
+  virtualFS[name] = {
     dir: false,
-    content: "Archivo creado desde ALEX-LINUX-LAB",
-    perms: "644"
+    content: "Archivo de demostración de ALEX-LINUX-LAB",
+    permissions: "644"
   };
 
-  $("fsOutput").textContent = "Archivo creado:\n" + path;
-  log("Archivo virtual creado");
+  listFiles();
+  log("Archivo demo creado");
 }
 
 function resetFS() {
-  Object.keys(virtualFS).forEach(path => {
-    if (path !== "/" && path !== "/home" && path !== "/home/alex") {
-      delete virtualFS[path];
+  virtualFS = {
+    "/": {dir:true},
+    "/home": {dir:true},
+    "/home/alex": {dir:true},
+    "/home/alex/readme.txt": {
+      dir:false,
+      content:"Bienvenido a ALEX-LINUX-LAB",
+      permissions:"644"
     }
-  });
-
-  virtualFS["/home/alex/readme.txt"] = {
-    dir: false,
-    content: "Bienvenido a ALEX-LINUX-LAB 27.0",
-    perms: "644"
   };
 
-  virtualFS["/home/alex/demo.txt"] = {
-    dir: false,
-    content: "Archivo de demostración",
-    perms: "644"
-  };
-
-  currentPath = "/home/alex";
-  $("fsOutput").textContent = "Sistema de archivos reiniciado.";
-  log("Sistema de archivos reiniciado");
+  listFiles();
+  log("Sistema de archivos virtual reiniciado");
 }
 
-/* PERMISSIONS */
+// PERMISSIONS
 function changePermission() {
-  const path = normalizePath($("permFile").value.trim());
-  const mode = $("permMode").value;
+  const path = document.getElementById("permissionFile")?.value.trim();
+  const mode = document.getElementById("permissionMode")?.value.trim();
+  const output = document.getElementById("permissionOutput");
 
-  if (!virtualFS[path]) {
-    $("permOutput").textContent = "No existe ese archivo en el sistema virtual.";
-    return;
+  if(!output) return;
+
+  const normalized = normalizePath(path);
+
+  if(!path || !mode) {
+    output.textContent = "Completa el archivo y los permisos.";
+  } else if(!virtualFS[normalized]) {
+    output.textContent = "Archivo no encontrado.";
+  } else {
+    virtualFS[normalized].permissions = mode;
+    output.textContent = "Permisos actualizados: " + mode;
   }
 
-  virtualFS[path].perms = mode;
-
-  $("permOutput").textContent =
-    "CHMOD APLICADO\n" +
-    "Archivo: " + path +
-    "\nPermisos: " + mode;
-
-  log("Permisos virtuales cambiados: " + path);
+  log("Cambio de permisos solicitado");
 }
 
-/* FORENSICS */
-async function analyzeFile() {
-  const file = $("fileInput").files[0];
+// FORENSICS
+function analyzeFile() {
+  const input = document.getElementById("forensicInput");
+  const output = document.getElementById("forensicOutput");
 
-  if (!file) {
-    $("forensicOutput").textContent = "Selecciona un archivo primero.";
+  if(!input || !output) return;
+
+  const file = input.files[0];
+
+  if(!file) {
+    output.textContent = "Selecciona un archivo primero.";
     return;
   }
 
-  $("forensicOutput").textContent = "Calculando SHA-256...";
+  output.textContent =
+    "ANÁLISIS DE ARCHIVO\n" +
+    "Nombre: " + file.name +
+    "\nTamaño: " + file.size + " bytes" +
+    "\nTipo: " + (file.type || "Desconocido") +
+    "\nÚltima modificación: " + new Date(file.lastModified).toLocaleString();
+
+  log("Archivo analizado: " + file.name);
+}
+
+async function calculateHash() {
+  const input = document.getElementById("hashInput");
+  const output = document.getElementById("hashOutput");
+
+  if(!input || !output) return;
+
+  const file = input.files[0];
+
+  if(!file) {
+    output.textContent = "Selecciona un archivo.";
+    return;
+  }
 
   try {
     const buffer = await file.arrayBuffer();
     const hash = await crypto.subtle.digest("SHA-256", buffer);
-
-    const hex = Array.from(new Uint8Array(hash))
-      .map(byte => byte.toString(16).padStart(2, "0"))
+    const result = Array.from(new Uint8Array(hash))
+      .map(b => b.toString(16).padStart(2, "0"))
       .join("");
 
-    $("forensicOutput").textContent =
-      "ARCHIVO: " + file.name +
-      "\nTAMAÑO: " + file.size + " bytes" +
-      "\nTIPO: " + (file.type || "Desconocido") +
-      "\n\nSHA-256:\n" + hex;
-
-    log("Hash de archivo calculado");
-
-  } catch (error) {
-    $("forensicOutput").textContent =
-      "No se pudo calcular el hash en este navegador.";
+    output.textContent = "SHA-256:\n" + result;
+    log("Hash SHA-256 calculado");
+  } catch(error) {
+    output.textContent = "No se pudo calcular el hash.";
   }
 }
 
-async function calculateHash() {
-  const value = $("hashInput").value;
-
-  if (!value) {
-    $("hashOutput").textContent = "Escribe un texto primero.";
-    return;
-  }
-
-  try {
-    const data = new TextEncoder().encode(value);
-    const hash = await crypto.subtle.digest("SHA-256", data);
-
-    const hex = Array.from(new Uint8Array(hash))
-      .map(byte => byte.toString(16).padStart(2, "0"))
-      .join("");
-
-    $("hashOutput").textContent = "SHA-256:\n" + hex;
-    log("Hash de texto calculado");
-
-  } catch (error) {
-    $("hashOutput").textContent =
-      "No se pudo calcular el hash.";
-  }
-}
-
-/* SYSTEM MONITOR */
+// SYSTEM MONITOR
 function systemMonitor() {
-  const connection = navigator.connection ||
-    navigator.mozConnection ||
-    navigator.webkitConnection;
+  const output = document.getElementById("systemOutput");
+  if(!output) return;
 
-  $("systemOutput").textContent =
-    "ESTADO: " + (navigator.onLine ? "ONLINE" : "OFFLINE") +
-    "\nPLATAFORMA: " + navigator.platform +
-    "\nIDIOMA: " + navigator.language +
-    "\nNÚCLEOS EXPUESTOS: " + (navigator.hardwareConcurrency || "N/D") +
-    "\nMEMORIA ESTIMADA: " + (navigator.deviceMemory || "N/D") +
-    "\nCONEXIÓN: " + (connection?.effectiveType || "N/D") +
-    "\nPANTALLA: " + screen.width + " x " + screen.height +
-    "\nHORA: " + new Date().toLocaleString() +
-    "\n\nDatos limitados por el navegador.";
+  output.textContent =
+    "SYSTEM MONITOR\n" +
+    "----------------------\n" +
+    "Navegador: " + navigator.appName +
+    "\nPlataforma: " + navigator.platform +
+    "\nIdioma: " + navigator.language +
+    "\nConexión: " + (navigator.onLine ? "Online" : "Offline") +
+    "\nMemoria JS: " +
+    (performance.memory
+      ? Math.round(performance.memory.usedJSHeapSize / 1048576) + " MB"
+      : "No disponible") +
+    "\n----------------------\n" +
+    "Datos limitados a lo que permite el navegador.";
 
-  log("Monitor del navegador actualizado");
+  log("Monitor del sistema actualizado");
 }
 
 function showProcesses() {
-  $("processOutput").textContent =
-`PID   USER   PROCESS
-100   alex   alex-terminal
-101   alex   browser-engine
-102   alex   virtual-lab
-103   root   system-demo
+  const output = document.getElementById("processOutput");
+  if(!output) return;
 
-PROCESOS SIMULADOS.
-No son procesos reales de Android.`;
+  output.textContent =
+    "PROCESOS SIMULADOS\n" +
+    "PID 101 - alex-terminal\n" +
+    "PID 102 - network-monitor\n" +
+    "PID 103 - dns-service\n" +
+    "PID 104 - security-lab";
 
-  log("Procesos virtuales mostrados");
+  log("Lista de procesos simulados consultada");
 }
 
-/* LOGS */
+// LOGS
 function showLogs() {
-  $("logOutput").textContent =
-    logs.length ? logs.join("\n") : "Sin eventos.";
+  const output = document.getElementById("logsOutput");
+  if(!output) return;
 
-  log("Registro de eventos consultado");
+  output.textContent = logs.length
+    ? logs.join("\n")
+    : "No hay registros.";
 }
 
 function clearLogs() {
   logs = [];
-  $("logOutput").textContent = "Registros borrados.";
-  $("recentActivity").textContent = "Sin actividad reciente.";
+  showLogs();
   log("Registros reiniciados");
+  showLogs();
 }
 
-/* STARTUP */
-log("ALEX-LINUX-LAB 27.0 iniciado");
-updateClock();
+// INICIALIZACIÓN
+log("ALEX-LINUX-LAB iniciado correctamente");
 </script>
-
 </body>
 </html>
-
-   
-
-    
