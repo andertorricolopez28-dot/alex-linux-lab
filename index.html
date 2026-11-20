@@ -3,397 +3,450 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ALEX-LINUX-LAB 28.0</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ALEX-LINUX-LAB 30.0</title>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+
 <style>
-:root{--bg:#050907;--green:#00ff88;--panel:#0b120e;--border:#17452c}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--green);font-family:monospace}
-header{padding:18px;background:#07100b;border-bottom:1px solid var(--green);position:sticky;top:0}
-h1{margin:0;font-size:22px}
-nav{display:flex;gap:7px;padding:12px;flex-wrap:wrap;background:#030805}
-button{background:#0b1710;color:var(--green);border:1px solid var(--border);padding:10px;cursor:pointer;font-family:monospace}
-button:hover{background:#12472a}
-main{max-width:1100px;margin:auto;padding:12px}
-.section{display:none}.section.active{display:block}
-.panel,.card{background:var(--panel);border:1px solid var(--border);padding:15px;border-radius:6px;margin-bottom:12px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
-input,textarea,select{width:100%;padding:11px;margin:7px 0;background:#020503;color:var(--green);border:1px solid var(--border);font-family:monospace}
-.terminal{background:#010401;padding:12px;border:1px solid var(--border);min-height:260px;max-height:420px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere}
-.line{margin:4px 0}.muted{color:#80a892}.red{color:#ff5555}
-footer{text-align:center;padding:20px;color:#80a892}
+:root {
+  --bg:#030806;
+  --panel:#07120d;
+  --green:#00ff88;
+  --green2:#00b866;
+  --text:#c7ffdf;
+  --border:#075b38;
+}
+* {box-sizing:border-box}
+body {
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Consolas,monospace;
+}
+header {
+  padding:20px;
+  background:#020503;
+  border-bottom:1px solid var(--green);
+  text-align:center;
+}
+header h1 {
+  color:var(--green);
+  margin:0;
+  font-size:25px;
+  text-shadow:0 0 12px var(--green);
+}
+header p {color:#76bd98;font-size:12px}
+nav {
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  padding:12px;
+  justify-content:center;
+  background:#050d08;
+}
+button {
+  background:#071b10;
+  border:1px solid var(--border);
+  color:var(--green);
+  padding:10px 13px;
+  font-family:inherit;
+  cursor:pointer;
+}
+button:hover {background:#0d3821}
+main {padding:15px;max-width:1200px;margin:auto}
+.page {display:none}
+.page.active {display:block}
+.panel {
+  background:var(--panel);
+  border:1px solid var(--border);
+  padding:16px;
+  margin-bottom:14px;
+  border-radius:7px;
+  box-shadow:0 0 12px #00351c55;
+}
+h2,h3 {color:var(--green)}
+.green {color:var(--green)}
+.small {font-size:12px;color:#91b9a2}
+.grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:12px;
+}
+.stat {
+  padding:15px;
+  background:#030a06;
+  border:1px solid #075b38;
+}
+.stat strong {
+  display:block;
+  color:var(--green);
+  font-size:20px;
+  margin-top:8px;
+}
+#map {
+  width:100%;
+  height:470px;
+  background:#07120d;
+  border:1px solid var(--green);
+  z-index:1;
+}
+input {
+  background:#020704;
+  color:var(--green);
+  border:1px solid var(--border);
+  padding:12px;
+  width:100%;
+  font-family:inherit;
+  outline:none;
+}
+#terminalOutput {
+  background:#020503;
+  border:1px solid #075b38;
+  height:260px;
+  overflow:auto;
+  padding:12px;
+  white-space:pre-wrap;
+  font-size:13px;
+  line-height:1.6;
+}
+.terminalInput {
+  display:flex;
+  gap:7px;
+  margin-top:8px;
+}
+.terminalInput input {flex:1;min-width:0}
+footer {
+  text-align:center;
+  color:#47785d;
+  padding:25px;
+  font-size:11px;
+}
+.leaflet-container {background:#07120d}
 </style>
 </head>
+
 <body>
 
 <header>
-<h1>⚡ ALEX-LINUX-LAB 28.0</h1>
-<small>ADVANCED CYBER OPERATIONS CENTER</small>
-<p>● SYSTEM ONLINE | VIRTUAL LAB</p>
+<h1>⚡ ALEX-LINUX-LAB 30.0</h1>
+<p>GLOBAL MAP // GEOLOCATION // CYBER OPERATIONS</p>
 </header>
 
 <nav>
-<button onclick="show('home')">HOME</button>
-<button onclick="show('terminal')">TERMINAL</button>
-<button onclick="show('devices')">DEVICE HUB</button>
-<button onclick="show('network')">NETWORK</button>
-<button onclick="show('password')">PASSWORD LAB</button>
-<button onclick="show('tools')">TOOLS</button>
-<button onclick="show('security')">SECURITY</button>
+<button onclick="showPage('home')">HOME</button>
+<button onclick="showPage('terminal')">TERMINAL</button>
+<button onclick="showPage('world')">WORLD MAP</button>
+<button onclick="showPage('location')">GPS LOCATION</button>
+<button onclick="showPage('network')">NETWORK</button>
+<button onclick="showPage('security')">SECURITY</button>
 </nav>
 
 <main>
 
-<section id="home" class="section active">
+<section id="home" class="page active">
 <div class="panel">
-<h2>╔══ ALEX OPERATIONS CENTER ══╗</h2>
-<p>Linux • Network • Device Security • Cyber Lab</p>
-<p class="muted">Interactive ethical cybersecurity training environment.</p>
+<h2>WELCOME TO ALEX LINUX LAB</h2>
+<p>Centro de operaciones y exploración geográfica.</p>
+<p class="green">SYSTEM STATUS: ONLINE</p>
+<p class="small">Versión 30.0 // Global Hacker Map</p>
 </div>
+
 <div class="grid">
-<div class="card"><h3>⌨ TERMINAL</h3><p>Virtual Linux commands.</p><button onclick="show('terminal')">OPEN</button></div>
-<div class="card"><h3>📺 DEVICE HUB</h3><p>TV, Android, router and cameras.</p><button onclick="show('devices')">OPEN</button></div>
-<div class="card"><h3>🌐 NETWORK</h3><p>Network configuration exercises.</p><button onclick="show('network')">OPEN</button></div>
-<div class="card"><h3>🔐 PASSWORD LAB</h3><p>Password strength analyzer.</p><button onclick="show('password')">OPEN</button></div>
-<div class="card"><h3>🧰 TOOLS</h3><p>Base64, JSON and URL.</p><button onclick="show('tools')">OPEN</button></div>
-<div class="card"><h3>🛡 SECURITY</h3><p>Security learning center.</p><button onclick="show('security')">OPEN</button></div>
+<div class="stat">SYSTEM<strong>ONLINE</strong></div>
+<div class="stat">WORLD MAP<strong>READY</strong></div>
+<div class="stat">GPS<strong id="gpsStatus">OFF</strong></div>
+<div class="stat">MODE<strong>ETHICAL LAB</strong></div>
+</div>
+
+<div class="panel">
+<h3>QUICK ACCESS</h3>
+<button onclick="showPage('world')">ABRIR MAPA MUNDIAL</button>
+<button onclick="getLocation()">OBTENER MI GPS</button>
+<button onclick="showPage('terminal')">ABRIR TERMINAL</button>
 </div>
 </section>
 
-<section id="terminal" class="section">
+<section id="terminal" class="page">
 <div class="panel">
-<h2>VIRTUAL TERMINAL</h2>
-<div id="output" class="terminal"></div>
-<input id="cmd" placeholder="alex@lab:~$ command" onkeydown="if(event.key==='Enter')run()">
-<button onclick="run()">EXECUTE</button>
-<button onclick="clearTerminal()">CLEAR</button>
-<p class="muted">Type help for commands.</p>
+<h2>ROOT TERMINAL</h2>
+<div id="terminalOutput">ALEX-LINUX-LAB 30.0
+Sistema iniciado correctamente.
+Escribe help para ver los comandos.</div>
+<div class="terminalInput">
+<input id="commandInput" placeholder="alex@lab:~$ escribe un comando">
+<button onclick="runCommand()">EXECUTE</button>
+</div>
 </div>
 </section>
 
-<section id="devices" class="section">
+<section id="world" class="page">
 <div class="panel">
-<h2>📡 ALEX DEVICE HACKER</h2>
-<p>Auditoría de seguridad de tus propios dispositivos.</p>
-<div class="grid">
-<div class="card"><h3>📺 SMART TV</h3><button onclick="deviceHub('tv')">ANALYZE TV</button></div>
-<div class="card"><h3>📱 ANDROID</h3><button onclick="deviceHub('mobile')">ANALYZE MOBILE</button></div>
-<div class="card"><h3>📡 ROUTER / WI-FI</h3><button onclick="deviceHub('router')">ANALYZE ROUTER</button></div>
-<div class="card"><h3>📷 CAMERAS</h3><button onclick="deviceHub('camera')">ANALYZE CAMERA</button></div>
-<div class="card"><h3>🌐 NETWORK</h3><button onclick="deviceHub('network')">ANALYZE NETWORK</button></div>
+<h2>🌍 GLOBAL MAP</h2>
+<p class="small">Mapa geográfico real mediante OpenStreetMap.</p>
+<div id="map"></div>
+<div style="margin-top:12px">
+<button onclick="worldView()">WORLD VIEW</button>
+<button onclick="getLocation()">MY LOCATION</button>
+<button onclick="zoomIn()">ZOOM +</button>
+<button onclick="zoomOut()">ZOOM -</button>
 </div>
-<button onclick="deviceHub('all')">⚡ RUN ALL MODULES</button>
-</div>
-<div class="panel"><h2>DEVICE REPORT</h2><div id="deviceOutput" class="terminal">Waiting...</div></div>
-</section>
-
-<section id="network" class="section">
-<div class="panel">
-<h2>NETWORK SECURITY CENTER</h2>
-<div class="grid">
-<div class="card">
-<h3>IP FORMAT CHECK</h3>
-<input id="ipInput" placeholder="192.168.1.1">
-<button onclick="checkIP()">CHECK</button>
-<div id="ipResult"></div>
-</div>
-<div class="card">
-<h3>DNS FORMAT CHECK</h3>
-<input id="dnsInput" placeholder="example.com">
-<button onclick="checkDNS()">CHECK</button>
-<div id="dnsResult"></div>
-</div>
-<div class="card">
-<h3>PORT LAB</h3>
-<select id="portSelect">
-<option value="22">22 SSH</option>
-<option value="80">80 HTTP</option>
-<option value="443">443 HTTPS</option>
-<option value="3306">3306 MYSQL</option>
-<option value="8080">8080 HTTP ALT</option>
-</select>
-<button onclick="portLab()">INSPECT</button>
-<div id="portResult"></div>
-</div>
-</div>
-<p class="muted">Local format checks only. No network scans are performed.</p>
 </div>
 </section>
 
-<section id="password" class="section">
+<section id="location" class="page">
 <div class="panel">
-<h2>🔐 PASSWORD LAB</h2>
-<p>Use test passwords only. Analysis happens locally.</p>
-<input id="passInput" type="password" placeholder="Test password">
-<button onclick="analyzePassword()">ANALYZE</button>
-<div id="passResult"></div>
+<h2>📡 GPS LOCATION</h2>
+<p>Solicita permiso para consultar la ubicación de este teléfono.</p>
+<button onclick="getLocation()">ACTIVAR GPS</button>
+<div class="grid" style="margin-top:15px">
+<div class="stat">LATITUDE<strong id="latitude">---</strong></div>
+<div class="stat">LONGITUDE<strong id="longitude">---</strong></div>
+<div class="stat">ACCURACY<strong id="accuracy">---</strong></div>
+</div>
+<p id="gpsMessage" class="small">Esperando autorización del usuario...</p>
+<button onclick="showPage('world')">VER EN MAPA</button>
 </div>
 </section>
 
-<section id="tools" class="section">
+<section id="network" class="page">
 <div class="panel">
-<h2>BASE64 LAB</h2>
-<textarea id="b64in" rows="3" placeholder="Text"></textarea>
-<button onclick="base64Encode()">ENCODE</button>
-<button onclick="base64Decode()">DECODE</button>
-<textarea id="b64out" rows="3" placeholder="Result"></textarea>
-</div>
-<div class="panel">
-<h2>JSON VALIDATOR</h2>
-<textarea id="jsonIn" rows="4" placeholder='{"name":"Alex","version":28}'></textarea>
-<button onclick="jsonFormat()">FORMAT JSON</button>
-<div id="jsonStatus"></div>
-<textarea id="jsonOut" rows="5"></textarea>
-</div>
-<div class="panel">
-<h2>URL ENCODER</h2>
-<textarea id="urlIn" rows="3" placeholder="URL or text"></textarea>
-<button onclick="urlEncode()">ENCODE</button>
-<button onclick="urlDecode()">DECODE</button>
-<textarea id="urlOut" rows="3"></textarea>
+<h2>NETWORK CENTER</h2>
+<p class="green">NETWORK STATUS: READY</p>
+<p>Este módulo muestra información de estado del laboratorio.</p>
+<button onclick="networkStatus()">CHECK STATUS</button>
+<div id="networkResult" class="small"></div>
 </div>
 </section>
 
-<section id="security" class="section">
+<section id="security" class="page">
 <div class="panel">
-<h2>SECURITY OPERATIONS</h2>
-<div class="grid">
-<div class="card"><h3>WEB SECURITY</h3><p>HTTPS, cookies and authentication.</p></div>
-<div class="card"><h3>PHISHING LAB</h3><p>Learn to identify fraudulent links.</p></div>
-<div class="card"><h3>ACCESS CONTROL</h3><p>Users, permissions and privileges.</p></div>
-<div class="card"><h3>HASHING</h3><p>Integrity and hash concepts.</p></div>
-<div class="card"><h3>VULNERABILITY LAB</h3><p>Learn about security weaknesses.</p></div>
-<div class="card"><h3>FORENSICS</h3><p>Logs, evidence and analysis.</p></div>
-</div>
+<h2>SECURITY LAB</h2>
+<p>Herramientas educativas para practicar seguridad informática.</p>
+<button onclick="securityScan()">RUN LAB CHECK</button>
+<div id="securityResult" class="small"></div>
+<p class="small">Los resultados son demostrativos. No se realizan intrusiones ni escaneos de dispositivos ajenos.</p>
 </div>
 </section>
 
 </main>
 
-<footer>ALEX-LINUX-LAB 28.0 // ETHICAL TRAINING ENVIRONMENT</footer>
+<footer>
+ALEX-LINUX-LAB 30.0 // EDUCATIONAL CYBER LAB
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
-function show(id){
- document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
- document.getElementById(id).classList.add('active');
-}
+let map = null;
+let userMarker = null;
+let circle = null;
+let currentPosition = null;
+let historyCommands = [];
 
-/* TERMINAL */
-const output=document.getElementById('output');
-let history=[];
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
 
-function printLine(t){
- const d=document.createElement('div');
- d.className='line';
- d.textContent=t;
- output.appendChild(d);
- output.scrollTop=output.scrollHeight;
-}
-function clearTerminal(){output.textContent='';}
-printLine('ALEX-LINUX-LAB 28.0');
-printLine('Virtual terminal initialized. Type help.');
-
-function run(){
- const input=document.getElementById('cmd');
- const value=input.value.trim();
- if(!value)return;
- history.push(value);
- printLine('alex@lab:~$ '+value);
- input.value='';
- const parts=value.split(/\s+/);
- const command=parts[0].toLowerCase();
- const arg=parts.slice(1).join(' ');
-
- switch(command){
- case 'help':
- printLine('help, clear, ls, pwd, whoami, date, uname, echo, cat');
- printLine('hack, deepaudit, devicehub, network, status, history');
- printLine('password, base64, json');
- break;
- case 'clear':clearTerminal();break;
- case 'ls':printLine('Documents Downloads Projects Tools lab.txt');break;
- case 'pwd':printLine('/home/alex');break;
- case 'whoami':printLine('alex');break;
- case 'date':printLine(new Date().toString());break;
- case 'uname':printLine('Linux ALEX-LAB 6.8.0 x86_64');break;
- case 'echo':printLine(arg);break;
- case 'cat':
- printLine(arg==='lab.txt'?'Welcome to ALEX-LINUX-LAB 28.0':'File not found.');
- break;
- case 'status':
- printLine('SYSTEM ONLINE | VERSION 28.0 | VIRTUAL LAB');
- break;
- case 'history':
- history.forEach((v,i)=>printLine((i+1)+' '+v));
- break;
- case 'network':
- show('network');printLine('Network center opened.');break;
- case 'password':
- show('password');break;
- case 'base64':
- case 'json':show('tools');break;
- case 'hack':hackSim();break;
- case 'deepaudit':deepAudit();break;
- case 'devicehub':
- deviceHub(arg);break;
- default:printLine('Command not found. Type help.');
- }
-}
-
-/* HACK SIMULATION */
-function hackSim(){
- const steps=[
- 'INITIALIZING VIRTUAL ENGINE...',
- 'LOADING SECURITY MODULES...',
- 'TARGET: VIRTUAL-LAB-01',
- 'RECONNAISSANCE: SIMULATED',
- 'ANALYZING SAMPLE SERVICES...',
- 'VULNERABILITY CHECK: SIMULATED',
- 'EXPLOITATION STAGE: SIMULATED',
- 'VIRTUAL FIREWALL TEST...',
- 'ACCESS SIMULATION: SUCCESS',
- 'PRIVILEGE CHECK: SIMULATED',
- 'GENERATING SAMPLE REPORT...',
- 'SIMULATION COMPLETED.',
- 'NO REAL DEVICE WAS ACCESSED.'
- ];
- printLine('=== ALEX HACK ENGINE ===');
- let i=0;
- function next(){
-  if(i>=steps.length)return;
-  printLine('[+] '+steps[i++]);
-  setTimeout(next,450);
- }
- next();
-}
-
-/* DEEP AUDIT */
-function deepAudit(){
- [
- '=== ALEX DEEPAUDIT ===',
- 'SYSTEM STATUS: LAB',
- 'NETWORK: SIMULATION',
- 'PASSWORD MODULE: READY',
- 'DEVICE HUB: READY',
- 'JSON ENGINE: READY',
- 'SECURITY CHECKLIST: READY',
- 'REAL SCANNING: NOT PERFORMED',
- 'DEEPAUDIT COMPLETED.'
- ].forEach(printLine);
-}
-
-/* DEVICE HUB */
-const modules={
- tv:{name:'SMART TV',checks:['System updates','Administrator password','Installed apps','Remote access settings','Privacy permissions']},
- mobile:{name:'ANDROID / MOBILE',checks:['OS updates','App permissions','Screen lock','Unknown app installation','Account protection']},
- router:{name:'ROUTER / WI-FI',checks:['WPA2/WPA3 encryption','Admin password','Firmware updates','WPS settings','Connected device review']},
- camera:{name:'CAMERA SECURITY',checks:['Default password review','Firmware updates','Remote access settings','Privacy settings','Authorized accounts']},
- network:{name:'NETWORK SECURITY',checks:['Authorized device inventory','DNS configuration','Network encryption','Firewall configuration','Unknown device review']}
-};
-
-function deviceHub(type=''){
- const box=document.getElementById('deviceOutput');
- box.textContent='';
- if(!type){
-  printLine('devicehub tv | mobile | router | camera | network | all');
-  return;
- }
- const keys=type==='all'?Object.keys(modules):[type.toLowerCase()];
- keys.forEach(key=>{
-  const device=modules[key];
-  if(!device){
-   box.textContent='Unknown module.';
-   return;
+  if(id === 'world') {
+    setTimeout(()=>{
+      initMap();
+      map.invalidateSize();
+    },100);
   }
-  const title=document.createElement('div');
-  title.className='line';
-  title.textContent='=== '+device.name+' ===';
-  box.appendChild(title);
-  device.checks.forEach((c,i)=>{
-   const line=document.createElement('div');
-   line.className='line';
-   line.textContent='[CHECK '+(i+1)+'] '+c+' — MANUAL REVIEW';
-   box.appendChild(line);
-  });
-  const end=document.createElement('div');
-  end.className='line';
-  end.textContent='[!] No device accessed or scanned.';
-  box.appendChild(end);
- });
- show('devices');
 }
 
-/* NETWORK */
-function checkIP(){
- const ip=document.getElementById('ipInput').value.trim();
- const valid=/^(?:(?:25[0-5]|2[0-4]\d|1?\d?\d)\.){3}(?:25[0-5]|2[0-4]\d|1?\d?\d)$/.test(ip);
- document.getElementById('ipResult').textContent=valid?'Valid IPv4 format.':'Invalid IPv4 format.';
-}
-function checkDNS(){
- const d=document.getElementById('dnsInput').value.trim();
- const valid=/^(?=.{1,253}$)(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$/.test(d);
- document.getElementById('dnsResult').textContent=valid?'Valid domain format.':'Invalid domain format.';
-}
-function portLab(){
- const p=document.getElementById('portSelect').value;
- const names={22:'SSH',80:'HTTP',443:'HTTPS',3306:'MYSQL',8080:'HTTP ALT'};
- document.getElementById('portResult').textContent='Port '+p+' / '+names[p]+'. Educational information only; no connection attempted.';
+function initMap() {
+  if(map) return;
+
+  map = L.map('map').setView([20,0],2);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+    maxZoom:19,
+    attribution:'&copy; OpenStreetMap contributors'
+  }).addTo(map);
+
+  L.marker([0,0]).addTo(map)
+    .bindPopup('GLOBAL MAP // ALEX LAB');
 }
 
-/* PASSWORD */
-function analyzePassword(){
- const p=document.getElementById('passInput').value;
- const r=document.getElementById('passResult');
- r.textContent='';
- if(!p){r.textContent='Enter a test password.';return;}
- let score=0;
- if(p.length>=8)score++;
- if(p.length>=12)score++;
- if(/[A-Z]/.test(p))score++;
- if(/[a-z]/.test(p))score++;
- if(/[0-9]/.test(p))score++;
- if(/[^A-Za-z0-9]/.test(p))score++;
- const title=document.createElement('h3');
- title.textContent='RESULT: '+(score<=2?'WEAK':score<=4?'MEDIUM':'STRONG')+' ('+score+'/6)';
- r.appendChild(title);
- const note=document.createElement('p');
- note.textContent='Basic heuristic. Use long, unique passwords and a password manager. Never enter real passwords here.';
- r.appendChild(note);
+function worldView() {
+  showPage('world');
+  setTimeout(()=>{
+    initMap();
+    map.setView([20,0],2);
+  },150);
 }
 
-/* BASE64 */
-function base64Encode(){
- try{
- document.getElementById('b64out').value=btoa(unescape(encodeURIComponent(document.getElementById('b64in').value)));
- }catch(e){document.getElementById('b64out').value='Encoding error';}
-}
-function base64Decode(){
- try{
- document.getElementById('b64out').value=decodeURIComponent(escape(atob(document.getElementById('b64in').value.trim())));
- }catch(e){document.getElementById('b64out').value='Invalid Base64';}
+function zoomIn() {
+  if(map) map.zoomIn();
 }
 
-/* JSON */
-function jsonFormat(){
- try{
- const data=JSON.parse(document.getElementById('jsonIn').value);
- document.getElementById('jsonOut').value=JSON.stringify(data,null,2);
- document.getElementById('jsonStatus').textContent='VALID JSON';
- }catch(e){
- document.getElementById('jsonOut').value='';
- document.getElementById('jsonStatus').textContent='INVALID JSON: '+e.message;
- }
+function zoomOut() {
+  if(map) map.zoomOut();
 }
 
-/* URL */
-function urlEncode(){
- document.getElementById('urlOut').value=encodeURIComponent(document.getElementById('urlIn').value);
+function getLocation() {
+  if(!navigator.geolocation) {
+    document.getElementById('gpsMessage').textContent =
+      'Este navegador no admite geolocalización.';
+    return;
+  }
+
+  document.getElementById('gpsMessage').textContent =
+    'Solicitando permiso de ubicación...';
+
+  navigator.geolocation.getCurrentPosition(
+    function(position) {
+      const lat = position.coords.latitude;
+      const lon = position.coords.longitude;
+      const acc = position.coords.accuracy;
+
+      currentPosition = [lat,lon];
+
+      document.getElementById('latitude').textContent = lat.toFixed(6);
+      document.getElementById('longitude').textContent = lon.toFixed(6);
+      document.getElementById('accuracy').textContent =
+        Math.round(acc)+' metros';
+
+      document.getElementById('gpsStatus').textContent = 'ACTIVE';
+      document.getElementById('gpsMessage').textContent =
+        'Ubicación obtenida con autorización.';
+
+      showPage('world');
+
+      setTimeout(()=>{
+        initMap();
+        map.setView(currentPosition,16);
+
+        if(userMarker) map.removeLayer(userMarker);
+        if(circle) map.removeLayer(circle);
+
+        userMarker = L.marker(currentPosition).addTo(map)
+          .bindPopup('📍 TU UBICACIÓN ACTUAL').openPopup();
+
+        circle = L.circle(currentPosition,{
+          radius:acc,
+          color:'#00ff88',
+          fillColor:'#00ff88',
+          fillOpacity:0.12
+        }).addTo(map);
+
+      },200);
+    },
+    function(error) {
+      let message = 'No se pudo obtener la ubicación.';
+      if(error.code===1) message='Permiso de ubicación denegado.';
+      if(error.code===2) message='Ubicación no disponible.';
+      if(error.code===3) message='Tiempo de espera agotado.';
+
+      document.getElementById('gpsMessage').textContent=message;
+      document.getElementById('gpsStatus').textContent='OFF';
+    },
+    {
+      enableHighAccuracy:true,
+      timeout:15000,
+      maximumAge:0
+    }
+  );
 }
-function urlDecode(){
- try{
- document.getElementById('urlOut').value=decodeURIComponent(document.getElementById('urlIn').value);
- }catch(e){document.getElementById('urlOut').value='Invalid URL encoding';}
+
+function output(text) {
+  const terminal=document.getElementById('terminalOutput');
+  terminal.textContent += '\n\nalex@lab:~$ '+text;
+  terminal.scrollTop=terminal.scrollHeight;
 }
+
+function runCommand() {
+  const input=document.getElementById('commandInput');
+  const cmd=input.value.trim();
+  if(!cmd) return;
+
+  historyCommands.push(cmd);
+  input.value='';
+
+  const args=cmd.split(' ');
+  const name=args[0].toLowerCase();
+
+  switch(name) {
+    case 'help':
+      output('COMANDOS DISPONIBLES:\nhelp - lista de comandos\nclear - limpiar terminal\nwhoami - usuario actual\ndate - fecha del sistema\nls - listar módulos\npwd - ruta virtual\nworld - abrir mapa mundial\nlocation - obtener GPS autorizado\ncoords - mostrar coordenadas\nmap - abrir mapa\nnetwork - estado de red\nstatus - estado del sistema\nhack - demostración visual\nhistory - historial de comandos');
+      break;
+
+    case 'clear':
+      document.getElementById('terminalOutput').textContent='ALEX-LINUX-LAB 30.0 // TERMINAL READY';
+      break;
+
+    case 'whoami':
+      output('alex@alex-linux-lab');
+      break;
+
+    case 'date':
+      output(new Date().toString());
+      break;
+
+    case 'ls':
+      output('home/ terminal/ world-map/ gps/ network/ security/');
+      break;
+
+    case 'pwd':
+      output('/alex-linux-lab');
+      break;
+
+    case 'world':
+    case 'map':
+      output('Abriendo mapa mundial real...');
+      showPage('world');
+      break;
+
+    case 'location':
+      output('Solicitando permiso GPS del navegador...');
+      getLocation();
+      break;
+
+    case 'coords':
+      if(currentPosition) {
+        output('LAT: '+currentPosition[0]+'\nLON: '+currentPosition[1]);
+      } else {
+        output('No hay coordenadas. Ejecuta location y autoriza el GPS.');
+      }
+      break;
+
+    case 'network':
+      output('Network module: READY\nEscaneo real de redes no disponible desde esta página.');
+      break;
+
+    case 'status':
+      output('SYSTEM: ONLINE\nMAP: READY\nGPS: '+(currentPosition?'ACTIVE':'OFF'));
+      break;
+
+    case 'hack':
+      output('DEMO MODE ACTIVATED\nSimulación educativa iniciada...\nNo se accede a dispositivos reales.');
+      break;
+
+    case 'history':
+      output(historyCommands.join('\n'));
+      break;
+
+    default:
+      output('Comando no reconocido. Escribe help.');
+  }
+}
+
+document.getElementById('commandInput').addEventListener('keydown',function(e){
+  if(e.key==='Enter') runCommand();
+});
+
+function networkStatus() {
+  document.getElementById('networkResult').textContent =
+    'Conexión del navegador: '+(navigator.onLine?'ONLINE':'OFFLINE');
+}
+
+function securityScan() {
+  document.getElementById('securityResult').textContent =
+    'LAB CHECK COMPLETE\nInterfaz: activa\nMapa: disponible\nPermisos GPS: bajo control del usuario\nIntrusiones: no realizadas';
+}
+
 </script>
 </body>
 </html>
