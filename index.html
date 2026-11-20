@@ -4,18 +4,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ALEX-LINUX-LAB 30.0</title>
+<title>ALEX-LINUX-LAB 31.0</title>
 
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<link rel="stylesheet"
+href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
 <style>
 :root {
   --bg:#030806;
   --panel:#07120d;
   --green:#00ff88;
-  --green2:#00b866;
-  --text:#c7ffdf;
   --border:#075b38;
+  --text:#c7ffdf;
 }
 * {box-sizing:border-box}
 body {
@@ -26,23 +26,23 @@ body {
 }
 header {
   padding:20px;
+  text-align:center;
   background:#020503;
   border-bottom:1px solid var(--green);
-  text-align:center;
 }
 header h1 {
   color:var(--green);
-  margin:0;
-  font-size:25px;
   text-shadow:0 0 12px var(--green);
+  margin:0;
+  font-size:24px;
 }
-header p {color:#76bd98;font-size:12px}
+header p {font-size:11px;color:#75bd98}
 nav {
   display:flex;
   flex-wrap:wrap;
+  justify-content:center;
   gap:7px;
   padding:12px;
-  justify-content:center;
   background:#050d08;
 }
 button {
@@ -52,17 +52,18 @@ button {
   padding:10px 13px;
   font-family:inherit;
   cursor:pointer;
+  border-radius:3px;
 }
-button:hover {background:#0d3821}
-main {padding:15px;max-width:1200px;margin:auto}
+button:hover {background:#104326}
+main {max-width:1200px;margin:auto;padding:14px}
 .page {display:none}
 .page.active {display:block}
 .panel {
   background:var(--panel);
   border:1px solid var(--border);
-  padding:16px;
+  padding:15px;
   margin-bottom:14px;
-  border-radius:7px;
+  border-radius:6px;
   box-shadow:0 0 12px #00351c55;
 }
 h2,h3 {color:var(--green)}
@@ -70,24 +71,23 @@ h2,h3 {color:var(--green)}
 .small {font-size:12px;color:#91b9a2}
 .grid {
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-  gap:12px;
+  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  gap:10px;
 }
 .stat {
-  padding:15px;
+  padding:14px;
   background:#030a06;
-  border:1px solid #075b38;
+  border:1px solid var(--border);
 }
 .stat strong {
   display:block;
   color:var(--green);
-  font-size:20px;
+  font-size:19px;
   margin-top:8px;
 }
 #map {
+  height:450px;
   width:100%;
-  height:470px;
-  background:#07120d;
   border:1px solid var(--green);
   z-index:1;
 }
@@ -96,48 +96,102 @@ input {
   color:var(--green);
   border:1px solid var(--border);
   padding:12px;
-  width:100%;
   font-family:inherit;
   outline:none;
+  min-width:0;
 }
+.searchbar {
+  display:flex;
+  gap:7px;
+  margin-bottom:10px;
+}
+.searchbar input {flex:1;width:100%}
 #terminalOutput {
-  background:#020503;
-  border:1px solid #075b38;
-  height:260px;
+  height:280px;
   overflow:auto;
-  padding:12px;
   white-space:pre-wrap;
-  font-size:13px;
+  background:#020503;
+  border:1px solid var(--border);
+  padding:12px;
   line-height:1.6;
+  font-size:13px;
 }
 .terminalInput {
   display:flex;
   gap:7px;
   margin-top:8px;
 }
-.terminalInput input {flex:1;min-width:0}
+.terminalInput input {flex:1;width:100%}
+#radar {
+  width:190px;
+  height:190px;
+  margin:15px auto;
+  border:1px solid #00ff88;
+  border-radius:50%;
+  position:relative;
+  overflow:hidden;
+  background:
+    linear-gradient(90deg,transparent 49.5%,#00ff8844 50%,transparent 50.5%),
+    linear-gradient(transparent 49.5%,#00ff8844 50%,transparent 50.5%),
+    repeating-radial-gradient(circle,#00ff8822 0 1px,transparent 2px 32px),
+    #021008;
+  box-shadow:0 0 18px #00ff8855;
+}
+#radar::after {
+  content:"";
+  position:absolute;
+  inset:0;
+  background:conic-gradient(from 0deg,transparent 0deg,#00ff8877 45deg,transparent 90deg);
+  border-radius:50%;
+  animation:scan 3s linear infinite;
+}
+@keyframes scan {to{transform:rotate(360deg)}}
+#radar::before {
+  content:"";
+  position:absolute;
+  top:50%;
+  left:50%;
+  width:7px;
+  height:7px;
+  background:#00ff88;
+  border-radius:50%;
+  transform:translate(-50%,-50%);
+  box-shadow:0 0 12px #00ff88;
+  z-index:2;
+}
+.result {
+  padding:10px;
+  border:1px solid var(--border);
+  margin-top:10px;
+  overflow-wrap:anywhere;
+}
 footer {
   text-align:center;
+  padding:22px;
   color:#47785d;
-  padding:25px;
   font-size:11px;
 }
-.leaflet-container {background:#07120d}
+@media(max-width:600px) {
+  #map {height:360px}
+  header h1 {font-size:20px}
+  .searchbar {flex-wrap:wrap}
+}
 </style>
 </head>
 
 <body>
 
 <header>
-<h1>⚡ ALEX-LINUX-LAB 30.0</h1>
-<p>GLOBAL MAP // GEOLOCATION // CYBER OPERATIONS</p>
+<h1>⚡ ALEX-LINUX-LAB 31.0</h1>
+<p>GLOBAL CYBER COMMAND // WORLD INTELLIGENCE</p>
 </header>
 
 <nav>
 <button onclick="showPage('home')">HOME</button>
 <button onclick="showPage('terminal')">TERMINAL</button>
-<button onclick="showPage('world')">WORLD MAP</button>
-<button onclick="showPage('location')">GPS LOCATION</button>
+<button onclick="showPage('world')">GLOBAL MAP</button>
+<button onclick="showPage('location')">GPS</button>
+<button onclick="showPage('radarPage')">RADAR</button>
 <button onclick="showPage('network')">NETWORK</button>
 <button onclick="showPage('security')">SECURITY</button>
 </nav>
@@ -146,35 +200,41 @@ footer {
 
 <section id="home" class="page active">
 <div class="panel">
-<h2>WELCOME TO ALEX LINUX LAB</h2>
-<p>Centro de operaciones y exploración geográfica.</p>
+<h2>GLOBAL CYBER COMMAND</h2>
+<p>Centro de exploración geográfica y herramientas de laboratorio.</p>
 <p class="green">SYSTEM STATUS: ONLINE</p>
-<p class="small">Versión 30.0 // Global Hacker Map</p>
+<p class="small">ALEX-LINUX-LAB VERSION 31.0</p>
 </div>
 
 <div class="grid">
 <div class="stat">SYSTEM<strong>ONLINE</strong></div>
 <div class="stat">WORLD MAP<strong>READY</strong></div>
-<div class="stat">GPS<strong id="gpsStatus">OFF</strong></div>
-<div class="stat">MODE<strong>ETHICAL LAB</strong></div>
+<div class="stat">GPS<strong id="gpsHome">OFF</strong></div>
+<div class="stat">RADAR<strong>ACTIVE</strong></div>
 </div>
 
 <div class="panel">
 <h3>QUICK ACCESS</h3>
-<button onclick="showPage('world')">ABRIR MAPA MUNDIAL</button>
-<button onclick="getLocation()">OBTENER MI GPS</button>
-<button onclick="showPage('terminal')">ABRIR TERMINAL</button>
+<button onclick="showPage('world')">OPEN WORLD MAP</button>
+<button onclick="getLocation()">GET MY GPS</button>
+<button onclick="showPage('radarPage')">OPEN RADAR</button>
+<button onclick="showPage('terminal')">OPEN TERMINAL</button>
+</div>
+
+<div class="panel">
+<h3>LAB INFORMATION</h3>
+<p class="small">Mapas y datos geográficos procedentes de servicios externos. El GPS solo se activa con autorización del usuario.</p>
 </div>
 </section>
 
 <section id="terminal" class="page">
 <div class="panel">
 <h2>ROOT TERMINAL</h2>
-<div id="terminalOutput">ALEX-LINUX-LAB 30.0
-Sistema iniciado correctamente.
-Escribe help para ver los comandos.</div>
+<div id="terminalOutput">ALEX-LINUX-LAB 31.0
+GLOBAL CYBER COMMAND INITIALIZED.
+Escribe help para consultar los comandos.</div>
 <div class="terminalInput">
-<input id="commandInput" placeholder="alex@lab:~$ escribe un comando">
+<input id="commandInput" placeholder="alex@lab:~$ comando">
 <button onclick="runCommand()">EXECUTE</button>
 </div>
 </div>
@@ -183,91 +243,153 @@ Escribe help para ver los comandos.</div>
 <section id="world" class="page">
 <div class="panel">
 <h2>🌍 GLOBAL MAP</h2>
-<p class="small">Mapa geográfico real mediante OpenStreetMap.</p>
-<div id="map"></div>
-<div style="margin-top:12px">
+<p class="small">Busca lugares y explora el mundo.</p>
+
+<div class="searchbar">
+<input id="placeSearch" placeholder="Ciudad, país o lugar...">
+<button onclick="searchPlace()">SEARCH</button>
+</div>
+
+<div class="searchbar">
+<button onclick="setMapMode('street')">STREET MAP</button>
+<button onclick="setMapMode('satellite')">SATELLITE</button>
 <button onclick="worldView()">WORLD VIEW</button>
+</div>
+
+<div id="map"></div>
+
+<div style="margin-top:12px">
 <button onclick="getLocation()">MY LOCATION</button>
 <button onclick="zoomIn()">ZOOM +</button>
 <button onclick="zoomOut()">ZOOM -</button>
 </div>
+<div id="searchResult" class="small"></div>
 </div>
 </section>
 
 <section id="location" class="page">
 <div class="panel">
 <h2>📡 GPS LOCATION</h2>
-<p>Solicita permiso para consultar la ubicación de este teléfono.</p>
-<button onclick="getLocation()">ACTIVAR GPS</button>
+<p>Obtén las coordenadas de este teléfono con permiso del navegador.</p>
+<button onclick="getLocation()">ACTIVATE GPS</button>
+
 <div class="grid" style="margin-top:15px">
 <div class="stat">LATITUDE<strong id="latitude">---</strong></div>
 <div class="stat">LONGITUDE<strong id="longitude">---</strong></div>
 <div class="stat">ACCURACY<strong id="accuracy">---</strong></div>
 </div>
-<p id="gpsMessage" class="small">Esperando autorización del usuario...</p>
-<button onclick="showPage('world')">VER EN MAPA</button>
+
+<div id="gpsMessage" class="result small">
+Esperando autorización del usuario...
+</div>
+<button onclick="showPage('world')">VIEW ON MAP</button>
+</div>
+</section>
+
+<section id="radarPage" class="page">
+<div class="panel">
+<h2>◉ GLOBAL RADAR</h2>
+<p class="small">Visualización animada de radar. Es un efecto gráfico, no un detector de dispositivos.</p>
+<div id="radar"></div>
+<p class="green" style="text-align:center">RADAR SYSTEM ACTIVE</p>
+<div class="grid">
+<div class="stat">RADAR<strong>ONLINE</strong></div>
+<div class="stat">SCANNING<strong>VISUAL DEMO</strong></div>
+</div>
+<button onclick="showPage('world')">OPEN GLOBAL MAP</button>
 </div>
 </section>
 
 <section id="network" class="page">
 <div class="panel">
 <h2>NETWORK CENTER</h2>
-<p class="green">NETWORK STATUS: READY</p>
-<p>Este módulo muestra información de estado del laboratorio.</p>
-<button onclick="networkStatus()">CHECK STATUS</button>
-<div id="networkResult" class="small"></div>
+<p class="green">NETWORK MODULE: READY</p>
+<button onclick="networkStatus()">CHECK CONNECTION</button>
+<div id="networkResult" class="result small"></div>
+<p class="small">Esta página no puede escanear redes privadas ni dispositivos arbitrarios.</p>
 </div>
 </section>
 
 <section id="security" class="page">
 <div class="panel">
 <h2>SECURITY LAB</h2>
-<p>Herramientas educativas para practicar seguridad informática.</p>
+<p>Herramientas de aprendizaje y comprobaciones básicas del navegador.</p>
 <button onclick="securityScan()">RUN LAB CHECK</button>
-<div id="securityResult" class="small"></div>
-<p class="small">Los resultados son demostrativos. No se realizan intrusiones ni escaneos de dispositivos ajenos.</p>
+<div id="securityResult" class="result small"></div>
 </div>
 </section>
 
 </main>
 
 <footer>
-ALEX-LINUX-LAB 30.0 // EDUCATIONAL CYBER LAB
+ALEX-LINUX-LAB 31.0 // GLOBAL CYBER COMMAND
 </footer>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
-let map = null;
-let userMarker = null;
-let circle = null;
-let currentPosition = null;
-let historyCommands = [];
+let map=null;
+let streetLayer=null;
+let satelliteLayer=null;
+let userMarker=null;
+let accuracyCircle=null;
+let currentPosition=null;
+let commandHistory=[];
 
 function showPage(id) {
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(p=>{
+    p.classList.remove('active');
+  });
   document.getElementById(id).classList.add('active');
 
-  if(id === 'world') {
+  if(id==='world') {
     setTimeout(()=>{
       initMap();
       map.invalidateSize();
-    },100);
+    },150);
   }
 }
 
 function initMap() {
   if(map) return;
 
-  map = L.map('map').setView([20,0],2);
+  map=L.map('map').setView([20,0],2);
 
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
-    maxZoom:19,
-    attribution:'&copy; OpenStreetMap contributors'
-  }).addTo(map);
+  streetLayer=L.tileLayer(
+    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    {
+      maxZoom:19,
+      attribution:'&copy; OpenStreetMap contributors'
+    }
+  );
 
-  L.marker([0,0]).addTo(map)
-    .bindPopup('GLOBAL MAP // ALEX LAB');
+  satelliteLayer=L.tileLayer(
+    'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+    {
+      maxZoom:19,
+      attribution:'Tiles &copy; Esri'
+    }
+  );
+
+  streetLayer.addTo(map);
+
+  L.control.scale().addTo(map);
+}
+
+function setMapMode(mode) {
+  showPage('world');
+
+  setTimeout(()=>{
+    initMap();
+
+    if(mode==='satellite') {
+      map.removeLayer(streetLayer);
+      satelliteLayer.addTo(map);
+    } else {
+      map.removeLayer(satelliteLayer);
+      streetLayer.addTo(map);
+    }
+  },180);
 }
 
 function worldView() {
@@ -275,7 +397,7 @@ function worldView() {
   setTimeout(()=>{
     initMap();
     map.setView([20,0],2);
-  },150);
+  },180);
 }
 
 function zoomIn() {
@@ -286,167 +408,271 @@ function zoomOut() {
   if(map) map.zoomOut();
 }
 
-function getLocation() {
-  if(!navigator.geolocation) {
-    document.getElementById('gpsMessage').textContent =
-      'Este navegador no admite geolocalización.';
+async function searchPlace() {
+  const input=document.getElementById('placeSearch');
+  const result=document.getElementById('searchResult');
+  const query=input.value.trim();
+
+  if(!query) {
+    result.textContent='Escribe el nombre de un lugar.';
     return;
   }
 
-  document.getElementById('gpsMessage').textContent =
-    'Solicitando permiso de ubicación...';
+  result.textContent='Buscando lugar...';
 
-  navigator.geolocation.getCurrentPosition(
-    function(position) {
-      const lat = position.coords.latitude;
-      const lon = position.coords.longitude;
-      const acc = position.coords.accuracy;
+  try {
+    const url='https://nominatim.openstreetmap.org/search?format=json&limit=5&q='+encodeURIComponent(query);
 
-      currentPosition = [lat,lon];
+    const response=await fetch(url);
+    if(!response.ok) throw new Error('Search unavailable');
 
-      document.getElementById('latitude').textContent = lat.toFixed(6);
-      document.getElementById('longitude').textContent = lon.toFixed(6);
-      document.getElementById('accuracy').textContent =
-        Math.round(acc)+' metros';
+    const data=await response.json();
 
-      document.getElementById('gpsStatus').textContent = 'ACTIVE';
-      document.getElementById('gpsMessage').textContent =
-        'Ubicación obtenida con autorización.';
-
-      showPage('world');
-
-      setTimeout(()=>{
-        initMap();
-        map.setView(currentPosition,16);
-
-        if(userMarker) map.removeLayer(userMarker);
-        if(circle) map.removeLayer(circle);
-
-        userMarker = L.marker(currentPosition).addTo(map)
-          .bindPopup('📍 TU UBICACIÓN ACTUAL').openPopup();
-
-        circle = L.circle(currentPosition,{
-          radius:acc,
-          color:'#00ff88',
-          fillColor:'#00ff88',
-          fillOpacity:0.12
-        }).addTo(map);
-
-      },200);
-    },
-    function(error) {
-      let message = 'No se pudo obtener la ubicación.';
-      if(error.code===1) message='Permiso de ubicación denegado.';
-      if(error.code===2) message='Ubicación no disponible.';
-      if(error.code===3) message='Tiempo de espera agotado.';
-
-      document.getElementById('gpsMessage').textContent=message;
-      document.getElementById('gpsStatus').textContent='OFF';
-    },
-    {
-      enableHighAccuracy:true,
-      timeout:15000,
-      maximumAge:0
+    if(!data.length) {
+      result.textContent='No se encontraron resultados.';
+      return;
     }
-  );
+
+    showPage('world');
+
+    setTimeout(()=>{
+      initMap();
+
+      const first=data[0];
+      const lat=parseFloat(first.lat);
+      const lon=parseFloat(first.lon);
+
+      map.setView([lat,lon],13);
+
+      L.marker([lat,lon]).addTo(map)
+        .bindPopup(first.display_name)
+        .openPopup();
+
+      result.textContent='Encontrado: '+first.display_name;
+    },200);
+
+  } catch(error) {
+    result.textContent='No se pudo completar la búsqueda. Comprueba Internet e inténtalo de nuevo.';
+  }
 }
 
-function output(text) {
-  const terminal=document.getElementById('terminalOutput');
-  terminal.textContent += '\n\nalex@lab:~$ '+text;
-  terminal.scrollTop=terminal.scrollHeight;
+document.getElementById('placeSearch').addEventListener('keydown',e=>{
+  if(e.key==='Enter') searchPlace();
+});
+
+function getLocation() {
+  if(!navigator.geolocation) {
+    document.getElementById('gpsMessage').textContent=
+      'Geolocalización no disponible.';
+    return;
+  }
+
+  document.getElementById('gpsMessage').textContent=
+    'Solicitando autorización GPS...';
+
+  navigator.geolocation.getCurrentPosition(position=>{
+    const lat=position.coords.latitude;
+    const lon=position.coords.longitude;
+    const accuracy=position.coords.accuracy;
+
+    currentPosition=[lat,lon];
+
+    document.getElementById('latitude').textContent=lat.toFixed(6);
+    document.getElementById('longitude').textContent=lon.toFixed(6);
+    document.getElementById('accuracy').textContent=
+      Math.round(accuracy)+' m';
+
+    document.getElementById('gpsHome').textContent='ACTIVE';
+    document.getElementById('gpsMessage').textContent=
+      'Ubicación obtenida con tu autorización.';
+
+    showPage('world');
+
+    setTimeout(()=>{
+      initMap();
+      map.setView(currentPosition,16);
+
+      if(userMarker) map.removeLayer(userMarker);
+      if(accuracyCircle) map.removeLayer(accuracyCircle);
+
+      userMarker=L.marker(currentPosition).addTo(map)
+        .bindPopup('TU UBICACIÓN ACTUAL')
+        .openPopup();
+
+      accuracyCircle=L.circle(currentPosition,{
+        radius:accuracy,
+        color:'#00ff88',
+        fillColor:'#00ff88',
+        fillOpacity:0.12
+      }).addTo(map);
+
+    },200);
+
+  },error=>{
+    let message='No se pudo obtener la ubicación.';
+    if(error.code===1) message='Permiso denegado.';
+    if(error.code===2) message='Ubicación no disponible.';
+    if(error.code===3) message='Tiempo de espera agotado.';
+
+    document.getElementById('gpsMessage').textContent=message;
+  },{
+    enableHighAccuracy:true,
+    timeout:15000,
+    maximumAge:0
+  });
+}
+
+function terminalWrite(text) {
+  const output=document.getElementById('terminalOutput');
+  output.textContent+='\n\nalex@lab:~$ '+text;
+  output.scrollTop=output.scrollHeight;
 }
 
 function runCommand() {
   const input=document.getElementById('commandInput');
-  const cmd=input.value.trim();
-  if(!cmd) return;
+  const command=input.value.trim();
 
-  historyCommands.push(cmd);
+  if(!command) return;
+
+  commandHistory.push(command);
   input.value='';
 
-  const args=cmd.split(' ');
-  const name=args[0].toLowerCase();
+  const args=command.split(' ');
+  const cmd=args[0].toLowerCase();
 
-  switch(name) {
+  switch(cmd) {
     case 'help':
-      output('COMANDOS DISPONIBLES:\nhelp - lista de comandos\nclear - limpiar terminal\nwhoami - usuario actual\ndate - fecha del sistema\nls - listar módulos\npwd - ruta virtual\nworld - abrir mapa mundial\nlocation - obtener GPS autorizado\ncoords - mostrar coordenadas\nmap - abrir mapa\nnetwork - estado de red\nstatus - estado del sistema\nhack - demostración visual\nhistory - historial de comandos');
+      terminalWrite(
+`COMMAND LIST:
+help       - Mostrar comandos
+clear      - Limpiar terminal
+whoami     - Usuario
+date       - Fecha actual
+ls         - Listar módulos
+pwd        - Ruta virtual
+world      - Mapa mundial
+map        - Abrir mapa
+satellite  - Mapa satelital
+search     - Buscar lugar
+location   - Obtener GPS autorizado
+coords     - Ver coordenadas
+radar      - Abrir radar visual
+network    - Estado de conexión
+status     - Estado del sistema
+hack       - Demostración educativa
+history    - Historial de comandos`
+      );
       break;
 
     case 'clear':
-      document.getElementById('terminalOutput').textContent='ALEX-LINUX-LAB 30.0 // TERMINAL READY';
+      document.getElementById('terminalOutput').textContent=
+        'ALEX-LINUX-LAB 31.0 // TERMINAL READY';
       break;
 
     case 'whoami':
-      output('alex@alex-linux-lab');
+      terminalWrite('alex@alex-linux-lab');
       break;
 
     case 'date':
-      output(new Date().toString());
+      terminalWrite(new Date().toString());
       break;
 
     case 'ls':
-      output('home/ terminal/ world-map/ gps/ network/ security/');
+      terminalWrite('home/ terminal/ world-map/ gps/ radar/ network/ security/');
       break;
 
     case 'pwd':
-      output('/alex-linux-lab');
+      terminalWrite('/alex-linux-lab');
       break;
 
     case 'world':
     case 'map':
-      output('Abriendo mapa mundial real...');
+      terminalWrite('Abriendo mapa mundial...');
       showPage('world');
       break;
 
+    case 'satellite':
+      terminalWrite('Activando vista satelital...');
+      setMapMode('satellite');
+      break;
+
+    case 'search':
+      if(args.length<2) {
+        terminalWrite('Uso: search Sao Paulo');
+      } else {
+        document.getElementById('placeSearch').value=
+          args.slice(1).join(' ');
+        terminalWrite('Buscando: '+args.slice(1).join(' '));
+        searchPlace();
+      }
+      break;
+
     case 'location':
-      output('Solicitando permiso GPS del navegador...');
+      terminalWrite('Solicitando permiso GPS...');
       getLocation();
       break;
 
     case 'coords':
-      if(currentPosition) {
-        output('LAT: '+currentPosition[0]+'\nLON: '+currentPosition[1]);
-      } else {
-        output('No hay coordenadas. Ejecuta location y autoriza el GPS.');
-      }
+      terminalWrite(currentPosition
+        ? 'LAT: '+currentPosition[0]+'\nLON: '+currentPosition[1]
+        : 'Sin coordenadas. Ejecuta location y autoriza el permiso.');
+      break;
+
+    case 'radar':
+      terminalWrite('Abriendo radar visual...');
+      showPage('radarPage');
       break;
 
     case 'network':
-      output('Network module: READY\nEscaneo real de redes no disponible desde esta página.');
+      terminalWrite('Estado de conexión: '+(navigator.onLine?'ONLINE':'OFFLINE'));
       break;
 
     case 'status':
-      output('SYSTEM: ONLINE\nMAP: READY\nGPS: '+(currentPosition?'ACTIVE':'OFF'));
+      terminalWrite(
+        'SYSTEM: ONLINE\nMAP: READY\nGPS: '+
+        (currentPosition?'ACTIVE':'OFF')+
+        '\nRADAR: VISUAL DEMO'
+      );
       break;
 
     case 'hack':
-      output('DEMO MODE ACTIVATED\nSimulación educativa iniciada...\nNo se accede a dispositivos reales.');
+      terminalWrite(
+        'EDUCATIONAL DEMO ACTIVATED\n'+
+        'Simulación visual iniciada.\n'+
+        'No se accede a dispositivos reales.'
+      );
       break;
 
     case 'history':
-      output(historyCommands.join('\n'));
+      terminalWrite(commandHistory.join('\n'));
       break;
 
     default:
-      output('Comando no reconocido. Escribe help.');
+      terminalWrite('Comando desconocido. Escribe help.');
   }
 }
 
-document.getElementById('commandInput').addEventListener('keydown',function(e){
+document.getElementById('commandInput').addEventListener('keydown',e=>{
   if(e.key==='Enter') runCommand();
 });
 
 function networkStatus() {
-  document.getElementById('networkResult').textContent =
-    'Conexión del navegador: '+(navigator.onLine?'ONLINE':'OFFLINE');
+  document.getElementById('networkResult').textContent=
+    'Browser connection: '+(navigator.onLine?'ONLINE':'OFFLINE')+
+    '\nGeolocation API: '+
+    (navigator.geolocation?'AVAILABLE':'UNAVAILABLE');
 }
 
 function securityScan() {
-  document.getElementById('securityResult').textContent =
-    'LAB CHECK COMPLETE\nInterfaz: activa\nMapa: disponible\nPermisos GPS: bajo control del usuario\nIntrusiones: no realizadas';
+  document.getElementById('securityResult').textContent=
+    'LAB CHECK COMPLETE\n'+
+    'Interface: ACTIVE\n'+
+    'Map module: READY\n'+
+    'GPS: USER AUTHORIZATION REQUIRED\n'+
+    'Radar: VISUAL MODE\n'+
+    'Unauthorized access: NOT PERFORMED';
 }
-
 </script>
+
 </body>
 </html>
